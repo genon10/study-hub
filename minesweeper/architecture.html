@@ -321,22 +321,82 @@ const LAYER_COLORS = {
 };
 const LAYER_LABELS = { domain: '⚙️ Domain', data: '🗄️ Data', ui: '👁️ UI', util: '🔧 Util', application: '🌐 App' };
 
+/* ---- Annotated code block with line tooltips ---- */
+function renderAnnotatedCode(cw) {
+  if (!cw || !cw.code) return '';
+  const lines = cw.code.split('\n');
+  const exMap = {};
+  (cw.lineExplanations || []).forEach(le => { exMap[le.line] = le.explanation; });
+  const linesHtml = lines.map((ln, i) => {
+    const lineNum = i + 1;
+    const ex = exMap[lineNum];
+    const lineEsc = esc(ln);
+    if (ex) {
+      return `<span class="anno-line has-tip" data-tip="${esc(ex)}">${lineEsc}</span>`;
+    }
+    return `<span class="anno-line">${lineEsc}</span>`;
+  }).join('\n');
+  return `
+    <div style="margin-bottom:10px">
+      <div style="font-size:.72rem;font-weight:600;color:var(--accent2);margin-bottom:4px">🔍 קוד מוסבר: <code style="font-size:.68rem">${esc(cw.methodName || '')}</code></div>
+      <div style="font-size:.67rem;color:var(--muted);margin-bottom:4px">💡 העבר עכבר על שורה מסומנת לפירוש</div>
+      <div class="anno-wrap">
+        <pre class="anno-pre">${linesHtml}</pre>
+        <div class="anno-tooltip" style="display:none"></div>
+      </div>
+    </div>`;
+}
+
 function renderClasses() {
   const list = activeLayer === 'all' ? CLASSES : CLASSES.filter(c => c.layer === activeLayer);
-  document.getElementById('class-grid').innerHTML = list.map(c => `
+  document.getElementById('class-grid').innerHTML = list.map(c => {
+    const hasDeep = c.deepExplanation && c.deepExplanation.length;
+    const badge = hasDeep ? '<span style="background:var(--accent);color:#fff;font-size:.58rem;padding:1px 6px;border-radius:8px;margin-right:4px;vertical-align:middle">★ עמוק</span>' : '';
+    return `
     <div class="class-card" onclick="toggleClassDetail(this)">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px">
-        <span style="font-family:var(--font-mono);font-size:.78rem;font-weight:600">${esc(c.name)}</span>
+        <span style="font-family:var(--font-mono);font-size:.78rem;font-weight:600">${badge}${esc(c.name)}</span>
         <span class="class-layer-badge" style="background:${LAYER_COLORS[c.layer] || 'var(--muted)'};opacity:.85;font-size:.62rem;padding:2px 7px;border-radius:10px;white-space:nowrap;color:#fff">${LAYER_LABELS[c.layer] || c.layer}</span>
       </div>
       <div style="font-size:.73rem;color:var(--muted);margin-bottom:5px;font-family:var(--font-mono)">${esc(c.package)}</div>
       <div style="font-size:.78rem;color:var(--text);line-height:1.5">${esc(t(c.purpose))}</div>
       <div class="class-detail" style="display:none;margin-top:10px">
+
+        ${hasDeep ? `<div style="margin-bottom:10px">
+          <div style="font-size:.73rem;font-weight:700;color:var(--accent);margin-bottom:6px">📖 הסבר מעמיק</div>
+          ${c.deepExplanation.map((p,i) => `<p style="font-size:.76rem;line-height:1.7;margin:0 0 6px;padding:8px 10px;background:rgba(99,102,241,${i%2?'.04':'.07'});border-radius:6px;border-right:2px solid rgba(99,102,241,.3)">${esc(p)}</p>`).join('')}
+        </div>` : ''}
+
         ${c.whyThisWay ? `<div class="highlight green" style="margin-bottom:8px;font-size:.76rem"><strong>🎯 למה כך:</strong> ${esc(t(c.whyThisWay))}</div>` : ''}
         ${c.alternatives ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
           <span class="badge-chosen" style="font-size:.7rem">✅ ${esc(c.alternatives.chosen)}</span>
           <span class="badge-rejected" style="font-size:.7rem">❌ ${esc(c.alternatives.rejected)}</span>
         </div>` : ''}
+
+        ${c.codeWalkthrough ? renderAnnotatedCode(c.codeWalkthrough) : ''}
+
+        ${c.commonMistakes && c.commonMistakes.length ? `<div style="margin-bottom:10px">
+          <div style="font-size:.73rem;font-weight:700;color:#f5a623;margin-bottom:6px">⚠️ טעויות נפוצות</div>
+          ${c.commonMistakes.map(m => `<div style="margin-bottom:6px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.15);border-radius:6px;padding:7px 9px">
+            <div style="font-size:.71rem;color:var(--danger);margin-bottom:3px">✗ <em>${esc(m.wrong)}</em></div>
+            <div style="font-size:.71rem;color:var(--success)">✓ ${esc(m.correct)}</div>
+          </div>`).join('')}
+        </div>` : ''}
+
+        ${c.examTips ? `<div style="margin-bottom:10px;background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.15);border-radius:8px;padding:9px 11px">
+          <div style="font-size:.73rem;font-weight:700;color:var(--accent);margin-bottom:7px">🎓 טיפים לבחינה</div>
+          ${c.examTips.mention && c.examTips.mention.length ? `<div style="font-size:.7rem;margin-bottom:6px"><strong>📢 תזכיר:</strong><br>${c.examTips.mention.map(m=>`• ${esc(m)}`).join('<br>')}</div>` : ''}
+          ${c.examTips.keywords && c.examTips.keywords.length ? `<div style="margin-bottom:6px"><span style="font-size:.68rem;font-weight:600">🔑 מילות מפתח: </span>${c.examTips.keywords.map(k=>`<span style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);border-radius:4px;padding:1px 5px;font-size:.65rem;font-family:var(--font-mono);margin-left:3px">${esc(k)}</span>`).join('')}</div>` : ''}
+          ${c.examTips.avoid && c.examTips.avoid.length ? `<div style="font-size:.7rem;color:var(--danger)"><strong>🚫 אל תגיד:</strong><br>${c.examTips.avoid.map(a=>`• ${esc(a)}`).join('<br>')}</div>` : ''}
+        </div>` : ''}
+
+        ${c.connectionsMap ? `<div style="margin-bottom:10px;background:rgba(32,217,192,.05);border:1px solid rgba(32,217,192,.15);border-radius:8px;padding:9px 11px">
+          <div style="font-size:.73rem;font-weight:700;color:var(--accent3);margin-bottom:6px">🔗 מפת חיבורים</div>
+          ${c.connectionsMap.from && c.connectionsMap.from.length ? `<div style="font-size:.7rem;margin-bottom:4px"><span style="color:var(--accent2);font-weight:600">← מקבל מ: </span>${c.connectionsMap.from.map(x=>`<span style="color:var(--text)">${esc(x)}</span>`).join(' | ')}</div>` : ''}
+          ${c.connectionsMap.to && c.connectionsMap.to.length ? `<div style="font-size:.7rem;margin-bottom:4px"><span style="color:var(--success);font-weight:600">→ שולח ל: </span>${c.connectionsMap.to.map(x=>`<span style="color:var(--text)">${esc(x)}</span>`).join(' | ')}</div>` : ''}
+          ${c.connectionsMap.createdBy ? `<div style="font-size:.7rem"><span style="color:var(--muted);font-weight:600">🏗 נוצר ע"י: </span><span style="color:var(--text)">${esc(c.connectionsMap.createdBy)}</span></div>` : ''}
+        </div>` : ''}
+
         ${c.connectsTo && c.connectsTo.length ? `<div style="font-size:.73rem;color:var(--muted);margin-bottom:6px">🔗 מתחבר ל: ${c.connectsTo.map(x => `<span style="color:var(--accent)">${esc(x)}</span>`).join(', ')}</div>` : ''}
         ${c.keyMethods && c.keyMethods.length ? `<div style="font-size:.73rem;font-weight:600;margin-bottom:4px;color:var(--accent2)">🔑 מתודות עיקריות:</div>
           ${c.keyMethods.map(m => `<div class="method-block">
@@ -349,12 +409,49 @@ function renderClasses() {
           ${c.examQuestions.map(q => `• ${esc(q)}`).join('<br>')}
         </div>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+
+  // Wire up annotated line tooltips
+  document.querySelectorAll('.anno-line.has-tip').forEach(el => {
+    el.addEventListener('mouseenter', function() {
+      const wrap = this.closest('.anno-wrap');
+      if (!wrap) return;
+      const tip = wrap.querySelector('.anno-tooltip');
+      if (!tip) return;
+      tip.textContent = this.dataset.tip;
+      tip.style.display = 'block';
+    });
+    el.addEventListener('mouseleave', function() {
+      const wrap = this.closest('.anno-wrap');
+      if (!wrap) return;
+      const tip = wrap.querySelector('.anno-tooltip');
+      if (tip) tip.style.display = 'none';
+    });
+  });
 }
 function toggleClassDetail(el) {
   const detail = el.querySelector('.class-detail');
-  detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+  const isOpen = detail.style.display !== 'none';
+  detail.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    detail.querySelectorAll('.anno-line.has-tip').forEach(line => {
+      line.onmouseenter = function() {
+        const wrap = this.closest('.anno-wrap');
+        if (!wrap) return;
+        const tip = wrap.querySelector('.anno-tooltip');
+        if (!tip) return;
+        tip.textContent = this.dataset.tip;
+        tip.style.display = 'block';
+      };
+      line.onmouseleave = function() {
+        const wrap = this.closest('.anno-wrap');
+        if (!wrap) return;
+        const tip = wrap.querySelector('.anno-tooltip');
+        if (tip) tip.style.display = 'none';
+      };
+    });
+  }
 }
 
 /* ---- Layout browser ---- */

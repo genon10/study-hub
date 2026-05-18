@@ -25,6 +25,19 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%);
   pointer-events: none;
 }
+/* ---- PARTICLES ---- */
+.particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleFloat linear infinite;
+  opacity: 0;
+}
+@keyframes particleFloat {
+  0%   { transform: translateY(0) scale(1); opacity: .55; }
+  100% { transform: translateY(-140px) scale(0); opacity: 0; }
+}
+
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.2);
@@ -105,6 +118,20 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-grid"></div>
+    <div class="particles">
+      <div class="particle" style="width:4px;height:4px;background:var(--accent);left:12%;bottom:8%;animation-duration:4.2s;animation-delay:0s"></div>
+      <div class="particle" style="width:3px;height:3px;background:var(--accent2);left:28%;bottom:15%;animation-duration:5.1s;animation-delay:.8s"></div>
+      <div class="particle" style="width:5px;height:5px;background:var(--accent);left:44%;bottom:6%;animation-duration:3.8s;animation-delay:1.4s"></div>
+      <div class="particle" style="width:3px;height:3px;background:var(--success);left:61%;bottom:20%;animation-duration:4.6s;animation-delay:.3s"></div>
+      <div class="particle" style="width:4px;height:4px;background:var(--accent2);left:75%;bottom:10%;animation-duration:5.3s;animation-delay:1.1s"></div>
+      <div class="particle" style="width:6px;height:6px;background:var(--accent);left:88%;bottom:5%;animation-duration:4s;animation-delay:.6s"></div>
+      <div class="particle" style="width:3px;height:3px;background:var(--purple);left:20%;bottom:30%;animation-duration:6.1s;animation-delay:2s"></div>
+      <div class="particle" style="width:4px;height:4px;background:var(--accent3);left:52%;bottom:25%;animation-duration:4.8s;animation-delay:1.7s"></div>
+      <div class="particle" style="width:3px;height:3px;background:var(--accent);left:35%;bottom:12%;animation-duration:5.5s;animation-delay:.4s"></div>
+      <div class="particle" style="width:5px;height:5px;background:var(--accent2);left:68%;bottom:18%;animation-duration:3.9s;animation-delay:2.3s"></div>
+      <div class="particle" style="width:3px;height:3px;background:var(--success);left:82%;bottom:28%;animation-duration:4.4s;animation-delay:1s"></div>
+      <div class="particle" style="width:4px;height:4px;background:var(--purple);left:6%;bottom:22%;animation-duration:5.8s;animation-delay:1.5s"></div>
+    </div>
     <div class="hero-eyebrow">✦ בגרות 5 יח"ל</div>
     <h1>Study Hub</h1>
     <p class="hero-sub">Master your projects — one concept at a time. כרטיסיות, חידונים ומבחני בגרות.</p>
