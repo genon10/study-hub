@@ -274,8 +274,9 @@ function renderFlip() {
 
   // Seen button
   const seenBtn = document.getElementById('btn-seen');
-  seenBtn.textContent = flipSeen.has(flipIdx) ? '✓ נראה' : '✓ סמן כנראה';
-  seenBtn.style.color = flipSeen.has(flipIdx) ? 'var(--success)' : '';
+  const isSeen = flipSeen.has(flipIdx);
+  seenBtn.textContent = isSeen ? t('btn.seen') : t('btn.mark-seen');
+  seenBtn.style.color = isSeen ? 'var(--success)' : '';
 
   // Stats
   const pct = Math.round(flipSeen.size / FLASHCARDS.length * 100);

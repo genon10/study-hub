@@ -274,7 +274,7 @@
 <script>
 /* ---- Language toggle ---- */
 document.getElementById('lang-toggle-wrap').innerHTML = langToggleHTML();
-function onLangChange() { renderAll(); }
+function onLangChange() { document.getElementById('lang-toggle-wrap').innerHTML = langToggleHTML(); }
 
 /* ---- Design Decisions ---- */
 function renderDecisions() {

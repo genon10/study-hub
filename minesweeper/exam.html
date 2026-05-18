@@ -158,12 +158,17 @@
     document.getElementById('exam-questions').innerHTML = questionOrder.map((qi, pos) => {
       const q = EXAM_QUESTIONS[qi];
       const hasCode = q.q.includes('\n') || q.q.includes('`');
-      const qText = hasCode
-        ? q.q.replace(/`([^`]+)`/g, '<code style="background:rgba(79,142,247,.12);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:.85em">$1</code>')
-        : esc(q.q);
+      let qDisplay;
+      if (hasCode) {
+        qDisplay = esc(q.q)
+          .replace(/`([^`]+)`/g, '<code style="background:rgba(79,142,247,.12);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:.85em">$1</code>')
+          .replace(/\n/g, '<br>');
+      } else {
+        qDisplay = esc(q.q);
+      }
       return `
         <div class="quiz-q" id="eq${pos}">
-          <div class="q-text">${pos + 1}. ${hasCode ? qText : esc(q.q)}</div>
+          <div class="q-text">${pos + 1}. ${qDisplay}</div>
           <div class="quiz-opts">
             ${q.o.map((o, oi) =>
               `<button class="qopt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</button>`
