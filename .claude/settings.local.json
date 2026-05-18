@@ -5,7 +5,9 @@
       "Bash(mkdir -p \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\\\\minesweeper\\\\css\")",
       "Bash(mkdir -p \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\\\\minesweeper\\\\js\")",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object -ExpandProperty FullName)"
     ]
   }
 }
