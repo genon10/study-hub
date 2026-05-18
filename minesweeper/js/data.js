@@ -1338,7 +1338,62 @@ const CLASSES = [
       'מה אלגוריתם floodReveal וכיצד isCovered() משמש כ-visited guard?',
       'מה הנוסחה לחישוב ניקוד ב-calculateScore()?',
       'למה serializeBoardState() משתמש ב-StringBuilder ולא ב-Gson?'
-    ]
+    ],
+    deepExplanation: [
+      "GameEngine פותר את בעיית עירוב לוגיקה עסקית עם קוד Android. לפני MVVM, לוגיקת המשחק הייתה מפוזרת ב-Activities, מה שגרם לקוד לא-ניתן-לבדיקה שנשבר בכל rotation של מסך.",
+      "ב-Clean Architecture, GameEngine מהווה את ה-domain layer — השכבה הפנימית ביותר שלא יודעת כלום על Android, Firebase, או Room. היא מממשת אלגוריתמי משחק בלבד: אתחול לוח, מיקום מוקשים, DFS flood reveal, בדיקת ניצחון, וחישוב ניקוד.",
+      "בלי GameEngine: לוגיקת floodReveal הייתה ב-GameViewModel או GameActivity. בדיקות JUnit היו בלתי אפשריות ללא אמולטור. כל bug בלוגיקה היה דורש debug על מכשיר. ה-Daily Challenge seed mechanism היה צמוד ל-Android Date API.",
+      "הנקודה הכי מאתגרת: serializeBoardState() חייבת להמיר Cell[][] ל-JSON ללא Gson, כי Gson הוא library חיצוני שאסור ב-domain layer. הפתרון: StringBuilder ידנית — מורכבת יותר לכתוב אך שומרת על Pure Java ללא dependencies."
+    ],
+    codeWalkthrough: {
+      methodName: "floodReveal(int x, int y)",
+      code: `private void floodReveal(int x, int y) {
+    for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            if (dx == 0 && dy == 0) continue;
+            int nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                Cell c = board[ny][nx];
+                if (c.isCovered() && !c.isMine()) {
+                    c.setState(CellState.REVEALED);
+                    game.incrementTilesRevealed();
+                    if (c.getAdjacentMines() == 0) {
+                        floodReveal(nx, ny);
+                    }
+                }
+            }
+        }
+    }
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "dy ו-dx עוברים על 9 תאים שכנים (כולל אלכסונים) — ה-3×3 grid סביב (x,y)" },
+        { line: 2, explanation: "dx=0,dy=0 = התא עצמו — מדלגים כי לא רוצים לבדוק את עצמנו" },
+        { line: 3, explanation: "נחשב קואורדינטות של שכן: nx=x+dx, ny=y+dy" },
+        { line: 4, explanation: "Boundary check — מוודאים שהשכן בתוך הלוח ולא מחוצה לו" },
+        { line: 5, explanation: "שולפים את ה-Cell מהמטריצה — board[ny][nx] כי ny=שורה, nx=עמודה" },
+        { line: 6, explanation: "isCovered() = ה-VISITED GUARD: תא שכבר REVEALED לא ייכנס לrecursion שוב" },
+        { line: 7, explanation: "!isMine() — לא מגלים מוקש (אפילו אם covered), רק תאים בטוחים" },
+        { line: 8, explanation: "מחליפים state מ-COVERED ל-REVEALED — עכשיו isCovered() יחזיר false" },
+        { line: 9, explanation: "מעדכנים מונה tilesRevealed — נבדק נגד totalSafeCells לגילוי ניצחון" },
+        { line: 10, explanation: "adjacentMines==0 = 'תא ריק' — אין מוקשים שכנים, מגלים גם את שכניו" },
+        { line: 11, explanation: "הקריאה הרקורסיבית — DFS! מעמיק לתוך הלוח. isCovered() מבטיח אין loops" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "GameEngine משתמש ב-Context כדי לגשת ל-Room DB", correct: "GameEngine הוא Pure Java — אין לו גישה ל-Context, Room, SharedPreferences, או כל Android class. הוא מקבל רק primitive data ו-Cell[][]" },
+      { wrong: "floodReveal משתמש ב-BFS עם Queue", correct: "floodReveal משתמש ב-DFS — הפונקציה קוראת לעצמה (recursion). BFS נדחה כי DFS קצרה ופשוטה יותר לממש" },
+      { wrong: "serializeBoardState() משתמש ב-Gson לנוחות", correct: "GameEngine אסור לו להכיר Gson (library חיצוני). משתמש ב-StringBuilder ידנית — ה-domain layer חייב להיות zero-dependency" }
+    ],
+    examTips: {
+      mention: ["'GameEngine הוא Pure Java — ניתן לבדיקה ב-JUnit ללא אמולטור'", "'isCovered() משמש כ-visited guard במניעת infinite recursion'", "'floodReveal היא DFS recursion — הפונקציה קוראת לעצמה'"],
+      keywords: ["Pure Java", "domain layer", "DFS", "recursion", "isCovered()", "visited guard", "Clean Architecture", "framework-free"],
+      avoid: ["אל תגיד ש-GameEngine uses Android SDK", "אל תבלבל DFS עם BFS", "אל תגיד שmines מונחים לפני הלחיצה הראשונה"]
+    },
+    connectionsMap: {
+      from: ["מקבל פרמטרים מ-GameViewModel.revealCell(x,y)", "מקבל seed מ-DailyChallengeActivity", "מקבל boardSeed מ-MultiplayerRoom"],
+      to: ["שולח Game object ל-GameViewModel דרך postValue()", "מחזיר JSON string ל-GameRepository.saveGameResult()"],
+      createdBy: "נוצר ע\"י GameViewModel (new GameEngine()) בעת אתחול"
+    }
   },
 
   {
@@ -1444,7 +1499,61 @@ const CLASSES = [
       { name: 'createRoom / joinRoom / listenToRoom', explanation: { he: 'RTDB rooms/ operations. ValueEventListener לעדכון real-time.', en: 'RTDB rooms/ operations. ValueEventListener for real-time updates.', mix: 'RTDB rooms/ CRUD + real-time listener.' }, code: 'rtdb.getReference("rooms").push().setValue(room)' }
     ],
     connectsTo: ['INetworkService', 'GameRepository', 'AuthActivity', 'LeaderboardActivity', 'App'],
-    examQuestions: ['מה INetworkService ומי מממש אותו?', 'מה ההבדל בין Firestore ל-RTDB בשימוש בפרויקט?']
+    examQuestions: ['מה INetworkService ומי מממש אותו?', 'מה ההבדל בין Firestore ל-RTDB בשימוש בפרויקט?'],
+    deepExplanation: [
+      "FirebaseManager פותר את בעיית הפיזור של Firebase logic. בלי FirebaseManager, כל Activity הייתה מבצעת Firebase calls ישירות — שכפול קוד, auth state management מפוזר, ואי אפשר לבדוק Firebase logic בנפרד.",
+      "FirebaseManager מממש את INetworkService interface, מה שיוצר abstraction חשובה: ViewModel תלוי ב-interface, לא בFirebase SDK. ניתן להחליף Firebase ב-REST API ללא שינוי ב-ViewModel. זהו Dependency Injection הפשוט ביותר.",
+      "בלי FirebaseManager: auth logic, Firestore reads/writes, RTDB listeners, ו-Storage uploads היו מפוזרים ב-10 Activities. כל Activity הייתה צריכה לנהל auth state בנפרד. קשה מאוד לבצע logout גלובלי. INetworkService לא היה ניתן לrealization.",
+      "הנקודה הכי מאתגרת: שניים שימושים שונים לFirebase. Firestore (scores/, users/, daily_challenges/) = NoSQL documents, מתאים לdata structured ועם offline cache. RTDB (rooms/) = JSON tree, מתאים ל-real-time multiplayer עם latency נמוך. שתי SDKs בApp אחד."
+    ],
+    codeWalkthrough: {
+      methodName: "fetchLeaderboard(String difficulty, NetworkCallback<List<LeaderboardEntry>> callback)",
+      code: `@Override
+public void fetchLeaderboard(String difficulty,
+        NetworkCallback<List<LeaderboardEntry>> callback) {
+    firestore.collection("scores")
+        .whereEqualTo("difficulty", difficulty)
+        .orderBy("score", Query.Direction.DESCENDING)
+        .limit(50)
+        .get()
+        .addOnSuccessListener(querySnapshot -> {
+            List<LeaderboardEntry> entries = new ArrayList<>();
+            for (DocumentSnapshot doc : querySnapshot) {
+                LeaderboardEntry entry = doc.toObject(LeaderboardEntry.class);
+                if (entry != null) entries.add(entry);
+            }
+            callback.onSuccess(entries);
+        })
+        .addOnFailureListener(e -> callback.onFailure(e));
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "@Override — מממש את INetworkService. ViewModel קורא לinterface, לא לFirebase ישירות" },
+        { line: 2, explanation: "firestore.collection('scores') — Firestore collection path. scores/{documentId} = כל ציון" },
+        { line: 3, explanation: ".whereEqualTo('difficulty', difficulty) — Query filter. Firestore SQL equivalent: WHERE difficulty=?" },
+        { line: 4, explanation: ".orderBy('score', DESCENDING) — מיון יורד לפי ניקוד — top scores ראשונים" },
+        { line: 5, explanation: ".limit(50) — מגביל 50 תוצאות — Performance + ממשק סביר" },
+        { line: 6, explanation: ".get() — async query — לא חוסם. מחזיר Task<QuerySnapshot>" },
+        { line: 7, explanation: "addOnSuccessListener — callback ב-main thread כשהQuery מוחזרת" },
+        { line: 8, explanation: "doc.toObject(LeaderboardEntry.class) — Firestore auto-deserialization לJava object" },
+        { line: 9, explanation: "callback.onSuccess(entries) — INetworkService callback pattern — ViewModel מקבל result" },
+        { line: 10, explanation: "addOnFailureListener — error handling — callback.onFailure() מעביר exception ל-ViewModel" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "Multiplayer משתמש ב-Firestore", correct: "Multiplayer משתמש ב-Firebase Realtime Database (rooms/). Firestore = scores/users/daily_challenges. RTDB = rooms/ בלבד, כי latency נמוך יותר" },
+      { wrong: "FirebaseManager.fetchLeaderboard() חוסם את ה-thread עד לתשובה", correct: "כל Firebase calls א-סינכרוניות. fetchLeaderboard() מחזיר מיד — NetworkCallback.onSuccess() נקרא מאוחר יותר ב-main thread" },
+      { wrong: "כל Activity קוראת ל-Firebase SDK ישירות", correct: "FirebaseManager מרכז הכל. Activities קוראות ל-FirebaseManager דרך Repository — ViewModel לא מכיר Firebase ישירות" }
+    ],
+    examTips: {
+      mention: ["'FirebaseManager מממש INetworkService — ניתן להחליף Firebase ב-REST ללא שינוי ViewModel'", "'Firestore לdata structured (scores/users), RTDB ל-real-time (rooms/)'", "'3 auth methods: Email, Google, Anonymous'"],
+      keywords: ["INetworkService", "NetworkCallback", "Firestore", "RTDB", "Anonymous auth", "async callbacks"],
+      avoid: ["אל תבלבל Firestore עם RTDB", "אל תגיד שFirebase calls synchronous", "אל תגיד שActivity קוראת ל-Firebase ישירות"]
+    },
+    connectionsMap: {
+      from: ["מקבל upload requests מ-GameRepository.saveGameResult()", "מקבל fetch requests מ-LeaderboardActivity", "מקבל auth requests מ-AuthActivity"],
+      to: ["שולח data ל-Firestore (scores/, users/, daily_challenges/)", "שולח data ל-Firebase RTDB (rooms/)", "שולח/מקבל files מ-Firebase Storage"],
+      createdBy: "נוצר ע\"י App.onCreate() — מאותחל כ-singleton דרך App.getInstance().getFirebaseManager()"
+    }
   },
 
   {
@@ -1464,6 +1573,74 @@ const CLASSES = [
     examQuestions: ['מה תפקיד SyncManager?']
   },
 
+  {
+    name: 'FirebaseSyncWorker.java',
+    package: 'worker',
+    layer: 'data',
+    purpose: {
+      he: 'WorkManager Worker שמסנכרן games לא-מסונכרנות ל-Firebase. PeriodicWorkRequest כל 15 דקות עם Constraint: NetworkType.CONNECTED. שולף getUnsynced() מ-GameDao, מעלה ל-Firebase, מסמן syncedToFirebase=1.',
+      en: 'WorkManager Worker that syncs unsynced games to Firebase. PeriodicWorkRequest every 15 minutes with NetworkType.CONNECTED constraint.',
+      mix: 'WorkManager Worker. 15-min periodic sync. NetworkType.CONNECTED. getUnsynced() → Firebase → markSynced().'
+    },
+    whyThisWay: { rejected: 'AsyncTask or Service for background sync', chosen: 'WorkManager PeriodicWorkRequest', why: 'WorkManager survives reboot, process death, app close — AsyncTask and Service do not' },
+    keyMethods: [
+      { name: 'doWork()', explanation: { he: 'Entry point של Worker. מחזיר Result.success() או Result.retry().', en: 'Worker entry point. Returns Result.success() or Result.retry().', mix: 'doWork(): fetch unsynced → upload → mark synced → Result.success().' }, code: '@Override\npublic Result doWork() {\n  List<GameEntity> unsynced = gameDao.getUnsynced();\n  for (GameEntity entity : unsynced) {\n    boolean success = firebaseManager.uploadGameSync(entity);\n    if (success) gameDao.markSynced(entity.getId());\n    else return Result.retry();\n  }\n  return Result.success();\n}' }
+    ],
+    connectsTo: ['GameDao', 'FirebaseManager', 'SyncManager', 'AppDatabase'],
+    examQuestions: ['מה WorkManager Constraint של FirebaseSyncWorker?', 'מה קורה אם Firebase upload נכשל?', 'למה WorkManager ולא AsyncTask?'],
+    deepExplanation: [
+      "FirebaseSyncWorker פותר את בעיית הסנכרון הרקע. ללא WorkManager, אם המשחק הסתיים ב-offline, הנתונים לא היו מגיעים ל-Firebase. Service רגיל היה מת עם סגירת האפליקציה. AsyncTask (deprecated) לא שורד process death.",
+      "WorkManager הוא ה-recommended API לbackground tasks ב-Android. PeriodicWorkRequest כל 15 דקות עם Constraint NetworkType.CONNECTED — Worker לא ירוץ אם אין רשת, חוסך סוללה ומונע failed attempts.",
+      "בלי FirebaseSyncWorker: אם אפליקציה נסגרת בmiddle of upload, הdata נאבד ל-Firebase (אבל נשמר ב-Room). כשהuser פותח שוב, אין מנגנון לretry. syncedToFirebase=0 יישאר לנצח.",
+      "הנקודה הכי מאתגרת: idempotency. Worker צריך להיות בטוח לrun כמה פעמים — אם upload הצליח אבל markSynced() נכשל, Worker יעלה שוב. Firestore handles duplicate documents gracefully."
+    ],
+    codeWalkthrough: {
+      methodName: "doWork()",
+      code: `@NonNull
+@Override
+public Result doWork() {
+    List<GameEntity> unsynced = gameDao.getUnsynced();
+    if (unsynced.isEmpty()) {
+        return Result.success();
+    }
+    for (GameEntity entity : unsynced) {
+        try {
+            firebaseManager.uploadGameSync(entity);
+            gameDao.markSynced(entity.getId());
+        } catch (Exception e) {
+            return Result.retry();
+        }
+    }
+    return Result.success();
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "doWork() = entry point של Worker. נקרא ב-background thread (לא main thread)" },
+        { line: 2, explanation: "getUnsynced() = @Query('SELECT * FROM games WHERE syncedToFirebase = 0')" },
+        { line: 3, explanation: "isEmpty() early return — אם אין מה לסנכרן, Result.success() מיד" },
+        { line: 4, explanation: "לולאה על כל game שממתין לסנכרון" },
+        { line: 5, explanation: "uploadGameSync() = synchronous Firebase upload (Worker כבר ב-background thread)" },
+        { line: 6, explanation: "markSynced() = UPDATE games SET syncedToFirebase=1 WHERE id=? — מסמן כסונכרן" },
+        { line: 7, explanation: "catch Exception: אם upload נכשל → Result.retry() → WorkManager ינסה שוב" },
+        { line: 8, explanation: "Result.success() = כל הgames סונכרנו. WorkManager יתזמן הריצה הבאה (15 דק')" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "FirebaseSyncWorker רץ כל שניה לreal-time sync", correct: "PeriodicWorkRequest כל 15 דקות — המינימום של WorkManager. Real-time sync = Firebase RTDB Listeners, לא Worker" },
+      { wrong: "Worker רץ גם ללא אינטרנט", correct: "NetworkType.CONNECTED Constraint — Worker מחכה עד שיש רשת. WorkManager מנהל את ה-scheduling אוטומטית" },
+      { wrong: "אם Worker נכשל, הdata אבד", correct: "Result.retry() → WorkManager ינסה שוב. syncedToFirebase=0 נשמר ב-Room עד שסנכרון מצליח" }
+    ],
+    examTips: {
+      mention: ["'NetworkType.CONNECTED Constraint — Worker מחכה לרשת'", "'PeriodicWorkRequest 15 דקות'", "'WorkManager שורד reboot, process death, app close'"],
+      keywords: ["PeriodicWorkRequest", "NetworkType.CONNECTED", "doWork()", "Result.success()", "Result.retry()", "getUnsynced()"],
+      avoid: ["אל תגיד שWorker רץ כל שניה", "אל תגיד שWorker = real-time", "אל תגיד שdata אבד בנכשל"]
+    },
+    connectionsMap: {
+      from: ["מקבל unsynced games מ-GameDao.getUnsynced()", "מקבל firebase reference מ-FirebaseManager"],
+      to: ["שולח games ל-FirebaseManager.uploadGameSync()", "מסמן synced ב-GameDao.markSynced()"],
+      createdBy: "נוצר ע\"י SyncManager.scheduleSync() דרך WorkManager.enqueueUniquePeriodicWork()"
+    }
+  },
+
   // ══════════════ REPOSITORY ══════════════
   {
     name: 'GameRepository.java',
@@ -1480,7 +1657,64 @@ const CLASSES = [
       { name: 'getAllGames()', explanation: { he: 'מחזיר כל המשחקים מ-Room. נקרא מ-StatisticsActivity.', en: 'Returns all games from Room. Called from StatisticsActivity.', mix: 'Room query. Used by Statistics + Achievements.' }, code: 'return databaseHelper.getAllGames();' }
     ],
     connectsTo: ['GameViewModel', 'StatisticsActivity', 'AchievementManager', 'DatabaseHelper', 'FirebaseManager'],
-    examQuestions: ['מה Repository Pattern ומדוע הוא חשוב ב-MVVM?', 'מה Offline First strategy ב-Repository?']
+    examQuestions: ['מה Repository Pattern ומדוע הוא חשוב ב-MVVM?', 'מה Offline First strategy ב-Repository?'],
+    deepExplanation: [
+      "GameRepository פותר את בעיית ה-coupling בין logic לdata sources. בלי Repository, GameViewModel היה קורא ישירות ל-GameDao ול-FirebaseManager — coupling צמוד שמקשה על החלפת מקור נתונים ועל בדיקות.",
+      "Repository Pattern מהווה Single Source of Truth: ViewModel מבקש data מRepository, ו-Repository מחליט מאיפה לשלוף — Room (תמיד זמין, offline) או Firebase (כשיש רשת). ViewModel לא מכיר ולא אכפת לו מהחלטה זו.",
+      "בלי Repository: ViewModel היה צריך לדעת על Room ועל Firebase ישירות. החלפת Firebase ב-REST API הייתה דורשת שינוי ב-ViewModel. בדיקות ViewModel היו דורשות mock של Firebase. לוגיקת Offline First הייתה מפוזרת.",
+      "הנקודה הכי מאתגרת: Offline First. saveGameResult() חייב לשמור ב-Room מיידית (executor thread) ולנסות Firebase רק אם יש רשת. אם אין רשת, syncedToFirebase=0 נשאר, ו-WorkManager יסנכרן מאוחר יותר. זה דורש תיאום בין executor, FirebaseManager, ו-GameDao."
+    ],
+    codeWalkthrough: {
+      methodName: "saveGameResult(GameResult result)",
+      code: `public void saveGameResult(GameResult result) {
+    AppDatabase.databaseWriteExecutor.execute(() -> {
+        GameEntity entity = GameMapper.toEntity(result);
+        entity.setSyncedToFirebase(0);
+        gameDao.insertGame(entity);
+    });
+    if (firebaseManager.isOnline()) {
+        firebaseManager.uploadScore(
+            result.toLeaderboardEntry(),
+            new NetworkCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean success) {
+                    AppDatabase.databaseWriteExecutor.execute(() ->
+                        gameDao.markSynced(result.getId()));
+                }
+                @Override
+                public void onFailure(Exception e) {
+                    // syncedToFirebase=0 stays, WorkManager will retry
+                }
+            }
+        );
+    }
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "שמירה ב-background thread (ExecutorService) — לעולם לא כותבים ל-Room מה-main thread" },
+        { line: 2, explanation: "GameMapper.toEntity() ממיר domain GameResult ל-Room GameEntity — Mapper Pattern" },
+        { line: 3, explanation: "syncedToFirebase=0 מסמן pending sync — זהו הלב של Offline First strategy" },
+        { line: 4, explanation: "gameDao.insertGame() — Room CRUD. ExecutorService מבטיח background thread" },
+        { line: 5, explanation: "isOnline() בודק קישוריות לפני ניסיון upload — לא מנסים Firebase ללא רשת" },
+        { line: 6, explanation: "uploadScore() א-סינכרוני עם NetworkCallback — לא חוסם את ה-thread" },
+        { line: 7, explanation: "onSuccess: markSynced() מעדכן syncedToFirebase=1 ב-Room — הועלה בהצלחה" },
+        { line: 8, explanation: "onFailure: לא עושים כלום — syncedToFirebase=0 נשאר, WorkManager יסנכרן כשיש רשת" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "GameViewModel מתקשר ישירות ל-GameDao ול-Firebase", correct: "GameViewModel מכיר רק את GameRepository. Repository הוא האבסטרקציה — ViewModel לא יודע אם data מגיע מRoom או Firebase" },
+      { wrong: "אם אין רשת, הנתונים לא נשמרים", correct: "Room נשמר תמיד (offline-capable). Firebase הוא secondary — syncedToFirebase=0 מסמן pending. WorkManager יעלה כשיחזור חיבור" },
+      { wrong: "saveGameResult() כותב ל-Room ב-main thread", correct: "כתיבה ל-Room חייבת ב-background thread. Repository משתמש ב-AppDatabase.databaseWriteExecutor (ExecutorService) לכל DB writes" }
+    ],
+    examTips: {
+      mention: ["'Repository Pattern — ViewModel לא יודע אם data מ-Room או Firebase'", "'Offline First: Room תחילה (syncedToFirebase=0), Firebase כשיש רשת'", "'Single Source of Truth — Repository מחליט מאיפה data'"],
+      keywords: ["Repository Pattern", "Single Source of Truth", "Offline First", "syncedToFirebase", "ExecutorService", "NetworkCallback"],
+      avoid: ["אל תגיד ש-ViewModel גישה ישירה ל-DB", "אל תגיד ש-data אבד ללא רשת", "אל תגיד שכתיבה ל-Room ב-main thread"]
+    },
+    connectionsMap: {
+      from: ["מקבל save requests מ-GameViewModel.saveGameResult()", "מקבל queries מ-StatisticsActivity, AchievementManager"],
+      to: ["שולח entities ל-GameDao (Room) ב-ExecutorService", "שולח scores ל-FirebaseManager.uploadScore()"],
+      createdBy: "נוצר ע\"י GameViewModel (new GameRepository(context)) — מוזרק דרך constructor"
+    }
   },
 
   // ══════════════ LOCAL DATA ══════════════
@@ -1640,6 +1874,64 @@ const CLASSES = [
     examQuestions: []
   },
 
+  {
+    name: 'AppDatabase.java',
+    package: 'data/db',
+    layer: 'data',
+    purpose: {
+      he: 'Room @Database — נקודת גישה יחידה ל-SQLite. version=6, 5 entities: GameEntity, BestScoreEntity, AchievementEntity, CustomMapEntity, CustomPresetEntity. Migrations 1→6.',
+      en: 'Room @Database — single access point to SQLite. version=6, 5 entities. Migrations 1 through 6.',
+      mix: 'Room @Database singleton. version=6, 5 entities. databaseWriteExecutor = ExecutorService for background writes.'
+    },
+    whyThisWay: { rejected: 'Multiple database helper classes', chosen: 'Single @Database with all entities', why: 'Room requires single @Database class per SQLite file; DAOs accessed from one place' },
+    keyMethods: [
+      { name: 'getInstance(Context)', explanation: { he: 'Double-check singleton. Thread-safe instantiation.', en: 'Double-check singleton. Thread-safe instantiation.', mix: 'Singleton pattern with synchronized block.' }, code: 'if (instance == null) {\n  synchronized (AppDatabase.class) {\n    if (instance == null)\n      instance = Room.databaseBuilder(context, AppDatabase.class, "minesweeper.db")\n        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)\n        .build();\n  }\n}\nreturn instance;' },
+      { name: 'MIGRATION_5_6', explanation: { he: 'הוסיף syncedToFirebase ל-games. ללא זה — crash עם DestructiveMigration.', en: 'Added syncedToFirebase to games table.', mix: 'ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0' }, code: 'static final Migration MIGRATION_5_6 = new Migration(5, 6) {\n  @Override\n  public void migrate(SupportSQLiteDatabase db) {\n    db.execSQL("ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0 NOT NULL");\n  }\n};' }
+    ],
+    connectsTo: ['GameDao', 'BestScoreDao', 'AchievementDao', 'CustomMapDao', 'CustomPresetDao', 'GameRepository', 'App'],
+    examQuestions: ['מה גרסת Room DB ומה ה-5 entities?', 'מה Migration 5→6 עשה?', 'למה migration ולא destructiveMigration?'],
+    deepExplanation: [
+      "AppDatabase פותר את בעיית הגישה ל-SQLite database. Room ORM מחייב class אחד עם @Database annotation שמכיל את כל ה-entities וה-DAOs. כל גישה לDB עוברת דרך AppDatabase.getInstance().",
+      "AppDatabase מכיל גם את databaseWriteExecutor — ExecutorService עם 4 threads לכתיבות background. כל Repository משתמש ב-executor זה לwrite operations. קריאות (queries עם LiveData) Room מטפל בהן אוטומטית ב-background.",
+      "בלי AppDatabase ו-Migrations: כל שדרוג גרסה היה קורס את האפליקציה למשתמשים קיימים. Migration 5→6 הוסיף syncedToFirebase לטבלת games — ללא זה, Offline First לא אפשרי. destructiveMigration מוחק data — בלתי קביל.",
+      "הנקודה הכי מאתגרת: thread-safety של Singleton. getInstance() משתמש ב-double-check locking (synchronized block עם בדיקה כפולה) כדי למנוע יצירת שתי instances בmultithreaded environment."
+    ],
+    codeWalkthrough: {
+      methodName: "MIGRATION_5_6",
+      code: `static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+    @Override
+    public void migrate(SupportSQLiteDatabase db) {
+        db.execSQL(
+            "ALTER TABLE games " +
+            "ADD COLUMN syncedToFirebase INTEGER DEFAULT 0 NOT NULL"
+        );
+    }
+};`,
+      lineExplanations: [
+        { line: 1, explanation: "new Migration(5, 6) — מגדיר שה-migration עובר מversion 5 לversion 6" },
+        { line: 2, explanation: "migrate() נקרא אוטומטית ע\"י Room כשה-DB version ישן מ-6" },
+        { line: 3, explanation: "ALTER TABLE games — SQL command להוספת עמודה לטבלה קיימת" },
+        { line: 4, explanation: "ADD COLUMN syncedToFirebase INTEGER — Room stores boolean as INTEGER (0=false, 1=true)" },
+        { line: 5, explanation: "DEFAULT 0 NOT NULL — כל rows קיימים יקבלו 0 (לא סונכרן). NOT NULL = data integrity" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "Room DB גרסה 5 עם 4 entities", correct: "Room DB גרסה 6 עם 5 entities: GameEntity, BestScoreEntity, AchievementEntity, CustomMapEntity, CustomPresetEntity. Migration 5→6 הוסיף syncedToFirebase" },
+      { wrong: "fallbackToDestructiveMigration() פשוט ומקובל", correct: "fallbackToDestructiveMigration() מוחק את כל הdata של המשתמש. Migration 5→6 = ALTER TABLE בלבד — שומר על data קיים" },
+      { wrong: "AppDatabase נוצר כל פעם ב-new AppDatabase()", correct: "AppDatabase הוא Singleton — getInstance() מחזיר תמיד את אותו instance. Room.databaseBuilder() נקרא רק פעם אחת" }
+    ],
+    examTips: {
+      mention: ["'version=6, 5 entities'", "'Migration 5→6: ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0'", "'databaseWriteExecutor = ExecutorService לכתיבות background'"],
+      keywords: ["@Database", "Migration", "ALTER TABLE", "Singleton", "ExecutorService", "entities"],
+      avoid: ["אל תגיד version=5 או 4 entities", "אל תגיד fallbackToDestructiveMigration בסדר", "אל תגיד שRoom מאפשר main thread writes"]
+    },
+    connectionsMap: {
+      from: ["מקבל Context מ-GameRepository ו-App.onCreate()"],
+      to: ["מחזיר GameDao, BestScoreDao, AchievementDao וכו' לRepositories"],
+      createdBy: "נוצר ע\"י App.onCreate() — Singleton"
+    }
+  },
+
   // ══════════════ UI — ACTIVITIES ══════════════
   {
     name: 'GameActivity.java',
@@ -1660,6 +1952,66 @@ const CLASSES = [
   },
 
   {
+    name: 'BaseNavigationActivity.java',
+    package: 'ui',
+    layer: 'ui',
+    purpose: {
+      he: 'Abstract AppCompatActivity שמספק: Bottom Navigation Bar, Toolbar, Window Insets, Theme application. 5 Activities יורשות: GameActivity, StatisticsActivity, LeaderboardActivity, ProfileActivity, AchievementsActivity.',
+      en: 'Abstract AppCompatActivity providing: Bottom Navigation Bar, Toolbar, Window Insets, Theme application. 5 Activities extend it.',
+      mix: 'Abstract base for 5 Activities. DRY: Bottom Nav + Toolbar + WindowInsets written once. Subclasses implement getLayoutResourceId() and initializeContent().'
+    },
+    whyThisWay: { rejected: 'Duplicate nav code in each Activity', chosen: 'Abstract base Activity', why: 'DRY principle — shared navigation code written once, 5 Activities get it for free via inheritance' },
+    keyMethods: [
+      { name: 'onCreate() [BaseNavigationActivity]', explanation: { he: 'מאתחל BottomNav, Toolbar, WindowInsets, ומפעיל initializeContent(savedInstanceState).', en: 'Initializes BottomNav, Toolbar, WindowInsets, then calls initializeContent().', mix: 'Setup shared UI. Calls abstract initializeContent() for subclass-specific setup.' }, code: '@Override\nprotected void onCreate(Bundle savedInstanceState) {\n  super.onCreate(savedInstanceState);\n  setContentView(getLayoutResourceId());\n  setupToolbar();\n  setupBottomNavigation();\n  applyWindowInsets();\n  initializeContent(savedInstanceState);\n}' },
+      { name: 'getLayoutResourceId() [abstract]', explanation: { he: 'Abstract — כל subclass מספקת את layout XML שלה.', en: 'Abstract — each subclass provides its own layout XML.', mix: 'Abstract method. GameActivity returns R.layout.activity_game.' }, code: 'protected abstract int getLayoutResourceId();' },
+      { name: 'initializeContent(Bundle) [abstract]', explanation: { he: 'Abstract — כל subclass מאתחלת ViewModels וviews.', en: 'Abstract — each subclass initializes its own ViewModels and views.', mix: 'Abstract. GameActivity sets up GameViewModel here.' }, code: 'protected abstract void initializeContent(Bundle savedInstanceState);' }
+    ],
+    connectsTo: ['GameActivity', 'StatisticsActivity', 'LeaderboardActivity', 'ProfileActivity', 'AchievementsActivity', 'VMFactory', 'ThemeManager'],
+    examQuestions: ['מה BaseNavigationActivity ואיזה Activities יורשים ממנו?', 'מה abstract methods הן מחייבות לממש?', 'מה Template Method Pattern?'],
+    deepExplanation: [
+      "BaseNavigationActivity פותרת את בעיית הכפילות בקוד. ב-5 Activities שונות, Bottom Navigation Bar, Toolbar, ו-Window Insets היו כתובים 5 פעמים — כל change היה דורש update ב-5 מקומות. Abstract base class מרכז קוד משותף.",
+      "Template Method Pattern: onCreate() ב-BaseNavigationActivity מגדיר את ה-skeleton — setupToolbar(), setupBottomNavigation(), applyWindowInsets(), ואז קורא ל-initializeContent() שכל subclass מממשת. הbase מחליט את הסדר, הsubclass ממלאת תוכן.",
+      "בלי BaseNavigationActivity: כל שינוי בBottomNav (הוספת tab, change color) היה דורש update ב-5 Activities. Bug ב-WindowInsets היה קשה לאתר. Inconsistent behavior בין Activities שונות. DRY principle מתבקש.",
+      "הנקודה הכי מאתגרת: Window Insets. Android 10+ הגדיר edge-to-edge display — תוכן מאחורי status bar. applyWindowInsets() מוסיף padding לbase layout כדי שהtoolbar לא יחפוף עם status bar. כל Activity מקבלת זאת חינם."
+    ],
+    codeWalkthrough: {
+      methodName: "onCreate(Bundle savedInstanceState)",
+      code: `@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(getLayoutResourceId());
+    setupToolbar();
+    setupBottomNavigation();
+    applyWindowInsets();
+    initializeContent(savedInstanceState);
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "super.onCreate() — חובה. Android מאתחל Activity internals (window, state restore)" },
+        { line: 2, explanation: "getLayoutResourceId() — קורא לabstract method. GameActivity מחזירה R.layout.activity_game" },
+        { line: 3, explanation: "setupToolbar() — מוצא toolbar ב-layout, מגדיר כ-ActionBar" },
+        { line: 4, explanation: "setupBottomNavigation() — מוצא BottomNavigationView, מגדיר listeners לניווט" },
+        { line: 5, explanation: "applyWindowInsets() — Edge-to-edge: מוסיף padding לstatus bar height" },
+        { line: 6, explanation: "initializeContent() — קורא לabstract method. GameActivity מאתחלת GameViewModel כאן" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "BaseNavigationActivity היא interface", correct: "BaseNavigationActivity היא abstract class — יש לה implementation חלקית (setupBottomNavigation, setupToolbar) ו-abstract methods. Interface לא יכול להכיל implementation" },
+      { wrong: "כל 7 Activities יורשות מBaseNavigationActivity", correct: "רק 5 Activities יורשות: GameActivity, StatisticsActivity, LeaderboardActivity, ProfileActivity, AchievementsActivity. NfcActivity, DailyChallengeActivity, MultiplayerLobbyActivity יורשות ישירות מAppCompatActivity" },
+      { wrong: "BaseNavigationActivity מנהלת את הVMFactory", correct: "BaseNavigationActivity מנהלת רק navigation UI (BottomNav, Toolbar, Insets). VMFactory נוצר ב-initializeContent() של כל Activity בנפרד" }
+    ],
+    examTips: {
+      mention: ["'5 Activities יורשות: GameActivity, StatisticsActivity, LeaderboardActivity, ProfileActivity, AchievementsActivity'", "'Template Method Pattern: base defines skeleton, subclass fills content'", "'DRY: Bottom Nav + Toolbar כתובים פעם אחת'"],
+      keywords: ["abstract class", "Template Method Pattern", "DRY", "BottomNavigationView", "WindowInsets", "getLayoutResourceId", "initializeContent"],
+      avoid: ["אל תגיד שBaseNavigationActivity = interface", "אל תגיד שכל Activities יורשות ממנה", "אל תגיד שמנהלת VMFactory"]
+    },
+    connectionsMap: {
+      from: ["מקבל theme settings מ-ThemeManager", "מקבל navigation events מ-BottomNavigationView"],
+      to: ["מגדירה navigation ל-GameActivity, StatisticsActivity, etc.", "קוראת ל-initializeContent() ב-subclass"],
+      createdBy: "Abstract — לא נוצרת ישירות. Subclasses: GameActivity, StatisticsActivity, etc."
+    }
+  },
+
+  {
     name: 'GameViewModel.java',
     package: 'ui/game',
     layer: 'ui',
@@ -1675,7 +2027,50 @@ const CLASSES = [
       { name: 'onCleared()', explanation: { he: 'מנקה timer כדי למנוע memory leak.', en: 'Cancels timer to prevent memory leak.', mix: 'Cleanup on destroy. timer.cancel() prevents memory leak.' }, code: '@Override protected void onCleared() { if (timer != null) timer.cancel(); }' }
     ],
     connectsTo: ['GameEngine', 'GameActivity', 'VMFactory', 'GameRepository'],
-    examQuestions: ['מה ViewModel.onCleared() ולמה חשוב?', 'למה ViewModel שורד rotation אבל Activity לא?']
+    examQuestions: ['מה ViewModel.onCleared() ולמה חשוב?', 'למה ViewModel שורד rotation אבל Activity לא?'],
+    deepExplanation: [
+      "GameViewModel פותר את בעיית אובדן state בסיבוב מסך. לפני ViewModel, כל rotation גרם ל-Activity להיהרס ולהיווצר מחדש — לוח המשחק, הטיימר, הניקוד — הכל אפס. ViewModel שורד את ה-rotation כי Android מנהל את lifecycle שלו בנפרד מ-Activity.",
+      "ב-MVVM, GameViewModel הוא השכבה האמצעית. הוא מחזיק LiveData observables (currentGame, timer, gameStatus, remainingMines) שהActivity מאזינה להם. כשstate משתנה, UI מתעדכן אוטומטית ללא polling. GameViewModel מעביר פקודות לGameEngine ומעדכן LiveData בתוצאה.",
+      "בלי GameViewModel: GameActivity הייתה מחזיקה את GameEngine ישירות. כל rotation היה הורס את הmatch — timer היה מתאפס, לוח היה נאבד. onSaveInstanceState() לא מספיק לdata מורכב. GameEngine לא היה יכול להיות Pure Java.",
+      "הנקודה הכי מאתגרת: ניהול הטיימר. java.util.Timer רץ ב-background thread, לכן postValue() (לא setValue()) חייב לעדכן את TimerLiveData. בonCleared(), חייבים timer.cancel() — אחרת הטיימר ממשיך לרוץ גם אחרי שהActivity נסגרה, גורם ל-memory leak."
+    ],
+    codeWalkthrough: {
+      methodName: "onCleared()",
+      code: `@Override
+protected void onCleared() {
+    super.onCleared();
+    if (timer != null) {
+        timer.cancel();
+        timer = null;
+    }
+    if (timerHandler != null) {
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "onCleared() נקרא כשה-ViewModel נהרס לצמיתות — Activity סגורה, לא rotation" },
+        { line: 2, explanation: "super.onCleared() — חובה לקרוא לversion של class האב" },
+        { line: 3, explanation: "בדיקת null לפני cancel() — Timer עשוי לא להיות מאותחל אם המשחק לא התחיל" },
+        { line: 4, explanation: "timer.cancel() עוצר את ה-TimerTask ברקע — בלי זה הטיימר ממשיך לרוץ אינסוף" },
+        { line: 5, explanation: "timer = null — מאפשר GC לשחרר את ה-Timer object מהזיכרון" },
+        { line: 6, explanation: "timerHandler.removeCallbacksAndMessages(null) עוצר כל pending callbacks" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "onCleared() נקרא בכל rotation של מסך", correct: "onCleared() נקרא רק כשה-Activity נהרסת לצמיתות (back button, finish()). ViewModel שורד rotation — לכן board נשמר בסיבוב" },
+      { wrong: "postValue() ו-setValue() זהים — ניתן לקרוא לשניהם מכל thread", correct: "setValue() חייב להיקרא מה-main thread בלבד. postValue() thread-safe לכל thread. Timer רץ ב-background → חייב postValue() לעדכון timerLiveData" },
+      { wrong: "GameViewModel צריך Context כדי לגשת ל-GameEngine", correct: "GameViewModel() נוצר ללא Context — GameEngine הוא Pure Java. רק StatisticsViewModel/LeaderboardViewModel/AchievementsViewModel מקבלים Context" }
+    ],
+    examTips: {
+      mention: ["'ViewModel שורד rotation — Activity נהרסת ונוצרת מחדש אבל ViewModel נשאר'", "'postValue() לעדכון מ-background thread של הטיימר'", "'onCleared() מנקה timer.cancel() למניעת memory leak'"],
+      keywords: ["LiveData", "postValue", "onCleared", "rotation survival", "memory leak", "background thread"],
+      avoid: ["אל תגיד ש-onCleared() נקרא ב-rotation", "אל תגיד ש-setValue() עובד מכל thread", "אל תגיד שGameViewModel צריך Context"]
+    },
+    connectionsMap: {
+      from: ["מקבל לחיצות תא מ-GameActivity.onCellClick()", "מקבל seed מ-DailyChallengeActivity.startNewGameWithSeed()"],
+      to: ["שולח game state ל-GameActivity דרך LiveData observers", "שולח save request ל-GameRepository.saveGameResult()"],
+      createdBy: "נוצר ע\"י VMFactory.create(GameViewModel.class) שנקרא מ-GameActivity.onCreate()"
+    }
   },
 
   {
@@ -1694,7 +2089,57 @@ const CLASSES = [
       { name: 'setGame(Game game)', explanation: { he: 'עדכון reference ל-board → invalidate() → onDraw().', en: 'Updates board reference → invalidate() → onDraw().', mix: 'setGame → invalidate → redraw. Called when LiveData changes.' }, code: 'this.game = game;\nthis.board = game.getBoard();\ninvalidate();' }
     ],
     connectsTo: ['GameActivity', 'Cell', 'CellState', 'Game'],
-    examQuestions: ['מה GameBoardView ואיך onTouchEvent מחשב row/col?', 'למה Canvas ולא RecyclerView?']
+    examQuestions: ['מה GameBoardView ואיך onTouchEvent מחשב row/col?', 'למה Canvas ולא RecyclerView?'],
+    deepExplanation: [
+      "GameBoardView פותר את בעיית ייצוג interactive grid עם תאים קטנים. RecyclerView מתאים לרשימות אנכיות — גריד של 30×16=480 תאים עם touch detection מדויקת דורש Canvas rendering ישיר.",
+      "GameBoardView extends View — ה-Android custom view mechanism. onDraw(Canvas) נקרא כשAndroid צריך לצייר. onTouchEvent(MotionEvent) נקרא כשמשתמש מגע. invalidate() מסמן 'צריך לצייר מחדש' — לא מצייר מיד. החישוב O(1) של תא מpixel coordinates הוא היתרון הגדול.",
+      "בלי GameBoardView: RecyclerView עם 480 items = memory intensive. scroll artifacts. touch detection מורכב (GridLayoutManager לא מחזיר row/col ישירות). אי אפשר לצייר custom graphics (mines, flags, numbers עם styles). invalidate() pattern הרבה יותר פשוט מ-DiffUtil.",
+      "הנקודה הכי מאתגרת: Gesture detection — tap, long-press, double-tap. GestureDetector מבדיל בין tap (reveal) ל-long-press (flag) ל-double-tap (quickReveal/chord). כל gesture צריך response שונה."
+    ],
+    codeWalkthrough: {
+      methodName: "onTouchEvent(MotionEvent event)",
+      code: `@Override
+public boolean onTouchEvent(MotionEvent event) {
+    if (event.getAction() == MotionEvent.ACTION_UP) {
+        float x = event.getX();
+        float y = event.getY();
+        int col = (int)(x / CELL_SIZE);
+        int row = (int)(y / CELL_SIZE);
+        if (row >= 0 && row < rows && col >= 0 && col < cols) {
+            if (listener != null) {
+                listener.onCellClick(row, col);
+            }
+        }
+        return true;
+    }
+    return gestureDetector.onTouchEvent(event);
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "ACTION_UP = משתמש הרים את האצבע — tap מלא. ACTION_DOWN = לחיצה עדיין בביצוע" },
+        { line: 2, explanation: "event.getX() / getY() = קואורדינטות pixel של touch בתוך ה-View" },
+        { line: 3, explanation: "col = (int)(x / CELL_SIZE) — חלוקה פשוטה O(1) ממיר pixel ל-column index" },
+        { line: 4, explanation: "row = (int)(y / CELL_SIZE) — אותו חישוב לשורה. y=0 = top of board" },
+        { line: 5, explanation: "Boundary check — מוודא שהtouch בתוך גבולות הלוח" },
+        { line: 6, explanation: "listener.onCellClick(row, col) — Interface callback ל-GameActivity. Decoupling: View לא מכיר Activity" },
+        { line: 7, explanation: "return true = event handled — מונע ביצוע event handlers נוספים" },
+        { line: 8, explanation: "gestureDetector.onTouchEvent() לlong-press (flag) ו-double-tap (quickReveal) gestures" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "GameBoardView הוא Fragment או RecyclerView", correct: "GameBoardView extends View — Custom View. onDraw(Canvas) מצייר ישירות. RecyclerView נדחה כי O(1) cell detection ו-full drawing control לא אפשריים בRecyclerView" },
+      { wrong: "כל שינוי במשחק מצייר מחדש את כל ה-View", correct: "Android לא מצייר כל frame — רק כשקוראים invalidate(). setGame(game) קורא invalidate() שמסמן 'צייר שוב'. onDraw() יקרא בframe הבא" },
+      { wrong: "onTouchEvent מחשב row/col עם חיפוש O(n)", correct: "חישוב O(1) ישיר: col=(int)(x/cellSize), row=(int)(y/cellSize). זו יתרון גדול של Canvas על RecyclerView" }
+    ],
+    examTips: {
+      mention: ["'onTouchEvent: col=(int)(x/cellSize) — O(1) חישוב ישיר'", "'invalidate() → onDraw(Canvas) — ה-cycle של Android custom view'", "'setGame(game) → invalidate() כשLiveData משתנה'"],
+      keywords: ["Canvas", "onDraw", "onTouchEvent", "invalidate", "O(1)", "Custom View", "GestureDetector", "listener interface"],
+      avoid: ["אל תגיד שGameBoardView הוא RecyclerView", "אל תגיד שonDraw נקרא כל frame", "אל תבלבל ACTION_UP עם ACTION_DOWN"]
+    },
+    connectionsMap: {
+      from: ["מקבל Game object מ-GameViewModel דרך LiveData observer ב-GameActivity"],
+      to: ["שולח onCellClick(row, col) ל-GameActivity דרך OnCellClickListener interface"],
+      createdBy: "נוצר ב-XML (activity_game.xml) ו-referenced ע\"י ViewBinding ב-GameActivity"
+    }
   },
 
   {
@@ -1712,7 +2157,59 @@ const CLASSES = [
       { name: 'createFactory(Context)', explanation: { he: 'Static helper — VMFactory.createFactory(this) במקום new VMFactory(this).', en: 'Static helper — VMFactory.createFactory(this) instead of new VMFactory(this).', mix: 'Static factory method convenience.' }, code: 'public static VMFactory createFactory(Context context) { return new VMFactory(context); }' }
     ],
     connectsTo: ['GameViewModel', 'LeaderboardViewModel', 'StatisticsViewModel', 'AchievementsViewModel', 'GameActivity'],
-    examQuestions: ['מה VMFactory ומה הבעיה שהוא פותר?', 'מה pattern השימוש ב-create()? (isAssignableFrom)']
+    examQuestions: ['מה VMFactory ומה הבעיה שהוא פותר?', 'מה pattern השימוש ב-create()? (isAssignableFrom)'],
+    deepExplanation: [
+      "VMFactory פותר constraint מוזר של Android: ViewModel יכול להיווצר רק עם no-arg constructor ע\"י ViewModelProvider. אבל StatisticsViewModel, LeaderboardViewModel, ו-AchievementsViewModel צריכים Context כדי לגשת ל-Room DB. ללא Factory — compile error.",
+      "VMFactory מממש ViewModelProvider.Factory — interface עם method אחת: create(Class<T>). כשActivity קוראת ViewModelProvider(this, factory).get(StatisticsViewModel.class), Android קורא factory.create(StatisticsViewModel.class) — ו-Factory מחזירה new StatisticsViewModel(context).",
+      "בלי VMFactory: אי אפשר לצור ViewModels עם parameters. האלטרנטיבה היא Hilt (Dependency Injection framework) — עובד אבל מוסיף annotation processing, Gradle plugins, ו-200+ שורות configuration. VMFactory = same result, 20 שורות קוד.",
+      "הנקודה הכי מאתגרת: isAssignableFrom() pattern. במקום instanceof (שלא עובד עם Class objects), משתמשים ב-modelClass.isAssignableFrom(GameViewModel.class). זה בודק אם modelClass הוא GameViewModel או subclass שלו."
+    ],
+    codeWalkthrough: {
+      methodName: "create(Class<T> modelClass)",
+      code: `@NonNull
+@Override
+public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+    if (modelClass.isAssignableFrom(GameViewModel.class)) {
+        return (T) new GameViewModel();
+    }
+    if (modelClass.isAssignableFrom(LeaderboardViewModel.class)) {
+        return (T) new LeaderboardViewModel(context);
+    }
+    if (modelClass.isAssignableFrom(StatisticsViewModel.class)) {
+        return (T) new StatisticsViewModel(context);
+    }
+    if (modelClass.isAssignableFrom(AchievementsViewModel.class)) {
+        return (T) new AchievementsViewModel(context);
+    }
+    throw new IllegalArgumentException(
+        "Unknown ViewModel class: " + modelClass.getName());
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "@NonNull annotation — חוזה: create() לא יחזיר null (Lint warning prevention)" },
+        { line: 2, explanation: "Generic method: <T extends ViewModel> מבטיח שמחזירים רק ViewModels" },
+        { line: 3, explanation: "isAssignableFrom(GameViewModel.class) — בודק אם modelClass IS-A GameViewModel" },
+        { line: 4, explanation: "new GameViewModel() — ללא Context! GameEngine הוא Pure Java ולא צריך Context" },
+        { line: 5, explanation: "(T) = unchecked cast — בטוח כי isAssignableFrom() ודא שהtype נכון" },
+        { line: 6, explanation: "new LeaderboardViewModel(context) — Context נחוץ לגישה ל-Room" },
+        { line: 7, explanation: "new StatisticsViewModel(context) — Context לגישה ל-GameRepository ו-Room" },
+        { line: 8, explanation: "throw IllegalArgumentException — ViewModel לא מוכר → crash בdevelopment = bug גלוי" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "VMFactory מוציא GameViewModel(context) כי context תמיד נחוץ", correct: "GameViewModel() נוצר ללא Context — Pure Java GameEngine לא צריך Context. רק ה-3 ViewModels עם DB access צריכים Context" },
+      { wrong: "Hilt עדיף על VMFactory תמיד", correct: "Hilt מצוין לפרויקטים גדולים, אבל מוסיף complexity. VMFactory מדגים Factory Pattern בצורה ברורה ומספיק לפרויקט. בגרות = Factory Pattern, לא Hilt" },
+      { wrong: "VMFactory נוצר ב-onCreate() ונמחק ב-onDestroy()", correct: "VMFactory הוא temporary — נוצר ב-onCreate() רק להקמת ViewModels. לאחר שViewModels נוצרו, Factory לא נדרשת. ה-ViewModels עצמם שורדים rotation" }
+    ],
+    examTips: {
+      mention: ["'Android מאפשר ViewModel רק עם no-arg — VMFactory מאפשר parameters'", "'isAssignableFrom() במקום instanceof לClass objects'", "'GameViewModel() בלי Context — Pure Java. שאר ה-VMs עם context'"],
+      keywords: ["ViewModelProvider.Factory", "isAssignableFrom", "Factory Pattern", "Context injection", "no-arg constructor"],
+      avoid: ["אל תגיד שVMFactory = Hilt", "אל תגיד שGameViewModel מקבל Context", "אל תגיד שVMFactory שורד rotation"]
+    },
+    connectionsMap: {
+      from: ["מקבל Context מ-GameActivity (this)"],
+      to: ["מחזיר GameViewModel, LeaderboardViewModel, StatisticsViewModel, AchievementsViewModel ל-ViewModelProvider"],
+      createdBy: "נוצר ע\"י כל Activity שצריכה ViewModel: new VMFactory(this) ב-onCreate()"
+    }
   },
 
   {
@@ -1933,7 +2430,51 @@ const CLASSES = [
       { name: 'read(Intent)', explanation: { he: 'מפענח NDEF מ-Intent → ChallengeData.', en: 'Decodes NDEF from Intent → ChallengeData.', mix: 'Intent → Parcelable[] → NdefMessage → parse JSON.' }, code: 'Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);\nNdefMessage msg = (NdefMessage) rawMsgs[0];\nreturn ChallengeData.fromJson(new String(msg.getRecords()[0].getPayload()));' }
     ],
     connectsTo: ['NfcActivity'],
-    examQuestions: ['מה MIME type של NDEF ב-NfcHandler?', 'מה NfcActivity.onNewIntent() עושה?']
+    examQuestions: ['מה MIME type של NDEF ב-NfcHandler?', 'מה NfcActivity.onNewIntent() עושה?'],
+    deepExplanation: [
+      "NfcHandler פותר את בעיית שיתוף custom maps בין מכשירים. ללא NFC, שיתוף map היה דורש שרת מרכזי, QR codes, או Bluetooth pairing — כולם מורכבים יותר. NFC = פשוט כמו לגעת בטלפונים.",
+      "NfcHandler אורז את ה-ChallengeData (width, height, mines, difficulty, creator, targetTime) כ-NDEF Message עם MIME type מותאם אישית. NDEF (NFC Data Exchange Format) הוא תקן cross-device.",
+      "בלי NfcHandler: לא ניתן לשתף custom maps. NfcActivity הייתה צריכה לממש NDEF logic ישירות — coupling גבוה. Validation של boardSize (max 50×50, mines < totalCells) היה מפוזר. simulate_nfc=true לא היה ניתן לישום בצורה נקייה.",
+      "הנקודה הכי מאתגרת: onNewIntent() ו-singleTop launchMode. כדי שNFC intent יגיע ל-Activity שכבר פתוחה (ולא Activity חדשה), Activity חייבת להיות מוגדרת כ-singleTop ב-Manifest. Android מעביר את ה-Intent לonNewIntent() במקום ליצור instance חדש."
+    ],
+    codeWalkthrough: {
+      methodName: "read(Intent intent)",
+      code: `public static ChallengeData read(Intent intent) {
+    Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
+        NfcAdapter.EXTRA_NDEF_MESSAGES);
+    if (rawMsgs == null || rawMsgs.length == 0) {
+        return null;
+    }
+    NdefMessage msg = (NdefMessage) rawMsgs[0];
+    NdefRecord record = msg.getRecords()[0];
+    String payload = new String(record.getPayload(), StandardCharsets.UTF_8);
+    return ChallengeData.fromJson(payload);
+}`,
+      lineExplanations: [
+        { line: 1, explanation: "EXTRA_NDEF_MESSAGES = המפתח ל-NFC data ב-Intent שנשלח ע\"י Android" },
+        { line: 2, explanation: "rawMsgs הוא Parcelable[] כי NDEF Message הוא Parcelable object" },
+        { line: 3, explanation: "null check — אם Intent לא מכיל NDEF (למשל simulate_nfc=false), מחזיר null" },
+        { line: 4, explanation: "rawMsgs[0] — הmessage הראשון. cast ל-NdefMessage" },
+        { line: 5, explanation: "getRecords()[0] — NdefMessage מכיל NdefRecord[]. כתבנו רק record אחד" },
+        { line: 6, explanation: "getPayload() = ה-bytes שכתבנו ב-write(). ממיר ל-String UTF-8" },
+        { line: 7, explanation: "ChallengeData.fromJson(payload) — parse JSON → Java object עם width/height/mines" }
+      ]
+    },
+    commonMistakes: [
+      { wrong: "NFC required=true ב-Manifest כי האפליקציה לא תעבוד בלי NFC", correct: "required=false — App זמין לכולם. checkNfcStatus() בודק בruntime. מכשיר ללא NFC: כל הפיצ'רים זמינים, רק שיתוף map לא" },
+      { wrong: "onNewIntent() נקרא כשפותחים Activity חדשה", correct: "onNewIntent() נקרא כש-Activity כבר פתוחה ומקבלת intent חדש — בזכות launchMode=singleTop. ללא singleTop, NFC היה יוצר Activity instance חדשה" },
+      { wrong: "NfcHandler כותב ל-Bluetooth או Wi-Fi", correct: "NfcHandler כותב NDEF Message ל-NFC adapter. NFC = physical proximity (tap), לא wireless networking" }
+    ],
+    examTips: {
+      mention: ["'required=false ב-Manifest — App זמין לכולם, NFC נבדק בruntime'", "'singleTop launchMode — onNewIntent() נקרא כשActivity כבר פתוחה'", "'simulate_nfc=true Intent extra לבדיקה ללא חומרה'"],
+      keywords: ["NDEF", "NfcAdapter", "onNewIntent", "singleTop", "required=false", "Parcelable", "ChallengeData"],
+      avoid: ["אל תגיד שNFC required=true", "אל תבלבל NFC עם Bluetooth", "אל תגיד שonNewIntent יוצר Activity חדשה"]
+    },
+    connectionsMap: {
+      from: ["מקבל ChallengeData מ-NfcActivity.shareMap()", "מקבל Intent מ-NfcActivity.onNewIntent()"],
+      to: ["שולח ChallengeData ל-NfcActivity לאחר parse", "שולח NDEF Message ל-NfcAdapter"],
+      createdBy: "נוצר ע\"י NfcActivity (new NfcHandler()) — utility class"
+    }
   },
 
   {
