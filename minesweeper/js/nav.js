@@ -37,6 +37,14 @@
     </div>
   `;
 
+  // Lang toggle — utils.js is loaded before nav.js
+  const curLang = (typeof getLang === 'function') ? getLang() : 'mix';
+  const navLangHTML = `<div class="lang-toggle" style="flex-shrink:0">
+    <button class="lang-btn${curLang==='he'?' active':''}" data-lang="he" onclick="setLang('he')">עב</button>
+    <button class="lang-btn${curLang==='en'?' active':''}" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn${curLang==='mix'?' active':''}" data-lang="mix" onclick="setLang('mix')">MIX</button>
+  </div>`;
+
   const navHTML = `
     <nav class="top-nav">
       <div class="top-nav-inner">
@@ -45,6 +53,7 @@
         <div class="nav-divider"></div>
         <div class="nav-links" id="nav-links">${linksHTML}</div>
         ${ringHTML}
+        ${navLangHTML}
         <button class="nav-hamburger" id="nav-hamburger" aria-label="תפריט">
           <span></span><span></span><span></span>
         </button>

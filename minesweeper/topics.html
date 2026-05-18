@@ -75,6 +75,9 @@
   // Deep-link support: topics.html#async
   const hash = window.location.hash.slice(1);
   if (hash) showTopic(hash);
+
+  // Topics content is Hebrew-only — lang toggle saves preference for other pages
+  function onLangChange() {}  // no-op: TOPICS data has no multilang structure
 </script>
 </body>
 </html>

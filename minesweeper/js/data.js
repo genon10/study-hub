@@ -11,6 +11,40 @@
 // ----------------------------------------------------------------
 const LANG_LABELS = { he: 'עב', en: 'EN', mix: 'MIX' };
 
+// ----------------------------------------------------------------
+// LANG — UI string translations (keyed by data-i18n attribute)
+// ----------------------------------------------------------------
+const LANG = {
+  // Flashcard mode tabs
+  'mode.flip':  { he: '🔄 הפוך',        en: '🔄 Flip',        mix: '🔄 Flip' },
+  'mode.learn': { he: '📖 למד',          en: '📖 Learn',       mix: '📖 Learn' },
+  'mode.match': { he: '🎯 התאם',         en: '🎯 Match',       mix: '🎯 Match' },
+  'mode.tf':    { he: '✅ נכון/שגוי',    en: '✅ True/False',  mix: '✅ T/F' },
+  'mode.write': { he: '✍️ כתיבה',        en: '✍️ Write',       mix: '✍️ Write' },
+  // Flashcard UI hints
+  'fc.flip-hint':  { he: 'לחץ להפוך',    en: 'Click to flip',  mix: 'Click to flip' },
+  'fc.swipe-hint': {
+    he: '← החלק ימינה לכרטיס הבא | שמאלה לקודם →',
+    en: '← Swipe right for next | left for prev →',
+    mix: '← Swipe right for next | שמאלה לקודם →'
+  },
+  // Flashcard action buttons
+  'btn.mark-seen': { he: '✓ סמן כנראה',  en: '✓ Mark seen',    mix: '✓ Mark seen' },
+  'btn.seen':      { he: '✓ נראה',        en: '✓ Seen',         mix: '✓ Seen' },
+  'btn.reset-seen':{ he: '🔄 אפס',        en: '🔄 Reset',       mix: '🔄 Reset' },
+  'btn.show-ans':  { he: '👁️ הצג תשובה', en: '👁️ Show answer', mix: '👁️ Show answer' },
+  'btn.knew-it':   { he: '✅ ידעתי',      en: '✅ Got it',      mix: '✅ Got it' },
+  'btn.again':     { he: '🔁 עוד פעם',   en: '🔁 Again',       mix: '🔁 Again' },
+  'fc.prev':       { he: '→ הקודם',       en: '← Prev',         mix: '← Prev' },
+  'fc.next':       { he: 'הבא ←',         en: 'Next →',         mix: 'Next →' },
+  // Write mode
+  'write.placeholder': { he: 'כתוב את התשובה...', en: 'Type the answer...', mix: 'Type the answer...' },
+  'write.check':       { he: '✓ בדוק',   en: '✓ Check',        mix: '✓ Check' },
+  // TF mode
+  'tf.true-btn':  { he: '✅ נכון',        en: '✅ True',         mix: '✅ True' },
+  'tf.false-btn': { he: '❌ שגוי',        en: '❌ False',        mix: '❌ False' },
+};
+
 if (typeof getLang === 'undefined') {
   // eslint-disable-next-line no-global-assign
   var getLang = function() { return localStorage.getItem('study_lang') || 'he'; };

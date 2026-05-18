@@ -36,19 +36,34 @@ const KEYS = {
 
 // ---- language helpers ----
 function getLang() {
-  return Store.get(KEYS.STUDY_LANG, 'he');
+  return Store.get(KEYS.STUDY_LANG, 'mix'); // default: MIX on first visit
 }
 function setLang(l) {
   Store.set(KEYS.STUDY_LANG, l);
+  // Update all toggle buttons (nav + any inline toggles)
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === l);
   });
+  // Update data-i18n elements (requires LANG dict from data.js)
+  if (typeof LANG !== 'undefined') {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const entry = LANG[el.dataset.i18n];
+      if (entry) el.textContent = entry[l] || entry.he || entry.en || '';
+    });
+  }
   if (typeof onLangChange === 'function') onLangChange(l);
 }
-// Translate: obj may be plain string or {he, en, mix}
+// Translate: obj may be a plain string key (looked up in LANG dict), or {he, en, mix}
 function t(obj) {
   if (!obj) return '';
-  if (typeof obj === 'string') return obj;
+  if (typeof obj === 'string') {
+    // key lookup in LANG dict (data.js loaded before call site)
+    if (typeof LANG !== 'undefined' && LANG[obj]) {
+      const l = getLang();
+      return LANG[obj][l] || LANG[obj].he || LANG[obj].en || obj;
+    }
+    return obj;
+  }
   const l = getLang();
   return obj[l] || obj.he || obj.en || '';
 }

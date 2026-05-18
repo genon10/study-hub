@@ -23,11 +23,11 @@
 
   <!-- MODE TABS -->
   <div class="mode-tabs" id="mode-tabs">
-    <button class="mode-tab active" onclick="setMode('flip',this)">🔄 הפוך</button>
-    <button class="mode-tab" onclick="setMode('learn',this)">📖 למד</button>
-    <button class="mode-tab" onclick="setMode('match',this)">🎯 התאם</button>
-    <button class="mode-tab" onclick="setMode('tf',this)">✅ נכון/שגוי</button>
-    <button class="mode-tab" onclick="setMode('write',this)">✍️ כתיבה</button>
+    <button class="mode-tab active" data-i18n="mode.flip"  onclick="setMode('flip',this)">🔄 הפוך</button>
+    <button class="mode-tab"        data-i18n="mode.learn" onclick="setMode('learn',this)">📖 למד</button>
+    <button class="mode-tab"        data-i18n="mode.match" onclick="setMode('match',this)">🎯 התאם</button>
+    <button class="mode-tab"        data-i18n="mode.tf"    onclick="setMode('tf',this)">✅ נכון/שגוי</button>
+    <button class="mode-tab"        data-i18n="mode.write" onclick="setMode('write',this)">✍️ כתיבה</button>
   </div>
 
   <!-- LANG TOGGLE -->
@@ -37,13 +37,13 @@
   <div id="mode-flip">
     <div class="fc-stats" id="flip-stats"></div>
     <div class="progress-dots" id="flip-dots"></div>
-    <div class="fc-swipe-hint">← החלק ימינה לכרטיס הבא | שמאלה לקודם →</div>
+    <div class="fc-swipe-hint" data-i18n="fc.swipe-hint">← החלק ימינה לכרטיס הבא | שמאלה לקודם →</div>
     <div class="fc-outer" id="flip-outer">
       <div class="fc-card-scene">
         <div class="flashcard" id="flip-card" onclick="flipCard()">
           <div class="fc-front">
             <div class="fc-q" id="flip-q"></div>
-            <span class="flip-hint">לחץ להפוך</span>
+            <span class="flip-hint" data-i18n="fc.flip-hint">לחץ להפוך</span>
           </div>
           <div class="fc-back">
             <div class="fc-a" id="flip-a"></div>
@@ -52,13 +52,13 @@
       </div>
     </div>
     <div class="fc-nav">
-      <button onclick="flipPrev()">→ הקודם</button>
+      <button data-i18n="fc.prev" onclick="flipPrev()">→ הקודם</button>
       <span class="fc-count" id="flip-count"></span>
-      <button onclick="flipNext()">הבא ←</button>
+      <button data-i18n="fc.next" onclick="flipNext()">הבא ←</button>
     </div>
     <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
-      <button class="btn btn-secondary" onclick="markSeen()" id="btn-seen">✓ סמן כנראה</button>
-      <button class="btn btn-danger" onclick="resetSeen()">🔄 אפס</button>
+      <button class="btn btn-secondary" data-i18n="btn.mark-seen" onclick="markSeen()" id="btn-seen">✓ סמן כנראה</button>
+      <button class="btn btn-danger" data-i18n="btn.reset-seen" onclick="resetSeen()">🔄 אפס</button>
     </div>
     <div style="text-align:center;margin-top:12px;font-size:.72rem;color:var(--muted)">
       מקלדת: ← → לניווט | Space להפוך
@@ -74,19 +74,19 @@
     <div class="progress-dots" id="learn-dots"></div>
     <div class="learn-card" id="learn-card"></div>
     <div style="display:flex;gap:10px;justify-content:center;margin-bottom:14px" id="learn-reveal-wrap">
-      <button class="btn btn-secondary" id="learn-reveal" onclick="learnReveal()">👁️ הצג תשובה</button>
+      <button class="btn btn-secondary" data-i18n="btn.show-ans" id="learn-reveal" onclick="learnReveal()">👁️ הצג תשובה</button>
     </div>
     <div id="learn-answer-wrap" style="display:none">
       <div class="learn-card" id="learn-answer-card" style="border-color:var(--accent2);font-size:.85rem;color:var(--accent2)"></div>
       <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px">
-        <button class="btn btn-secondary" style="border-color:var(--success);color:var(--success)" onclick="learnGotIt()">✅ ידעתי</button>
-        <button class="btn btn-secondary" style="border-color:var(--danger);color:var(--danger)" onclick="learnAgain()">🔁 עוד פעם</button>
+        <button class="btn btn-secondary" data-i18n="btn.knew-it" style="border-color:var(--success);color:var(--success)" onclick="learnGotIt()">✅ ידעתי</button>
+        <button class="btn btn-secondary" data-i18n="btn.again"   style="border-color:var(--danger);color:var(--danger)"   onclick="learnAgain()">🔁 עוד פעם</button>
       </div>
     </div>
     <div class="fc-nav">
-      <button onclick="learnPrev()">→ הקודם</button>
+      <button data-i18n="fc.prev" onclick="learnPrev()">→ הקודם</button>
       <span class="fc-count" id="learn-count"></span>
-      <button onclick="learnNext()">הבא ←</button>
+      <button data-i18n="fc.next" onclick="learnNext()">הבא ←</button>
     </div>
     <div style="text-align:center;font-size:.76rem;color:var(--muted)" id="learn-stats"></div>
   </div>
@@ -123,8 +123,8 @@
     </div>
     <div class="tf-statement" id="tf-statement"></div>
     <div class="tf-btns" id="tf-btns">
-      <button class="tf-true"  id="tf-true-btn"  onclick="answerTF(true)">✅ נכון</button>
-      <button class="tf-false" id="tf-false-btn" onclick="answerTF(false)">❌ שגוי</button>
+      <button class="tf-true"  data-i18n="tf.true-btn"  id="tf-true-btn"  onclick="answerTF(true)">✅ נכון</button>
+      <button class="tf-false" data-i18n="tf.false-btn" id="tf-false-btn" onclick="answerTF(false)">❌ שגוי</button>
     </div>
     <div class="tf-explanation" id="tf-explanation"></div>
     <div style="text-align:center" id="tf-next-wrap" style="display:none">
@@ -154,7 +154,7 @@
       <input type="text" class="write-input" id="write-input"
              placeholder="הקלד את התשובה..." autocomplete="off" autocorrect="off"
              onkeydown="if(event.key==='Enter')submitWrite()">
-      <button class="btn btn-primary" onclick="submitWrite()">בדוק</button>
+      <button class="btn btn-primary" data-i18n="write.check" onclick="submitWrite()">בדוק</button>
     </div>
     <div class="write-feedback" id="write-feedback"></div>
     <div style="text-align:center;margin-top:8px">
@@ -211,8 +211,11 @@ function setMode(mode, btn) {
 
 /* ---- Lang toggle ---- */
 function onLangChange() {
+  // Rebuild inline lang-wrap if present (null-guard for other pages)
+  const lw = document.getElementById('lang-wrap');
+  if (lw) lw.innerHTML = langToggleHTML();
+
   // Re-render only the translatable text for the current mode — do NOT restart
-  document.getElementById('lang-wrap').innerHTML = langToggleHTML();
   if (currentMode === 'flip')  renderFlip();
   else if (currentMode === 'learn') renderLearnCard();
   else if (currentMode === 'tf') {
@@ -220,16 +223,22 @@ function onLangChange() {
     if (q) {
       document.getElementById('tf-statement').textContent = t(q.statement);
       const expEl = document.getElementById('tf-explanation');
-      if (expEl.classList.contains('show')) expEl.textContent = t(q.explanation);
+      if (expEl && expEl.classList.contains('show')) expEl.textContent = t(q.explanation);
     }
   }
   else if (currentMode === 'write') {
     const card = WRITE_CARDS[writeOrder[writeIdx]];
-    if (card) document.getElementById('write-prompt').textContent = t(card.prompt);
+    if (card) {
+      const wp = document.getElementById('write-prompt');
+      if (wp) wp.textContent = t(card.prompt);
+    }
+    const inp = document.getElementById('write-input');
+    if (inp) inp.placeholder = t('write.placeholder');
   }
   // match mode: MATCH_PAIRS are plain strings — no translation needed
 }
-document.getElementById('lang-wrap').innerHTML = langToggleHTML();
+const _lw = document.getElementById('lang-wrap');
+if (_lw) _lw.innerHTML = langToggleHTML();
 
 
 /* ================================================================
@@ -242,7 +251,8 @@ if (flipIdx >= FLASHCARDS.length) flipIdx = 0;
 
 function initFlip() {
   renderFlip();
-  document.getElementById('lang-wrap').innerHTML = langToggleHTML();
+  const lw = document.getElementById('lang-wrap');
+  if (lw) lw.innerHTML = langToggleHTML();
 }
 
 function renderFlip() {
@@ -606,9 +616,10 @@ function renderWrite() {
 
   writeAnswered = false;
   const input = document.getElementById('write-input');
-  input.value     = '';
-  input.className = 'write-input';
-  input.disabled  = false;
+  input.value       = '';
+  input.className   = 'write-input';
+  input.disabled    = false;
+  input.placeholder = t('write.placeholder');
   input.focus();
   document.getElementById('write-feedback').className = 'write-feedback';
   document.getElementById('write-next').style.display = 'none';
