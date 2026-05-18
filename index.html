@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Hub – יונה</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/style.css">
+<link rel="stylesheet" href="minesweeper/css/style.css">
+<style>
+/* ---- HERO ---- */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 96px 0 72px;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.2);
+  border-radius: 999px; padding: 4px 14px;
+  font-size: .74rem; font-weight: 600; color: var(--accent);
+  letter-spacing: .04em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #fff 20%, var(--accent) 60%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+.hero-sub {
+  font-size: clamp(.9rem, 2.5vw, 1.1rem);
+  color: var(--muted); max-width: 480px;
+  margin: 0 auto 40px;
+  line-height: 1.65;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: white;
+  border: none; border-radius: var(--radius-sm);
+  padding: 12px 28px; font-size: .92rem; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 20px rgba(99,102,241,.4);
+  transition: all .2s;
+}
+.hero-cta:hover {
+  background: #7577f3; color: white;
+  box-shadow: 0 8px 32px rgba(99,102,241,.55);
+  transform: translateY(-2px); text-decoration: none;
+}
+
+/* ---- PROJECT CARDS ---- */
+.projects-section { margin-bottom: 48px; }
+.projects-label {
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px; padding-right: 2px;
+}
+
+/* ---- STATS ---- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+}
+.stat-card strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  letter-spacing: -.02em;
+  margin-bottom: 2px;
+}
+.stat-card span { font-size: .75rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-eyebrow">✦ בגרות 5 יח"ל</div>
+    <h1>Study Hub</h1>
+    <p class="hero-sub">Master your projects — one concept at a time. כרטיסיות, חידונים ומבחני בגרות.</p>
+    <a href="minesweeper/index.html" class="hero-cta">💣 פתח MineMaster</a>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="projects-section">
+    <div class="projects-label">פרויקטים</div>
+    <div class="project-grid">
+
+      <!-- MineMaster -->
+      <a href="minesweeper/index.html" class="project-card">
+        <div class="pc-icon">💣</div>
+        <div class="pc-title">MineMaster Analytics</div>
+        <div class="pc-sub">Android Minesweeper — Java, MVVM, Room DB v6, Firebase</div>
+        <div class="pc-tags">
+          <span class="pc-badge">Java</span>
+          <span class="pc-badge">MVVM</span>
+          <span class="pc-badge">Room v6</span>
+          <span class="pc-badge">Firebase</span>
+          <span class="pc-badge">NFC</span>
+          <span class="pc-badge">WorkManager</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px">
+          <div class="badge badge-success">✅ סקירה</div>
+          <div class="badge badge-success">✅ ארכיטקטורה</div>
+          <div class="badge badge-success">✅ קוד אמיתי</div>
+          <div class="badge badge-success">✅ מבחן בגרות</div>
+        </div>
+        <div class="pc-arrow">פתח לימוד ←</div>
+      </a>
+
+      <!-- FRC (coming soon) -->
+      <div class="project-card coming-soon">
+        <div class="pc-icon">🤖</div>
+        <div class="pc-title">FRC Robot Project</div>
+        <div class="pc-sub">בקרוב — Java, WPILib, PID, Computer Vision</div>
+        <div class="pc-tags">
+          <span class="pc-badge" style="opacity:.4">Java</span>
+          <span class="pc-badge" style="opacity:.4">WPILib</span>
+          <span class="pc-badge" style="opacity:.4">PID</span>
+          <span class="pc-badge" style="opacity:.4">Vision</span>
+        </div>
+        <div style="margin-top:16px">
+          <span class="badge" style="background:rgba(100,116,139,.1);border-color:rgba(100,116,139,.2);color:var(--muted)">🔒 בקרוב</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card card-glass" id="hub-stats">
+    <div class="card-title">📈 התקדמות כוללת</div>
+    <div class="stats-grid" id="hub-stats-grid" style="display:none"></div>
+    <div id="hub-stats-body" style="color:var(--muted);font-size:.84rem">טעינת נתונים...</div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="shared/utils.js"></script>
+<script src="minesweeper/js/data.js"></script>
+<script>
+(function () {
+  const seen    = Store.get(KEYS.FC_SEEN, []);
+  const history = Store.get(KEYS.QUIZ_HISTORY, []);
+  const exams   = Store.get(KEYS.EXAM_HISTORY, []);
+  const tf      = Store.get(KEYS.TF_HISTORY, []);
+  const write   = Store.get(KEYS.WRITE_HISTORY, []);
+
+  const FC_TOTAL = typeof FLASHCARDS !== 'undefined' ? FLASHCARDS.length : 20;
+  const fcPct    = Math.round(seen.length / FC_TOTAL * 100);
+
+  // Stat cards
+  const grid = document.getElementById('hub-stats-grid');
+  const body = document.getElementById('hub-stats-body');
+
+  const hasData = seen.length || history.length || exams.length || tf.length || write.length;
+
+  if (!hasData) {
+    body.textContent = 'עדיין אין נתונים — התחל לתרגל!';
+    return;
+  }
+
+  body.style.display = 'none';
+  grid.style.display = 'grid';
+
+  // Cards seen
+  grid.innerHTML += `<div class="stat-card">
+    <strong style="color:var(--accent)">${seen.length}/${FC_TOTAL}</strong>
+    <span>🃏 כרטיסיות נראו</span>
+  </div>`;
+
+  // FC progress bar
+  const progCard = document.createElement('div');
+  progCard.className = 'stat-card';
+  progCard.style.gridColumn = 'span 2';
+  progCard.innerHTML = `
+    <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:6px">
+      <span>השלמת כרטיסיות</span>
+      <span style="color:var(--accent);font-family:var(--font-mono)">${fcPct}%</span>
+    </div>
+    ${progressBarHTML(fcPct)}
+  `;
+  grid.appendChild(progCard);
+
+  if (history.length) {
+    const best = history.reduce((a, b) => (a.score / a.total > b.score / b.total ? a : b));
+    const pct = Math.round(best.score / best.total * 100);
+    grid.innerHTML += `<div class="stat-card">
+      <strong style="color:${pctColor(pct)}">${pct}%</strong>
+      <span>✏️ חידון הכי טוב</span>
+    </div>`;
+  }
+
+  if (exams.length) {
+    const best = exams.reduce((a, b) => a.grade > b.grade ? a : b);
+    grid.innerHTML += `<div class="stat-card">
+      <strong style="color:${best.grade>=55?'var(--success)':'var(--danger)'}">${best.grade}</strong>
+      <span>🎓 ציון בגרות הכי טוב</span>
+    </div>`;
+  }
+
+  if (tf.length) {
+    const best = tf.reduce((a, b) => (a.score / a.total > b.score / b.total ? a : b));
+    const pct = Math.round(best.score / best.total * 100);
+    grid.innerHTML += `<div class="stat-card">
+      <strong style="color:${pctColor(pct)}">${pct}%</strong>
+      <span>✔️ נכון/שגוי הכי טוב</span>
+    </div>`;
+  }
+
+  if (write.length) {
+    const best = write.reduce((a, b) => (a.score / a.total > b.score / b.total ? a : b));
+    const pct = Math.round(best.score / best.total * 100);
+    grid.innerHTML += `<div class="stat-card">
+      <strong style="color:${pctColor(pct)}">${pct}%</strong>
+      <span>✍️ כתיבה הכי טוב</span>
+    </div>`;
+  }
+})();
+</script>
+</body>
+</html>

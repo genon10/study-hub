@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – נושאים | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<div class="page-wrap">
+
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <h1>נושאים</h1>
+    <p>לחץ על נושא לצלילה מעמיקה</p>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="חפש נושא, מחלקה, מושג..." autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+
+  <!-- TOPIC GRID -->
+  <div class="topic-grid" id="topic-grid"></div>
+
+  <!-- TOPIC DETAIL -->
+  <div class="card card-glass" id="topic-detail" style="display:none">
+    <button id="topic-back" class="btn btn-secondary" style="margin-bottom:14px;font-size:.8rem">← חזור לנושאים</button>
+    <div id="topic-content"></div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="js/data.js"></script>
+<script src="js/search.js"></script>
+<script>
+  const grid   = document.getElementById('topic-grid');
+  const detail = document.getElementById('topic-detail');
+  const back   = document.getElementById('topic-back');
+
+  // Note: loop variable renamed 'topic' to avoid shadowing the global t() function
+  grid.innerHTML = TOPICS.map(topic => `
+    <div class="topic-card" onclick="showTopic('${topic.key}')">
+      <div class="tc-icon">${topic.icon}</div>
+      <div class="tc-title">${topic.title}</div>
+      <div class="tc-desc">${topic.desc}</div>
+    </div>
+  `).join('');
+
+  function showTopic(key) {
+    const topic = TOPICS.find(x => x.key === key);
+    if (!topic) return;
+    document.getElementById('topic-content').innerHTML =
+      `<div class="card-title">${topic.icon} ${topic.title}</div>${topic.content}`;
+    grid.style.display    = 'none';
+    detail.style.display  = 'block';
+    window.location.hash  = key;
+    detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  back.addEventListener('click', () => {
+    grid.style.display   = 'grid';
+    detail.style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+  });
+
+  // Deep-link support: topics.html#async
+  const hash = window.location.hash.slice(1);
+  if (hash) showTopic(hash);
+</script>
+</body>
+</html>

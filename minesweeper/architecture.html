@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – ארכיטקטורה | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<div class="page-wrap">
+
+  <div class="section-header">
+    <span class="section-icon">🏗️</span>
+    <h1>ארכיטקטורה</h1>
+    <p>MVVM + Clean Architecture | כל שכבה, כל החלטה, כל מחלקה</p>
+  </div>
+
+  <!-- LANG TOGGLE -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px" id="lang-toggle-wrap"></div>
+
+  <!-- MVVM DIAGRAM -->
+  <div class="card card-glass">
+    <div class="card-title">🏗️ MVVM + Clean Architecture – הפרויקט שלך</div>
+
+    <div class="arch-layer" style="border-color:#4f8ef7">
+      <div class="arch-title" style="background:rgba(79,142,247,.15);color:#4f8ef7">👁️ VIEW – Activities, Fragments, Custom Views</div>
+      <div class="arch-items">
+        <span class="arch-item">GameActivity</span>
+        <span class="arch-item">GameBoardView extends View</span>
+        <span class="arch-item">StatisticsActivity</span>
+        <span class="arch-item">LeaderboardActivity</span>
+        <span class="arch-item">NfcActivity</span>
+        <span class="arch-item">MultiplayerLobbyActivity</span>
+        <span class="arch-item">ProfileActivity</span>
+        <span class="arch-item">DailyChallengeActivity</span>
+        <span class="arch-item">AchievementsActivity</span>
+        <span class="arch-item">CustomMapCreatorActivity</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕ observe LiveData</div>
+
+    <div class="arch-layer" style="border-color:#f5a623">
+      <div class="arch-title" style="background:rgba(245,166,35,.15);color:#f5a623">🧠 VIEWMODEL – Logic + LiveData (survives rotation)</div>
+      <div class="arch-items">
+        <span class="arch-item">GameViewModel</span>
+        <span class="arch-item">StatisticsViewModel</span>
+        <span class="arch-item">AchievementsViewModel</span>
+        <span class="arch-item">LeaderboardViewModel</span>
+        <span class="arch-item">AuthViewModel</span>
+        <span class="arch-item">ProfileViewModel</span>
+        <span class="arch-item">VMFactory</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕ request data</div>
+
+    <div class="arch-layer" style="border-color:#22c55e">
+      <div class="arch-title" style="background:rgba(34,197,94,.15);color:#22c55e">📦 REPOSITORY – Single Source of Truth</div>
+      <div class="arch-items">
+        <span class="arch-item">GameRepository</span>
+        <span class="arch-item">ScoresRepository</span>
+        <span class="arch-item">CustomMapRepository</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="arch-layer" style="border-color:#a78bfa">
+        <div class="arch-title" style="background:rgba(167,139,250,.15);color:#a78bfa;font-size:.68rem">🏠 LOCAL – Room DB v6</div>
+        <div class="arch-items" style="flex-direction:column;gap:3px">
+          <span class="arch-item">AppDatabase v6</span>
+          <span class="arch-item">GameDao</span>
+          <span class="arch-item">BestScoreDao</span>
+          <span class="arch-item">AchievementDao</span>
+          <span class="arch-item">CustomMapDao</span>
+          <span class="arch-item">CustomPresetDao</span>
+        </div>
+      </div>
+      <div class="arch-layer" style="border-color:#f05252">
+        <div class="arch-title" style="background:rgba(240,82,82,.15);color:#f05252;font-size:.68rem">☁️ REMOTE – Firebase</div>
+        <div class="arch-items" style="flex-direction:column;gap:3px">
+          <span class="arch-item">FirebaseManager</span>
+          <span class="arch-item">SyncManager</span>
+          <span class="arch-item">Firestore (scores/users)</span>
+          <span class="arch-item">RTDB (rooms/)</span>
+          <span class="arch-item">Auth</span>
+          <span class="arch-item">Storage (photos)</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <div class="arch-layer" style="border-color:#20d9c0">
+      <div class="arch-title" style="background:rgba(32,217,192,.1);color:#20d9c0;font-size:.68rem">⚙️ DOMAIN / USE CASE – Pure Java Logic (no Android)</div>
+      <div class="arch-items">
+        <span class="arch-item">GameEngine.java</span>
+        <span class="arch-item">initializeBoard()</span>
+        <span class="arch-item">placeMines(excludeX,excludeY)</span>
+        <span class="arch-item">floodReveal() ← DFS Recursion</span>
+        <span class="arch-item">checkWinCondition()</span>
+        <span class="arch-item">serializeBoardState()</span>
+        <span class="arch-item">calculateScore()</span>
+      </div>
+    </div>
+    <div class="highlight" style="margin-top:10px;font-size:.82rem">
+      <strong>🎯 Clean Architecture:</strong> GameEngine לא תלוי ב-Android — ניתן לבדוק ב-JUnit רגיל. הלוגיקה הכי חשובה מופרדת מהפלטפורמה.
+    </div>
+  </div>
+
+  <!-- OFFLINE FIRST FLOW -->
+  <div class="card card-glass">
+    <div class="card-title">🔄 Offline First Flow – מה קורה כשלוחצים על תא</div>
+    <div style="background:#060a10;border:1px solid var(--border);border-radius:8px;padding:14px;font-family:var(--font-mono);font-size:.76rem;direction:ltr;text-align:left;line-height:2">
+      <span style="color:#22c55e">1. GameBoardView.onTouchEvent()</span> → col=(int)(x/cellPx), row=(int)(y/cellPx)<br>
+      <span style="color:#22c55e">2.</span> listener.onCellClick(row, col)<br>
+      <span style="color:#4f8ef7">3. GameActivity</span> → gameViewModel.revealCell(x, y)<br>
+      <span style="color:#f5a623">4. GameViewModel</span> → gameEngine.revealCell(x, y) <span style="color:#6e7681">// pure logic</span><br>
+      <span style="color:#f5a623">5. GameEngine</span> → floodReveal() if adjacentMines==0 <span style="color:#6e7681">// DFS recursion</span><br>
+      <span style="color:#f5a623">6. GameViewModel</span> → game.postValue(gameEngine.getGame()) <span style="color:#6e7681">// UI auto-updates</span><br>
+      <span style="color:#a78bfa">7. on WIN/LOSE</span> → repository.saveGameResult(result)<br>
+      <span style="color:#a78bfa">8. Repository</span> → gameDao.insert(result) <span style="color:#22c55e">✅ LOCAL FIRST</span><br>
+      <span style="color:#f05252">9. if online</span> → FirebaseManager.uploadScore() <span style="color:#6e7681">// async</span><br>
+      <span style="color:#f05252">10. if offline</span> → syncedToFirebase=0 → WorkManager retries (15 min, CONNECTED)
+    </div>
+  </div>
+
+  <!-- VMFACTORY -->
+  <div class="card card-glass">
+    <div class="card-title">🏭 VMFactory – למה צריך Factory?</div>
+    <p style="font-size:.84rem;line-height:1.7;margin-bottom:10px">Android לא מאפשר ViewModel עם constructor parameters. VMFactory פותר:</p>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="code-lang-badge">Java</span>
+        <button class="copy-btn" onclick="copyCode(this)">העתק</button>
+      </div>
+      <pre><span class="kw">public class</span> <span class="cn">VMFactory</span> <span class="kw">implements</span> <span class="cn">ViewModelProvider.Factory</span> {
+    <span class="kw">private final</span> <span class="cn">Context</span> context;
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> &lt;T <span class="kw">extends</span> <span class="cn">ViewModel</span>&gt; T <span class="fn">create</span>(<span class="cn">Class</span>&lt;T&gt; modelClass) {
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">GameViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">GameViewModel</span>();
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">LeaderboardViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">LeaderboardViewModel</span>(context);
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">StatisticsViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">StatisticsViewModel</span>(context);
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">AchievementsViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">AchievementsViewModel</span>(context);
+        <span class="kw">throw new</span> <span class="cn">IllegalArgumentException</span>(<span class="st">"Unknown ViewModel class"</span>);
+    }
+}</pre>
+    </div>
+    <div class="highlight green" style="margin-top:8px;font-size:.82rem">
+      <strong>GameViewModel נוצר ללא Context</strong> — Pure Java logic, אין תלות ב-Android. שאר ה-ViewModels צריכים Context לגישה ל-Room.
+    </div>
+  </div>
+
+  <!-- INHERITANCE TREE -->
+  <div class="card card-glass">
+    <div class="card-title">🌳 עץ ירושה – כל ה-extends בפרויקט</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:var(--accent);margin-bottom:6px">Activities</div>
+        <div style="font-family:var(--font-mono);font-size:.72rem;line-height:2;direction:ltr;text-align:left">
+          AppCompatActivity<br>
+          └─ BaseNavigationActivity<br>
+          &nbsp;&nbsp;&nbsp;├─ GameActivity<br>
+          &nbsp;&nbsp;&nbsp;├─ StatisticsActivity<br>
+          &nbsp;&nbsp;&nbsp;├─ LeaderboardActivity<br>
+          &nbsp;&nbsp;&nbsp;├─ ProfileActivity<br>
+          &nbsp;&nbsp;&nbsp;└─ AchievementsActivity<br>
+          AppCompatActivity<br>
+          ├─ NfcActivity<br>
+          ├─ DailyChallengeActivity<br>
+          └─ MultiplayerLobbyActivity
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:var(--accent3);margin-bottom:6px">ViewModels &amp; Workers</div>
+        <div style="font-family:var(--font-mono);font-size:.72rem;line-height:2;direction:ltr;text-align:left">
+          ViewModel<br>
+          ├─ GameViewModel<br>
+          ├─ StatisticsViewModel<br>
+          ├─ AchievementsViewModel<br>
+          ├─ LeaderboardViewModel<br>
+          ├─ AuthViewModel<br>
+          └─ ProfileViewModel<br>
+          Worker<br>
+          ├─ FirebaseSyncWorker<br>
+          └─ AchievementSyncWorker
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:var(--success);margin-bottom:6px">Models (Firebase)</div>
+        <div style="font-family:var(--font-mono);font-size:.72rem;line-height:2;direction:ltr;text-align:left">
+          BaseFirebaseModel<br>
+          ├─ UserRecord<br>
+          └─ LeaderboardEntry
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:var(--purple);margin-bottom:6px">Custom Views</div>
+        <div style="font-family:var(--font-mono);font-size:.72rem;line-height:2;direction:ltr;text-align:left">
+          View (Android)<br>
+          └─ GameBoardView<br>
+          &nbsp;&nbsp;&nbsp;├─ onDraw(Canvas)<br>
+          &nbsp;&nbsp;&nbsp;└─ onTouchEvent()
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKMANAGER -->
+  <div class="card card-glass">
+    <div class="card-title">⚙️ WorkManager Architecture</div>
+    <div class="highlight orange" style="margin-bottom:10px">
+      <strong>WorkManager > AsyncTask:</strong> שורד reboot, process death, ניתן לתזמן. AsyncTask deprecated מ-Android 11.
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="code-lang-badge">Java</span>
+        <button class="copy-btn" onclick="copyCode(this)">העתק</button>
+      </div>
+      <pre><span class="cm">// FirebaseSyncWorker — כל 15 דקות כשיש רשת</span>
+<span class="cn">PeriodicWorkRequest</span> syncWork =
+    <span class="kw">new</span> <span class="cn">PeriodicWorkRequest.Builder</span>(<span class="cn">FirebaseSyncWorker</span>.<span class="kw">class</span>, 15, <span class="cn">TimeUnit</span>.<span class="nm">MINUTES</span>)
+        .<span class="fn">setConstraints</span>(<span class="kw">new</span> <span class="cn">Constraints.Builder</span>()
+            .<span class="fn">setRequiredNetworkType</span>(<span class="cn">NetworkType</span>.<span class="nm">CONNECTED</span>).<span class="fn">build</span>())
+        .<span class="fn">build</span>();
+
+<span class="cm">// AchievementSyncWorker — כל 24 שעות</span>
+<span class="cn">PeriodicWorkRequest</span> achWork =
+    <span class="kw">new</span> <span class="cn">PeriodicWorkRequest.Builder</span>(<span class="cn">AchievementSyncWorker</span>.<span class="kw">class</span>, 24, <span class="cn">TimeUnit</span>.<span class="nm">HOURS</span>)
+        .<span class="fn">setConstraints</span>(<span class="kw">new</span> <span class="cn">Constraints.Builder</span>()
+            .<span class="fn">setRequiredNetworkType</span>(<span class="cn">NetworkType</span>.<span class="nm">CONNECTED</span>).<span class="fn">build</span>())
+        .<span class="fn">build</span>();</pre>
+    </div>
+  </div>
+
+  <!-- DESIGN DECISIONS -->
+  <div class="card card-glass">
+    <div class="card-title">🎯 12 החלטות עיצוב – Chosen vs Rejected</div>
+    <div id="decisions-list"></div>
+  </div>
+
+  <!-- CLASSES BROWSER -->
+  <div class="card card-glass">
+    <div class="card-title">📂 מחלקות Java – 60+ Classes</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="layer-filters">
+      <button class="btn btn-secondary layer-filter-btn active" data-layer="all" onclick="filterClasses('all',this)">הכל</button>
+      <button class="btn btn-secondary layer-filter-btn" data-layer="domain" onclick="filterClasses('domain',this)">⚙️ Domain</button>
+      <button class="btn btn-secondary layer-filter-btn" data-layer="data" onclick="filterClasses('data',this)">🗄️ Data</button>
+      <button class="btn btn-secondary layer-filter-btn" data-layer="ui" onclick="filterClasses('ui',this)">👁️ UI</button>
+      <button class="btn btn-secondary layer-filter-btn" data-layer="util" onclick="filterClasses('util',this)">🔧 Util</button>
+      <button class="btn btn-secondary layer-filter-btn" data-layer="application" onclick="filterClasses('application',this)">🌐 App</button>
+    </div>
+    <div class="class-grid" id="class-grid"></div>
+  </div>
+
+  <!-- XML LAYOUTS BROWSER -->
+  <div class="card card-glass">
+    <div class="card-title">🖼️ Layout XMLs – 26 קבצי Layout</div>
+    <div class="class-grid" id="layout-grid"></div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="js/data.js"></script>
+<script>
+/* ---- Language toggle ---- */
+document.getElementById('lang-toggle-wrap').innerHTML = langToggleHTML();
+function onLangChange() { renderAll(); }
+
+/* ---- Design Decisions ---- */
+function renderDecisions() {
+  const el = document.getElementById('decisions-list');
+  el.innerHTML = DESIGN_DECISIONS.map((d, i) => `
+    <div class="decision-card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:pointer" onclick="toggleDecision(${i})">
+        <strong style="font-size:.88rem">${d.topic}</strong>
+        <span id="dd-arrow-${i}" style="color:var(--muted);font-size:.8rem">▼</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <span class="badge-chosen">✅ ${d.chosen}</span>
+        <span class="badge-rejected">❌ ${d.rejected}</span>
+      </div>
+      <div id="dd-body-${i}" style="display:none">
+        <div class="badge-why" style="margin-bottom:8px">💡 ${t(d.why)}</div>
+        ${d.code ? `<pre style="font-size:.7rem;margin:0">${esc(d.code)}</pre>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+function toggleDecision(i) {
+  const body = document.getElementById('dd-body-' + i);
+  const arrow = document.getElementById('dd-arrow-' + i);
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  arrow.textContent = open ? '▼' : '▲';
+}
+
+/* ---- Classes browser ---- */
+let activeLayer = 'all';
+function filterClasses(layer, btn) {
+  activeLayer = layer;
+  document.querySelectorAll('.layer-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClasses();
+}
+const LAYER_COLORS = {
+  domain: 'var(--purple)',
+  data: 'var(--accent3)',
+  ui: 'var(--accent)',
+  util: 'var(--success)',
+  application: 'var(--danger)'
+};
+const LAYER_LABELS = { domain: '⚙️ Domain', data: '🗄️ Data', ui: '👁️ UI', util: '🔧 Util', application: '🌐 App' };
+
+function renderClasses() {
+  const list = activeLayer === 'all' ? CLASSES : CLASSES.filter(c => c.layer === activeLayer);
+  document.getElementById('class-grid').innerHTML = list.map(c => `
+    <div class="class-card" onclick="toggleClassDetail(this)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px">
+        <span style="font-family:var(--font-mono);font-size:.78rem;font-weight:600">${esc(c.name)}</span>
+        <span class="class-layer-badge" style="background:${LAYER_COLORS[c.layer] || 'var(--muted)'};opacity:.85;font-size:.62rem;padding:2px 7px;border-radius:10px;white-space:nowrap;color:#fff">${LAYER_LABELS[c.layer] || c.layer}</span>
+      </div>
+      <div style="font-size:.73rem;color:var(--muted);margin-bottom:5px;font-family:var(--font-mono)">${esc(c.package)}</div>
+      <div style="font-size:.78rem;color:var(--text);line-height:1.5">${esc(t(c.purpose))}</div>
+      <div class="class-detail" style="display:none;margin-top:10px">
+        ${c.whyThisWay ? `<div class="highlight green" style="margin-bottom:8px;font-size:.76rem"><strong>🎯 למה כך:</strong> ${esc(t(c.whyThisWay))}</div>` : ''}
+        ${c.alternatives ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+          <span class="badge-chosen" style="font-size:.7rem">✅ ${esc(c.alternatives.chosen)}</span>
+          <span class="badge-rejected" style="font-size:.7rem">❌ ${esc(c.alternatives.rejected)}</span>
+        </div>` : ''}
+        ${c.connectsTo && c.connectsTo.length ? `<div style="font-size:.73rem;color:var(--muted);margin-bottom:6px">🔗 מתחבר ל: ${c.connectsTo.map(x => `<span style="color:var(--accent)">${esc(x)}</span>`).join(', ')}</div>` : ''}
+        ${c.keyMethods && c.keyMethods.length ? `<div style="font-size:.73rem;font-weight:600;margin-bottom:4px;color:var(--accent2)">🔑 מתודות עיקריות:</div>
+          ${c.keyMethods.map(m => `<div class="method-block">
+            <div style="font-family:var(--font-mono);font-size:.72rem;font-weight:600;margin-bottom:3px">${esc(m.name)}</div>
+            ${m.explanation ? `<div style="font-size:.71rem;color:var(--muted);margin-bottom:4px">${esc(t(m.explanation))}</div>` : ''}
+            ${m.code ? `<pre style="font-size:.68rem;margin:0;max-height:120px;overflow:auto">${esc(m.code)}</pre>` : ''}
+          </div>`).join('')}` : ''}
+        ${c.examQuestions && c.examQuestions.length ? `<div style="margin-top:8px;padding:8px;background:rgba(79,142,247,.07);border-radius:6px;font-size:.72rem">
+          <strong style="color:var(--accent)">🎓 שאלות בגרות:</strong><br>
+          ${c.examQuestions.map(q => `• ${esc(q)}`).join('<br>')}
+        </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+function toggleClassDetail(el) {
+  const detail = el.querySelector('.class-detail');
+  detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+}
+
+/* ---- Layout browser ---- */
+function renderLayouts() {
+  document.getElementById('layout-grid').innerHTML = XML_LAYOUTS.map(l => `
+    <div class="class-card layout-card" onclick="toggleLayoutDetail(this)">
+      <div style="font-family:var(--font-mono);font-size:.78rem;font-weight:600;margin-bottom:5px">${esc(l.filename)}</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:5px">🔗 ${esc(l.connectedTo)}</div>
+      <div style="font-size:.78rem;line-height:1.5">${esc(t(l.description))}</div>
+      <div class="class-detail" style="display:none;margin-top:10px">
+        ${l.views && l.views.length ? `<div style="font-size:.73rem;font-weight:600;margin-bottom:5px;color:var(--accent2)">📐 Views:</div>
+          ${l.views.map(v => `<div style="display:flex;gap:6px;align-items:baseline;margin-bottom:4px">
+            <span style="font-family:var(--font-mono);font-size:.68rem;color:var(--accent)">${esc(v.type)}</span>
+            ${v.why ? `<span style="font-size:.68rem;color:var(--muted)">— ${esc(v.why)}</span>` : ''}
+          </div>`).join('')}` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+function toggleLayoutDetail(el) {
+  const d = el.querySelector('.class-detail');
+  d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+
+/* ---- Render everything ---- */
+function renderAll() {
+  renderDecisions();
+  renderClasses();
+  renderLayouts();
+  document.getElementById('lang-toggle-wrap').innerHTML = langToggleHTML();
+}
+renderAll();
+</script>
+</body>
+</html>

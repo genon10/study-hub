@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – קוד אמיתי | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<div class="page-wrap">
+
+  <div class="section-header">
+    <span class="section-icon">💻</span>
+    <h1>קוד אמיתי מהפרויקט</h1>
+    <p>כל קטע קוד נלקח ישירות מהפרויקט — הבן כל שורה</p>
+  </div>
+
+  <div class="highlight red" style="margin-bottom:16px">
+    <strong>⚠️ לבגרות:</strong> לדעת להסביר כל קטע קוד בפירוט — למה זה נכתב כך, מה הבעיה שהוא פותר, מה היה קורה אחרת.
+  </div>
+
+  <!-- 1. INetworkService -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>1️⃣ INetworkService – ה-Interface של שירותי הרשת</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight red">⚠️ חשוב לבגרות: ה-Interface הוא <strong>חובה</strong> בחלופת שירותי רשת. עקרון Dependency Inversion.</div>
+      <div class="hljs-wrap"><pre><code class="language-java">public interface INetworkService {
+    // Read — שליפת לוח מובילים
+    void fetchLeaderboard(String difficulty, NetworkCallback&lt;List&lt;LeaderboardEntry&gt;&gt; callback);
+    // Create — העלאת ניקוד
+    void uploadScore(LeaderboardEntry entry, NetworkCallback&lt;Boolean&gt; callback);
+    // Update — עדכון התקדמות
+    void updateProgress(String userId, PlayerProgress progress, NetworkCallback&lt;Boolean&gt; callback);
+    // Delete — מחיקת חשבון
+    void deleteAccount(String userId, NetworkCallback&lt;Boolean&gt; callback);
+}</code></pre></div>
+      <strong>למה Interface?</strong> Dependency Inversion — ViewModel תלוי ב-INetworkService, לא ב-FirebaseManager ספציפי. אפשר להחליף Firebase ל-REST API בלי לשנות שורה ב-ViewModel.
+    </div>
+  </div>
+
+  <!-- 2. floodReveal — DFS (fixed from BFS) -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>2️⃣ GameEngine – floodReveal (DFS Recursion)</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight green">GameEngine.java ב-domain/usecase — Pure Java, ללא Android SDK.</div>
+      <div class="highlight red">⚠️ לבגרות: זהו DFS — הפונקציה קוראת לעצמה. לא BFS עם Queue!</div>
+      <div class="hljs-wrap"><pre><code class="language-java">// חשיפת שטחים ריקים — DFS Recursion
+private void floodReveal(int x, int y) {
+    for (int dy = -1; dy &lt;= 1; dy++) {
+        for (int dx = -1; dx &lt;= 1; dx++) {
+            if (dx == 0 &amp;&amp; dy == 0) continue;
+            int nx = x + dx, ny = y + dy;
+            if (nx >= 0 &amp;&amp; nx &lt; width &amp;&amp; ny >= 0 &amp;&amp; ny &lt; height) {
+                Cell c = board[ny][nx];
+                // isCovered() = visited guard — תא REVEALED לא יעובד שוב
+                if (c.isCovered() &amp;&amp; !c.isMine()) {
+                    c.setState(CellState.REVEALED);
+                    game.incrementTilesRevealed();
+                    // רק תאים ריקים (0 מוקשים שכנים) קוראים ל-recursion
+                    if (c.getAdjacentMines() == 0) {
+                        floodReveal(nx, ny); // ← DFS: קריאה רקורסיבית
+                    }
+                }
+            }
+        }
+    }
+}</code></pre></div>
+      <div class="highlight" style="margin-top:8px">
+        <strong>🎯 נקודות מפתח:</strong><br>
+        • DFS = הפונקציה קוראת לעצמה (recursion), לא BFS עם Queue<br>
+        • <code>isCovered()</code> = visited guard — לאחר setState(REVEALED), התא כבר לא covered<br>
+        • בדיקת 8 שכנים עם לולאות dx/dy ∈ {-1,0,1}<br>
+        • recursion רק אם adjacentMines == 0 (תא ריק לחלוטין)
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. GameViewModel -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>3️⃣ GameViewModel – finishGame + LiveData</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">public class GameViewModel extends ViewModel {
+    private final GameRepository repository;
+    private final MutableLiveData&lt;GameStatus&gt; gameState = new MutableLiveData&lt;&gt;();
+    private final MutableLiveData&lt;Game&gt; currentGame    = new MutableLiveData&lt;&gt;();
+    private final MutableLiveData&lt;Integer&gt; timer       = new MutableLiveData&lt;&gt;(0);
+
+    public void finishGame(boolean isWin, long timeSeconds, String difficulty) {
+        GameResult result = new GameResult(difficulty, timeSeconds, isWin);
+        // 1. עדכון UI מיידי (main thread → setValue OK)
+        gameState.setValue(isWin ? GameStatus.WON : GameStatus.LOST);
+        // 2. שמירה א-סינכרונית — לא חוסמת UI
+        repository.saveGameResult(result);
+        // 3. חישוב XP ב-background
+        XpManager.calculateAndAddXp(isWin, difficulty);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (timer != null) timer.cancel(); // מניע memory leak
+    }
+}</code></pre></div>
+      <strong>חוק:</strong> finishGame רץ מ-main thread → setValue() מותר. repository.saveGameResult() מנהל thread בעצמו.
+    </div>
+  </div>
+
+  <!-- 4. BaseFirebaseModel -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>4️⃣ BaseFirebaseModel – ירושה בשכבת Model</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight green">✅ ירושה ב-Model — נדרשת בבגרות.</div>
+      <div class="hljs-wrap"><pre><code class="language-java">// מחלקת בסיס — שדות משותפים לכל מסמך Firebase
+public class BaseFirebaseModel {
+    private String documentId;
+    private long   createdAt;
+    private long   updatedAt;
+    // getters / setters...
+}
+
+// UserRecord יורש — מקבל documentId, createdAt, updatedAt בחינם
+public class UserRecord extends BaseFirebaseModel {
+    private String userId;
+    private int    gamesWon;
+    private int    totalGames;
+    // ...
+}
+
+// LeaderboardEntry גם יורש
+public class LeaderboardEntry extends BaseFirebaseModel {
+    private int    score;
+    private String playerName;
+    private String difficulty;
+}</code></pre></div>
+      <strong>יתרון:</strong> DRY — לא כותבים documentId/createdAt שוב ושוב. כל model שנשמר ל-Firebase יורש.
+    </div>
+  </div>
+
+  <!-- 5. Room Entity + DAO + Migration -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>5️⃣ Room DB – Entity + DAO + Migration 5→6</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">// Entity — הגדרת טבלת games
+@Entity(tableName = "games")
+public class GameEntity {
+    @PrimaryKey(autoGenerate = true)
+    public int     id;
+    public String  userId;
+    public int     difficultyId;     // 1=Easy 2=Med 3=Hard 4=Custom
+    public String  status;           // WON/LOST/IN_PROGRESS
+    public int     secondsElapsed;
+    public String  boardState;       // JSON — Cell[][] מ-serializeBoardState()
+    public boolean syncedToFirebase; // ← הוסף ב-Migration 5→6
+}
+
+// DAO — שאילתות SQL
+@Dao
+public interface GameDao {
+    @Insert
+    long insertGame(GameEntity game);
+
+    @Query("SELECT * FROM games WHERE userId = :uid ORDER BY id DESC")
+    List&lt;GameEntity&gt; getGamesByUser(String uid);
+
+    @Query("SELECT * FROM games WHERE syncedToFirebase = 0")
+    List&lt;GameEntity&gt; getUnsynced(); // ← FirebaseSyncWorker משתמש בזה
+
+    @Update
+    void updateGame(GameEntity game);
+}
+
+// Migration 5→6 — הוספת שדה syncedToFirebase
+static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+    @Override
+    public void migrate(SupportSQLiteDatabase db) {
+        db.execSQL("ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0");
+    }
+};</code></pre></div>
+    </div>
+  </div>
+
+  <!-- 6. WorkManager -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>6️⃣ WorkManager – FirebaseSyncWorker</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight orange">הרחבה — תכנות א-סינכרוני. WorkManager &gt; AsyncTask (deprecated).</div>
+      <div class="hljs-wrap"><pre><code class="language-java">public class FirebaseSyncWorker extends Worker {
+    @Override @NonNull
+    public Result doWork() {
+        // רץ ב-background thread שכבר ניהל WorkManager
+        List&lt;GameEntity&gt; unsynced = gameDao.getUnsynced();
+        for (GameEntity g : unsynced) {
+            boolean success = firebaseManager.uploadGame(g);
+            if (success) {
+                g.syncedToFirebase = true;
+                gameDao.updateGame(g);
+            }
+        }
+        return Result.success();
+    }
+}
+
+// תזמון כל 15 דקות — רק עם אינטרנט
+PeriodicWorkRequest syncWork = new PeriodicWorkRequest.Builder(
+    FirebaseSyncWorker.class, 15, TimeUnit.MINUTES)
+    .setConstraints(new Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED).build())
+    .build();
+WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    "firebase_sync", ExistingPeriodicWorkPolicy.KEEP, syncWork);</code></pre></div>
+    </div>
+  </div>
+
+  <!-- 7. NFC -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>7️⃣ NFC – NfcActivity + onNewIntent</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">// onCreate — אתחול NFC
+nfcHandler = new NfcHandler(this);
+boolean simulate = getIntent().getBooleanExtra("simulate_nfc", false);
+if (simulate) { simulateNfc(); return; }
+checkNfcStatus();      // מציג UI מתאים אם NFC לא זמין
+handleIntent(getIntent()); // טיפול אם האפליקציה נפתחה מ-NFC
+
+// כשמכשיר שני נגע (האפליקציה פתוחה — singleTop)
+@Override
+protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    handleIntent(intent); // מפענח NDEF Message → CustomMap
+}
+
+// Manifest — חובה לדעת!
+// &lt;uses-permission android:name="android.permission.NFC"/&gt;
+// &lt;uses-feature android:name="android.hardware.nfc" android:required="false"/&gt;
+// required="false" = האפליקציה עובדת גם בלי NFC חומרה</code></pre></div>
+    </div>
+  </div>
+
+  <!-- 8. StatisticsViewModel postValue -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>8️⃣ StatisticsViewModel – postValue מ-Thread</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">public class StatisticsViewModel extends ViewModel {
+    private final MutableLiveData&lt;StatisticsData&gt; statisticsData = new MutableLiveData&lt;&gt;();
+    private final MutableLiveData&lt;Boolean&gt; isLoading = new MutableLiveData&lt;&gt;(false);
+
+    public void loadStatistics() {
+        isLoading.setValue(true); // main thread — setValue OK
+        new Thread(() -> {
+            List&lt;Game&gt; allGames = gameRepository.getAllGames();
+            StatisticsData stats = calculateStatistics(allGames);
+            statisticsData.postValue(stats); // background thread — חייב postValue!
+            isLoading.postValue(false);
+        }).start();
+    }
+
+    private StatisticsData calculateStatistics(List&lt;Game&gt; games) {
+        int gamesWon = 0, bestStreak = 0, tempStreak = 0;
+        for (Game game : games) {
+            if (game.getStatus() == GameStatus.WON) {
+                gamesWon++; tempStreak++;
+                if (tempStreak > bestStreak) bestStreak = tempStreak;
+            } else { tempStreak = 0; }
+        }
+        return new StatisticsData(gamesWon, games.size(), bestStreak);
+    }
+}</code></pre></div>
+      <strong>חשוב:</strong> setValue() מ-background thread → IllegalStateException. postValue() thread-safe תמיד.
+    </div>
+  </div>
+
+  <!-- 9. AES Encryption -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>9️⃣ AES Encryption – EncryptionUtil</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight green">הרחבה — הצפנה. AES = סימטרי: אותו key להצפנה ולפענוח.</div>
+      <div class="hljs-wrap"><pre><code class="language-java">public static String encrypt(String data, String key) throws Exception {
+    SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
+    Cipher cipher = Cipher.getInstance("AES");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+    return Base64.encodeToString(cipher.doFinal(data.getBytes()), Base64.DEFAULT);
+}
+
+public static String decrypt(String encrypted, String key) throws Exception {
+    SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
+    Cipher cipher = Cipher.getInstance("AES");
+    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+    return new String(cipher.doFinal(Base64.decode(encrypted, Base64.DEFAULT)));
+}</code></pre></div>
+      <strong>שימוש:</strong> מצפין boardState לפני שמירה ב-Firestore. Base64 ממיר bytes → String לשמירה כ-text.
+    </div>
+  </div>
+
+  <!-- 10. Score + Daily Challenge -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>🔟 Score Calculation + Daily Challenge Seed</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">// Score Calculation — GameEngine.calculateScore()
+public int calculateScore(int seconds, int moves, int difficulty, int flagsPlaced, int totalMines) {
+    int timeBonus         = Math.max(1000 - seconds, 0);
+    int moveBonus         = Math.max(500 - moves, 0);
+    int difficultyBonus   = difficulty * 10;           // minesCount * 10
+    int flagAccuracyBonus = (flagsPlaced == totalMines) ? 200
+                          : Math.max(0, 100 - Math.abs(flagsPlaced - totalMines) * 10);
+    return timeBonus + moveBonus + difficultyBonus + flagAccuracyBonus;
+}
+
+// Daily Challenge — seed קבוע לפי תאריך
+public long generateDailySeed(int year, int month, int day) {
+    return year * 10000L + month * 100 + day; // e.g. 20250502
+}
+
+// initializeBoard עם seed → אותו לוח לכולם ביום זה
+public void initializeBoard(int width, int height, int mines, long seed) {
+    Random rng = new Random(seed); // seed קבוע = רצף קבוע = לוח זהה
+    // placeMines משתמש ב-rng...
+}</code></pre></div>
+    </div>
+  </div>
+
+  <!-- 11. Firestore Security Rules -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)"><span>1️⃣1️⃣ Firestore Security Rules</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight red">מגן על ה-DB בענן — ידיעה זו מפגינה הבנה מעמיקה.</div>
+      <div class="hljs-wrap"><pre><code class="language-javascript">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // פרופיל משתמש — קריאה ציבורית, כתיבה לבעלים בלבד
+    match /users/{userId} {
+      allow read:  if true;
+      allow write: if request.auth.uid == userId;
+    }
+    // לוח מובילים — קריאה ציבורית, הוספה למחוברים
+    match /scores/{scoreId} {
+      allow read:   if true;
+      allow create: if request.auth != null;
+    }
+    // אתגר יומי — קריאה ציבורית, כתיבה לבעלים
+    match /daily_challenges/{date}/scores/{userId} {
+      allow read:  if true;
+      allow write: if request.auth.uid == userId;
+    }
+  }
+}</code></pre></div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // wrap each .hljs-wrap with code-block structure + copy button
+  document.querySelectorAll('.hljs-wrap').forEach(wrap => {
+    const code = wrap.querySelector('code');
+    const langMatch = code && code.className.match(/language-(\w+)/);
+    const lang = langMatch ? langMatch[1] : '';
+    const header = document.createElement('div');
+    header.className = 'code-block-header';
+    header.innerHTML = `<span class="code-lang-badge">${lang}</span><button class="copy-btn" onclick="copyCode(this)">העתק</button>`;
+    wrap.classList.add('code-block');
+    wrap.insertBefore(header, wrap.firstChild);
+  });
+
+  document.querySelectorAll('.hljs-wrap pre code').forEach(block => {
+    hljs.highlightElement(block);
+  });
+});
+document.querySelectorAll('.acc-h').forEach(h => {
+  h.addEventListener('click', () => {
+    setTimeout(() => {
+      h.nextElementSibling.querySelectorAll('pre code').forEach(block => {
+        if (!block.dataset.highlighted) hljs.highlightElement(block);
+      });
+    }, 50);
+  });
+});
+</script>
+</body>
+</html>

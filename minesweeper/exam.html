@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – מבחן בגרות | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<!-- TIMER BAR (shown during exam) -->
+<div class="exam-timer-bar" id="timer-bar" style="display:none">
+  <div>
+    <div class="exam-timer" id="timer-display">45:00</div>
+    <div style="font-size:.7rem;color:var(--muted)">זמן נותר</div>
+  </div>
+  <div style="flex:1;padding:0 12px">
+    <div class="progress-bar-wrap" style="margin:0">
+      <div class="progress-bar-fill" id="timer-progress" style="width:100%;background:linear-gradient(90deg,var(--success),var(--accent2))"></div>
+    </div>
+  </div>
+  <div class="exam-progress-text" id="exam-progress-text">0 / 20 נענו</div>
+  <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ===== START SCREEN ===== -->
+  <div id="screen-start">
+    <div class="section-header">
+      <span class="section-icon">🎓</span>
+      <h1>מבחן בגרות</h1>
+      <p>20 שאלות · 45 דקות · ציון 55–100</p>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">📋 הנחיות המבחן</div>
+      <ul class="sl" style="font-size:.87rem;line-height:2">
+        <li>20 שאלות רב-ברירה בסגנון בגרות 5 יח"ל</li>
+        <li>כל שאלה שווה 5 נקודות (סה"כ 100)</li>
+        <li>ציון עובר: 55 ומעלה</li>
+        <li>זמן: 45 דקות (מבחן בגרות אמיתי = ~90 דקות לכל החומר)</li>
+        <li>הגשה אוטומטית כשהזמן אוזל</li>
+        <li>שאלות נשלפות אקראית מ-25 שאלות בנק</li>
+      </ul>
+    </div>
+
+    <div id="exam-history-card" class="card card-glass" style="display:none">
+      <div class="card-title">📊 ניסיונות קודמים</div>
+      <div id="exam-history-list"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="startExam()" style="padding:13px 36px;font-size:1rem">
+        🎓 התחל מבחן
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== EXAM SCREEN ===== -->
+  <div id="screen-exam" style="display:none">
+    <div id="exam-questions"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="submitEarly()" style="padding:11px 28px">
+        ✅ הגש מבחן
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS SCREEN ===== -->
+  <div id="screen-results" style="display:none">
+
+    <div class="section-header" style="padding-top:16px">
+      <span class="section-icon" id="result-icon">🎓</span>
+      <h1 id="result-title">תוצאות המבחן</h1>
+    </div>
+
+    <div class="exam-grade-display">
+      <div class="grade-circle" id="grade-circle">—</div>
+      <div class="grade-label" id="grade-label"></div>
+      <div class="grade-sub"   id="grade-sub"></div>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">📊 סטטיסטיקות המבחן</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+        <div class="fc-stat"><strong id="stat-correct" style="color:var(--success)">—</strong>נכון</div>
+        <div class="fc-stat"><strong id="stat-wrong"   style="color:var(--danger)">—</strong>שגוי</div>
+        <div class="fc-stat"><strong id="stat-time"    style="color:var(--accent3)">—</strong>זמן ששימש</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="result-bar" style="width:0%"></div>
+        </div>
+        <div style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:4px" id="result-pct"></div>
+      </div>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">📋 ניתוח לפי נושא</div>
+      <div id="topic-breakdown"></div>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">🔍 סקירת תשובות</div>
+      <div id="review-list"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-primary"    onclick="restartExam()">🔄 נסה שוב</button>
+      <a href="quiz.html"       class="btn btn-secondary" style="text-decoration:none">✏️ חידון</a>
+      <a href="flashcards.html" class="btn btn-secondary" style="text-decoration:none">🃏 כרטיסיות</a>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- Timer warning toast -->
+<div id="exam-toast" style="
+  display:none; position:fixed; top:70px; left:50%; transform:translateX(-50%);
+  background:var(--accent3); color:var(--bg); padding:10px 22px;
+  border-radius:var(--radius-md); font-weight:700; z-index:200;
+  white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,.4);
+"></div>
+
+<script src="js/data.js"></script>
+<script>
+  const EXAM_DURATION = 45 * 60;
+  let timerInterval       = null;
+  let timeLeft            = EXAM_DURATION;
+  let examAnswers         = {};
+  let examStartTime       = null;
+  let questionOrder       = [];
+  let tenMinWarningShown  = false;
+
+  function startExam() {
+    examAnswers          = {};
+    timeLeft             = EXAM_DURATION;
+    examStartTime        = Date.now();
+    tenMinWarningShown   = false;
+    // Pick 20 random from the 25-question bank
+    questionOrder = shuffle([...Array(EXAM_QUESTIONS.length).keys()]).slice(0, 20);
+
+    document.getElementById('screen-start').style.display   = 'none';
+    document.getElementById('screen-exam').style.display    = 'block';
+    document.getElementById('timer-bar').style.display      = 'flex';
+
+    renderExamQuestions();
+    startTimer();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderExamQuestions() {
+    document.getElementById('exam-questions').innerHTML = questionOrder.map((qi, pos) => {
+      const q = EXAM_QUESTIONS[qi];
+      const hasCode = q.q.includes('\n') || q.q.includes('`');
+      const qText = hasCode
+        ? q.q.replace(/`([^`]+)`/g, '<code style="background:rgba(79,142,247,.12);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:.85em">$1</code>')
+        : esc(q.q);
+      return `
+        <div class="quiz-q" id="eq${pos}">
+          <div class="q-text">${pos + 1}. ${hasCode ? qText : esc(q.q)}</div>
+          <div class="quiz-opts">
+            ${q.o.map((o, oi) =>
+              `<button class="qopt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</button>`
+            ).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function ansExam(pos, oi) {
+    const b0 = document.getElementById(`eo${pos}0`);
+    if (b0 && b0.classList.contains('disabled')) return;
+
+    examAnswers[pos] = oi;
+
+    const qi = questionOrder[pos];
+    const q  = EXAM_QUESTIONS[qi];
+    for (let i = 0; i < q.o.length; i++) {
+      const b = document.getElementById(`eo${pos}${i}`);
+      if (!b) continue;
+      b.classList.add('disabled');
+      if (i === oi) b.style.borderColor = 'var(--accent)';
+    }
+
+    const answered = Object.keys(examAnswers).length;
+    document.getElementById('exam-progress-text').textContent = `${answered} / ${questionOrder.length} נענו`;
+  }
+
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) { clearInterval(timerInterval); submitExam(true); }
+    }, 1000);
+  }
+
+  function showExamToast(msg) {
+    const toast = document.getElementById('exam-toast');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    toast.style.animation = 'fadeIn .3s ease';
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { toast.style.display = 'none'; }, 4000);
+  }
+
+  function updateTimerDisplay() {
+    const display  = document.getElementById('timer-display');
+    const progress = document.getElementById('timer-progress');
+    display.textContent  = fmtTime(timeLeft);
+    progress.style.width = (timeLeft / EXAM_DURATION * 100) + '%';
+    if (timeLeft <= 300) {
+      display.classList.remove('warning-10');
+      display.classList.add('warning');
+      progress.style.background = 'var(--danger)';
+    } else if (timeLeft <= 600) {
+      if (!tenMinWarningShown) {
+        tenMinWarningShown = true;
+        display.classList.add('warning-10');
+        showExamToast('⚠️ נותרו 10 דקות!');
+      }
+      progress.style.background = 'linear-gradient(90deg,var(--accent3),var(--danger))';
+    }
+  }
+
+  function submitEarly() {
+    const unanswered = questionOrder.length - Object.keys(examAnswers).length;
+    if (unanswered > 0) {
+      if (!confirm(`יש לך ${unanswered} שאלות ללא תשובה. להגיש בכל זאת?`)) return;
+    }
+    clearInterval(timerInterval);
+    submitExam(false);
+  }
+
+  function submitExam(timeUp) {
+    clearInterval(timerInterval);
+    const timeUsed = EXAM_DURATION - timeLeft;
+    let correct = 0;
+
+    questionOrder.forEach((qi, pos) => {
+      if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) correct++;
+    });
+
+    const grade = bagrutGrade(correct, questionOrder.length);
+    const pass  = grade >= 55;
+
+    const history = Store.get(KEYS.EXAM_HISTORY, []);
+    history.push({ date: todayStr(), grade, correct, total: questionOrder.length, timeUsed, timeUp });
+    if (history.length > 10) history.shift();
+    Store.set(KEYS.EXAM_HISTORY, history);
+
+    showResults(correct, grade, pass, timeUsed);
+  }
+
+  function showResults(correct, grade, pass, timeUsed) {
+    document.getElementById('screen-exam').style.display    = 'none';
+    document.getElementById('timer-bar').style.display      = 'none';
+    document.getElementById('screen-results').style.display = 'block';
+
+    const wrong = questionOrder.length - correct;
+    const pct   = Math.round(correct / questionOrder.length * 100);
+
+    document.getElementById('result-icon').textContent  = pass ? '🎉' : '📚';
+    document.getElementById('result-title').textContent = pass ? 'עברת את המבחן!' : 'לא עברת — המשך לתרגל';
+
+    const circle = document.getElementById('grade-circle');
+    circle.textContent = grade;
+    circle.className   = 'grade-circle ' + (pass ? 'pass' : 'fail');
+
+    document.getElementById('grade-label').textContent = pass ? '✅ עובר' : '❌ לא עובר';
+    document.getElementById('grade-sub').textContent   =
+      `${correct}/${questionOrder.length} נכון · ${pct}% · ציון ${grade}${pass ? '' : ' (נדרש 55)'}`;
+    document.getElementById('stat-correct').textContent = correct;
+    document.getElementById('stat-wrong').textContent   = wrong;
+    document.getElementById('stat-time').textContent    = fmtTime(timeUsed);
+    document.getElementById('result-bar').style.width   = pct + '%';
+    document.getElementById('result-bar').style.background = pctColor(pct);
+    document.getElementById('result-pct').textContent   = pct + '%';
+
+    // Topic breakdown
+    const topicStats = {};
+    questionOrder.forEach((qi, pos) => {
+      const topic = (typeof EXAM_TOPICS !== 'undefined' ? EXAM_TOPICS[qi] : null) || 'כללי';
+      if (!topicStats[topic]) topicStats[topic] = { correct: 0, total: 0 };
+      topicStats[topic].total++;
+      if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) topicStats[topic].correct++;
+    });
+    document.getElementById('topic-breakdown').innerHTML =
+      Object.entries(topicStats)
+        .sort((a, b) => b[1].total - a[1].total)
+        .map(([topic, s]) => {
+          const tp = Math.round(s.correct / s.total * 100);
+          return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div style="min-width:95px;font-size:.8rem;font-weight:600">${esc(topic)}</div>
+            <div style="flex:1">
+              <div class="progress-bar-wrap" style="margin:0">
+                <div class="progress-bar-fill" style="width:${tp}%;background:${pctColor(tp)}"></div>
+              </div>
+            </div>
+            <div style="min-width:80px;font-size:.78rem;text-align:left;direction:ltr;color:${pctColor(tp)}">${s.correct}/${s.total} (${tp}%)</div>
+          </div>`;
+        }).join('');
+
+    document.getElementById('review-list').innerHTML = questionOrder.map((qi, pos) => {
+      const q    = EXAM_QUESTIONS[qi];
+      const oi   = examAnswers[pos];
+      const ok   = oi === q.c;
+      return `
+        <div style="border-bottom:1px solid var(--border);padding:12px 0">
+          <div style="font-size:.84rem;font-weight:600;margin-bottom:5px">
+            ${ok ? '✅' : '❌'} ${pos + 1}. ${esc(q.q.split('\n')[0])}
+          </div>
+          ${oi === undefined ? `<div style="color:var(--muted);font-size:.78rem">לא נענה</div>` : ''}
+          ${oi !== undefined && !ok ? `<div style="font-size:.78rem;color:var(--danger);margin-bottom:3px">❌ בחרת: ${esc(q.o[oi])}</div>` : ''}
+          <div style="font-size:.78rem;color:var(--success)">✅ נכון: ${esc(q.o[q.c])}</div>
+          <div style="font-size:.76rem;color:var(--muted);margin-top:4px;padding:6px 10px;background:rgba(32,217,192,.05);border-radius:5px;border:1px solid rgba(32,217,192,.15)">
+            💡 ${esc(q.e)}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderExamHistory();
+  }
+
+  function restartExam() {
+    document.getElementById('screen-results').style.display = 'none';
+    document.getElementById('screen-start').style.display   = 'block';
+    renderExamHistory();
+  }
+
+  function renderExamHistory() {
+    const history = Store.get(KEYS.EXAM_HISTORY, []);
+    const card    = document.getElementById('exam-history-card');
+    const list    = document.getElementById('exam-history-list');
+    if (!history.length) { card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    list.innerHTML = `
+      <table class="cmp-table">
+        <tr><th>תאריך</th><th>ציון</th><th>נכון</th><th>זמן</th><th>תוצאה</th></tr>
+        ${history.slice().reverse().map(h => {
+          const pass = h.grade >= 55;
+          return `<tr>
+            <td>${h.date}</td>
+            <td style="font-weight:700;color:${pass?'var(--success)':'var(--danger)'}">${h.grade}</td>
+            <td>${h.correct}/${h.total}</td>
+            <td style="direction:ltr">${fmtTime(h.timeUsed)}</td>
+            <td>${pass ? '✅ עובר' : '❌ לא עובר'}</td>
+          </tr>`;
+        }).join('')}
+      </table>
+    `;
+  }
+
+  renderExamHistory();
+</script>
+</body>
+</html>

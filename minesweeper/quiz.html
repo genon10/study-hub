@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – חידון | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<div class="page-wrap">
+
+  <div class="section-header">
+    <span class="section-icon">✏️</span>
+    <h1>חידון</h1>
+    <p>10 שאלות · תרגול חופשי · אין לחץ זמן</p>
+  </div>
+
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div>
+      <div class="score-num" id="qs">0</div>
+      <div style="font-size:.75rem;color:var(--muted)">נכון</div>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:.85rem;font-weight:600">ציון: <span id="qp">—</span></div>
+      <div style="font-size:.73rem;color:var(--muted)" id="qpr">ענה שאלה ראשונה</div>
+    </div>
+    <div>
+      <button class="btn btn-secondary" onclick="resetQ()" style="font-size:.78rem;padding:6px 12px">🔄 אפס</button>
+    </div>
+  </div>
+
+  <!-- QUIZ HISTORY -->
+  <div id="quiz-history-bar" style="margin-bottom:14px;display:none">
+    <div class="card card-glass" style="padding:12px 16px">
+      <div class="card-title" style="margin-bottom:8px;font-size:.82rem">📊 ניסיונות קודמים</div>
+      <div id="quiz-history-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="qc"></div>
+
+  <!-- FINISHED BANNER -->
+  <div id="quiz-done" style="display:none">
+    <div class="card card-glass" style="text-align:center;padding:28px">
+      <div style="font-size:2.5rem;margin-bottom:10px" id="done-emoji"></div>
+      <div style="font-size:1.3rem;font-weight:700;margin-bottom:6px" id="done-title"></div>
+      <div style="color:var(--muted);font-size:.84rem;margin-bottom:18px" id="done-sub"></div>
+      <button class="btn btn-primary" onclick="resetQ()">🔄 נסה שוב</button>
+      <a href="exam.html" class="btn btn-secondary" style="text-decoration:none;margin-right:8px">🎓 מבחן בגרות</a>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="js/data.js"></script>
+<script>
+  let qScore = 0, qAns = 0;
+
+  function renderQ() {
+    document.getElementById('qc').innerHTML = QUIZ_QUESTIONS.map((q, qi) => `
+      <div class="quiz-q" id="qq${qi}">
+        <div class="q-text">${qi + 1}. ${esc(q.q)}</div>
+        <div class="quiz-opts">
+          ${q.o.map((o, oi) =>
+            `<button class="qopt" id="qo${qi}${oi}" onclick="ansQ(${qi},${oi})">${esc(o)}</button>`
+          ).join('')}
+        </div>
+        <div class="q-explain" id="qe${qi}">💡 ${esc(q.e)}</div>
+      </div>
+    `).join('');
+
+    const saved = Store.get(KEYS.QUIZ_ANSWERS, {});
+    Object.entries(saved).forEach(([qi, oi]) => {
+      applyAnswer(parseInt(qi), parseInt(oi), false);
+    });
+
+    renderHistory();
+  }
+
+  function applyAnswer(qi, oi, save = true) {
+    const q = QUIZ_QUESTIONS[qi];
+    for (let i = 0; i < q.o.length; i++) {
+      const b = document.getElementById(`qo${qi}${i}`);
+      if (!b) continue;
+      b.classList.add('disabled');
+      if (i === q.c)                   b.classList.add('correct');
+      else if (i === oi && oi !== q.c) b.classList.add('wrong');
+    }
+    const explain = document.getElementById(`qe${qi}`);
+    if (explain) explain.classList.add('show');
+    if (save) {
+      Store.update(KEYS.QUIZ_ANSWERS, ans => ({ ...ans, [qi]: oi }), {});
+    }
+  }
+
+  function ansQ(qi, oi) {
+    const b0 = document.getElementById(`qo${qi}0`);
+    if (b0 && b0.classList.contains('disabled')) return;
+    qAns++;
+    if (oi === QUIZ_QUESTIONS[qi].c) qScore++;
+    applyAnswer(qi, oi);
+    updateScore();
+    if (qAns === QUIZ_QUESTIONS.length) finishQuiz();
+  }
+
+  function updateScore() {
+    document.getElementById('qs').textContent  = qScore;
+    document.getElementById('qp').textContent  = qAns ? Math.round(qScore / qAns * 100) + '%' : '—';
+    document.getElementById('qpr').textContent = `${qAns} מתוך ${QUIZ_QUESTIONS.length} שאלות`;
+  }
+
+  function finishQuiz() {
+    const pct     = Math.round(qScore / QUIZ_QUESTIONS.length * 100);
+    const history = Store.get(KEYS.QUIZ_HISTORY, []);
+    history.push({ date: todayStr(), score: qScore, total: QUIZ_QUESTIONS.length });
+    if (history.length > 10) history.shift();
+    Store.set(KEYS.QUIZ_HISTORY, history);
+    Store.set(KEYS.QUIZ_ANSWERS, {});
+
+    const banner = document.getElementById('quiz-done');
+    banner.style.display = 'block';
+    document.getElementById('done-emoji').textContent  = pct >= 80 ? '🎉' : pct >= 55 ? '👍' : '📚';
+    document.getElementById('done-title').textContent  = pct >= 80 ? 'כל הכבוד!' : pct >= 55 ? 'לא רע!' : 'צריך לחזור על החומר';
+    document.getElementById('done-sub').textContent    = `${qScore}/${QUIZ_QUESTIONS.length} נכון (${pct}%)`;
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    renderHistory();
+  }
+
+  function resetQ() {
+    qScore = 0; qAns = 0;
+    Store.set(KEYS.QUIZ_ANSWERS, {});
+    document.getElementById('qs').textContent  = 0;
+    document.getElementById('qp').textContent  = '—';
+    document.getElementById('qpr').textContent = 'ענה שאלה ראשונה';
+    document.getElementById('quiz-done').style.display = 'none';
+    renderQ();
+  }
+
+  function renderHistory() {
+    const history = Store.get(KEYS.QUIZ_HISTORY, []);
+    const bar  = document.getElementById('quiz-history-bar');
+    const list = document.getElementById('quiz-history-list');
+    if (!history.length) { bar.style.display = 'none'; return; }
+    bar.style.display = 'block';
+    list.innerHTML = history.slice().reverse().map(h => {
+      const pct   = Math.round(h.score / h.total * 100);
+      const color = pctColor(pct);
+      return `<span class="tag" style="background:rgba(79,142,247,.1);border:1px solid var(--border);color:${color};font-size:.73rem">
+        ${h.date}: ${h.score}/${h.total} (${pct}%)
+      </span>`;
+    }).join('');
+  }
+
+  renderQ();
+</script>
+</body>
+</html>

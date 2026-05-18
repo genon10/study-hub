@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineMaster – Study Hub v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b12;
+  --surface: #0f1420;
+  --card: #141926;
+  --border: #1c2438;
+  --accent: #4f8ef7;
+  --accent2: #20d9c0;
+  --accent3: #f5a623;
+  --danger: #f05252;
+  --success: #22c55e;
+  --purple: #a78bfa;
+  --text: #dde4f0;
+  --muted: #5a6480;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rubik', sans-serif;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(79,142,247,0.08), transparent);
+  pointer-events: none; z-index: 0;
+}
+.app { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 20px 14px 80px; }
+
+/* HEADER */
+header { text-align: center; padding: 36px 0 28px; }
+.bomb { font-size: 2.4rem; display: block; margin-bottom: 10px; animation: float 4s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+header h1 { font-size: clamp(1.5rem,5vw,2.2rem); font-weight: 900; background: linear-gradient(130deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.2; margin-bottom:6px; }
+header p { color: var(--muted); font-size: 0.88rem; }
+
+/* TABS */
+.tabs { display: flex; gap: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 5px; margin-bottom: 24px; flex-wrap: wrap; }
+.tab-btn { flex:1; min-width:70px; padding:9px 6px; border:none; border-radius:9px; background:transparent; color:var(--muted); cursor:pointer; font-family:'Rubik',sans-serif; font-size:0.78rem; font-weight:500; transition:all .2s; text-align:center; }
+.tab-btn.active { background:var(--accent); color:white; box-shadow:0 3px 12px rgba(79,142,247,.35); }
+.tab-btn:hover:not(.active) { background:var(--border); color:var(--text); }
+
+.panel { display:none; animation:fadeIn .3s ease; }
+.panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* CARD */
+.card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:14px; }
+.card-title { font-size:.95rem; font-weight:700; color:var(--accent2); margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+
+/* ACCORDION */
+.acc { margin-bottom:8px; }
+.acc-h { background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:13px 15px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; font-weight:500; font-size:0.87rem; transition:all .2s; user-select:none; }
+.acc-h:hover, .acc-h.open { border-color:var(--accent); color:var(--accent2); background:rgba(79,142,247,.08); }
+.acc-h.open { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+.acc-arrow { transition:transform .2s; font-size:.65rem; color:var(--muted); }
+.acc-h.open .acc-arrow { transform:rotate(180deg); }
+.acc-b { display:none; background:var(--card); border:1px solid var(--accent); border-top:none; border-bottom-left-radius:9px; border-bottom-right-radius:9px; padding:16px; font-size:.84rem; line-height:1.8; }
+.acc-b.open { display:block; animation:fadeIn .25s ease; }
+
+/* CODE */
+pre { background:#060a10; border:1px solid var(--border); border-radius:8px; padding:13px; font-family:'Fira Code',monospace; font-size:.76rem; overflow-x:auto; margin:10px 0; line-height:1.65; direction:ltr; text-align:left; }
+code { font-family:'Fira Code',monospace; font-size:.82em; background:rgba(79,142,247,.12); padding:1px 5px; border-radius:4px; direction:ltr; }
+.kw{color:#ff7b72} .cn{color:#79c0ff} .st{color:#a5d6ff} .cm{color:#6e7681;font-style:italic} .fn{color:#d2a8ff} .nm{color:#ffa657} .an{color:#22d3ee}
+
+/* TAGS */
+.tag { display:inline-block; padding:2px 7px; border-radius:20px; font-size:.68rem; font-weight:600; margin:2px; }
+.tb { background:rgba(79,142,247,.14); color:var(--accent); border:1px solid rgba(79,142,247,.3); }
+.tg { background:rgba(34,197,94,.14); color:var(--success); border:1px solid rgba(34,197,94,.3); }
+.ta { background:rgba(245,166,35,.14); color:var(--accent3); border:1px solid rgba(245,166,35,.3); }
+.tr { background:rgba(240,82,82,.14); color:var(--danger); border:1px solid rgba(240,82,82,.3); }
+.tp { background:rgba(167,139,250,.14); color:var(--purple); border:1px solid rgba(167,139,250,.3); }
+
+ul.sl { padding-right:18px; } ul.sl li { margin-bottom:6px; }
+hr.div { border:none; border-top:1px solid var(--border); margin:14px 0; }
+
+/* ARCH */
+.arch-layer { border:1px solid var(--border); border-radius:9px; margin-bottom:6px; overflow:hidden; }
+.arch-title { padding:9px 14px; font-size:.73rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.arch-items { display:flex; flex-wrap:wrap; gap:5px; padding:8px 14px 12px; }
+.arch-item { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:3px 9px; font-size:.72rem; font-family:'Fira Code',monospace; direction:ltr; }
+
+/* GRID */
+.topic-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:10px; margin-bottom:20px; }
+.topic-card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px; cursor:pointer; transition:all .2s; }
+.topic-card:hover { transform:translateY(-2px); border-color:var(--accent); box-shadow:0 6px 20px rgba(79,142,247,.15); }
+.tc-icon { font-size:1.7rem; margin-bottom:8px; }
+.tc-title { font-size:.86rem; font-weight:600; margin-bottom:3px; }
+.tc-desc { font-size:.73rem; color:var(--muted); line-height:1.4; }
+#topic-detail { display:none; }
+
+/* FLASHCARDS */
+.fc-wrap { perspective:1000px; margin-bottom:18px; }
+.flashcard { background:var(--card); border:2px solid var(--accent); border-radius:14px; padding:28px 22px; min-height:150px; display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; box-shadow:0 0 28px rgba(79,142,247,.1); transition:box-shadow .2s; position:relative; }
+.flashcard:hover { box-shadow:0 0 40px rgba(79,142,247,.22); }
+.fc-q { font-size:.95rem; font-weight:600; line-height:1.55; }
+.fc-a { display:none; font-size:.85rem; line-height:1.75; color:var(--accent2); }
+.flashcard.flipped .fc-q { display:none; }
+.flashcard.flipped .fc-a { display:block; animation:fadeIn .3s ease; }
+.flip-hint { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); font-size:.68rem; color:var(--muted); }
+.fc-nav { display:flex; gap:10px; align-items:center; justify-content:center; }
+.fc-nav button { background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:7px; padding:7px 16px; cursor:pointer; font-family:'Rubik',sans-serif; font-size:.82rem; transition:all .15s; }
+.fc-nav button:hover { border-color:var(--accent); color:var(--accent); }
+.fc-count { color:var(--muted); font-size:.82rem; min-width:60px; text-align:center; }
+.progress-dots { display:flex; gap:4px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:7px; height:7px; border-radius:50%; background:var(--border); transition:background .2s; }
+.dot.done { background:var(--success); }
+.dot.active { background:var(--accent); }
+
+/* QUIZ */
+.score-bar { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px 18px; display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+.score-num { font-size:1.9rem; font-weight:900; color:var(--accent3); }
+.quiz-q { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:18px; margin-bottom:12px; }
+.q-text { font-weight:600; font-size:.9rem; margin-bottom:12px; line-height:1.6; }
+.quiz-opts { display:flex; flex-direction:column; gap:7px; }
+.qopt { background:var(--card); border:1px solid var(--border); border-radius:7px; padding:9px 13px; cursor:pointer; font-size:.84rem; transition:all .15s; text-align:right; font-family:'Rubik',sans-serif; }
+.qopt:hover { border-color:var(--accent); background:rgba(79,142,247,.08); }
+.qopt.correct { background:rgba(34,197,94,.14); border-color:var(--success); color:var(--success); }
+.qopt.wrong { background:rgba(240,82,82,.14); border-color:var(--danger); color:var(--danger); }
+.qopt.disabled { pointer-events:none; }
+.q-explain { display:none; margin-top:10px; padding:11px; background:rgba(32,217,192,.07); border:1px solid rgba(32,217,192,.25); border-radius:7px; font-size:.81rem; line-height:1.7; color:var(--accent2); }
+.q-explain.show { display:block; animation:fadeIn .3s ease; }
+
+/* HIGHLIGHT BOX */
+.highlight { background:rgba(79,142,247,.08); border:1px solid rgba(79,142,247,.2); border-radius:8px; padding:12px 14px; margin:10px 0; font-size:.84rem; line-height:1.7; }
+.highlight.orange { background:rgba(245,166,35,.08); border-color:rgba(245,166,35,.25); }
+.highlight.green { background:rgba(34,197,94,.08); border-color:rgba(34,197,94,.25); }
+.highlight.red { background:rgba(240,82,82,.08); border-color:rgba(240,82,82,.25); }
+
+/* COMPARISON TABLE */
+.cmp-table { width:100%; border-collapse:collapse; font-size:.82rem; margin:12px 0; }
+.cmp-table th { background:rgba(79,142,247,.15); color:var(--accent); padding:8px 12px; text-align:right; border:1px solid var(--border); font-weight:600; }
+.cmp-table td { padding:7px 12px; border:1px solid var(--border); line-height:1.5; vertical-align:top; }
+.cmp-table tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+
+@media(max-width:500px) {
+  .tab-btn { font-size:.7rem; padding:7px 4px; }
+  .topic-grid { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <span class="bomb">💣</span>
+  <h1>MineMaster Analytics<br>Study Hub v2</h1>
+  <p>מבוסס על קוד הפרויקט האמיתי | הכנה לבגרות 5 יח"ל</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">📋 סקירה</button>
+  <button class="tab-btn" onclick="showTab('arch')">🏗️ ארכיטקטורה</button>
+  <button class="tab-btn" onclick="showTab('code')">💻 קוד אמיתי</button>
+  <button class="tab-btn" onclick="showTab('topics')">📚 נושאים</button>
+  <button class="tab-btn" onclick="showTab('cards')">🃏 כרטיסיות</button>
+  <button class="tab-btn" onclick="showTab('quiz')">✏️ חידון</button>
+</div>
+
+<!-- ===== OVERVIEW ===== -->
+<div id="tab-overview" class="panel active">
+
+  <div class="card">
+    <div class="card-title">🎯 מה בתיק הפרויקט – מבנה הלימוד</div>
+    <p style="font-size:.87rem;line-height:1.7;color:#bcc8e0">
+      תיק הפרויקט מכיל 4 שכבות עיקריות לבגרות. תלמד אותן לפי הסדר הזה:
+    </p>
+    <hr class="div">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+      <div class="highlight">📡 <strong>שירותי רשת</strong><br><span style="font-size:.78rem;color:var(--muted)">INetworkService, FirebaseManager, CRUD, הצפנה, תמונות</span></div>
+      <div class="highlight orange">🗄️ <strong>מסד נתונים</strong><br><span style="font-size:.78rem;color:var(--muted)">DSD, 5 טבלאות, טבלת קישור, Room v6, Migrations</span></div>
+      <div class="highlight green">🏗️ <strong>צד שרת / Model</strong><br><span style="font-size:.78rem;color:var(--muted)">UML, BaseFirebaseModel, ירושה, Repository</span></div>
+      <div class="highlight" style="background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25)">🧠 <strong>ViewModel</strong><br><span style="font-size:.78rem;color:var(--muted)">LiveData, VMFactory, GameViewModel, StatisticsViewModel</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ נושאים מתקדמים שיישמת (סעיף 9)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+      <span class="tag tg">✅ NFC – שיתוף אתגרים</span>
+      <span class="tag tg">✅ ירושה ממחלקת View (GameBoardView)</span>
+      <span class="tag tg">✅ Multiplayer (Firebase RTDB)</span>
+      <span class="tag tg">✅ Threads / WorkManager</span>
+      <span class="tag tg">✅ Firebase Remote DB (קריאה+כתיבה)</span>
+    </div>
+    <div class="highlight orange">
+      <strong>⚠️ חשוב לבגרות:</strong> Firebase Remote DB נחשב גם לנושא מתקדם וגם לחובת DB — כלומר מקבלת ניקוד כפול!
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 מחוון הבגרות – מה נבדק ואיפה זה בפרויקט</div>
+    <table class="cmp-table">
+      <tr><th>מה נבדק</th><th>משקל</th><th>איפה בפרויקט שלך</th></tr>
+      <tr><td>מבוא + מטרות + ממשק משתמש</td><td>10%</td><td>תיק פרויקט – פרק 1 + מסכים</td></tr>
+      <tr><td>מדריך למשתמש + דיאגרמת מסכים</td><td>10%</td><td>פרק מסכים + NavigationHelper</td></tr>
+      <tr><td>ארכיטקטורה + UML + עצי מחלקות</td><td>15%</td><td>MVVM, GameEngine, VMFactory, BaseNavigationActivity</td></tr>
+      <tr><td>מסד נתונים – DSD + טבלאות + קישור</td><td>10%</td><td>AppDatabase v6, 5 טבלאות, migrations</td></tr>
+      <tr><td>מימוש – קוד + OOP + הפרדת לוגיקה</td><td>25%</td><td>GameEngine ≠ GameViewModel ≠ GameBoardView</td></tr>
+      <tr><td>שירותי רשת – Interface + CRUD</td><td>פי חלופה</td><td>INetworkService + FirebaseManager</td></tr>
+      <tr><td>הרחבות (א-סינכרוני, תמונות, הצפנה)</td><td>בונוס</td><td>WorkManager, Storage+Glide, Encryption</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔐 הרחבה 2 שיישמת – הצפנה</div>
+    <p style="font-size:.85rem;line-height:1.7">
+      פרויקט שלך כולל הצפנה לנתונים רגישים (סיסמאות/נתוני משתמש). זוהי הרחבה לסעיף שירותי הרשת.
+    </p>
+    <pre><span class="cm">// הצפנה לנתונים רגישים לפני שמירה / שליחה לשרת</span>
+<span class="kw">public class</span> <span class="cn">EncryptionUtil</span> {
+    <span class="kw">private static final</span> <span class="cn">String</span> ALGORITHM = <span class="st">"AES"</span>;
+    
+    <span class="kw">public static</span> <span class="cn">String</span> <span class="fn">encrypt</span>(<span class="cn">String</span> data, <span class="cn">String</span> key) <span class="kw">throws</span> <span class="cn">Exception</span> {
+        <span class="cm">// שימוש ב-AES להצפנה סימטרית</span>
+        <span class="cn">SecretKeySpec</span> secretKey = <span class="kw">new</span> <span class="cn">SecretKeySpec</span>(key.<span class="fn">getBytes</span>(), ALGORITHM);
+        <span class="cn">Cipher</span> cipher = <span class="cn">Cipher</span>.<span class="fn">getInstance</span>(ALGORITHM);
+        cipher.<span class="fn">init</span>(<span class="cn">Cipher</span>.<span class="nm">ENCRYPT_MODE</span>, secretKey);
+        <span class="kw">return</span> <span class="cn">Base64</span>.<span class="fn">encodeToString</span>(cipher.<span class="fn">doFinal</span>(data.<span class="fn">getBytes</span>()), <span class="cn">Base64</span>.<span class="nm">DEFAULT</span>);
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ===== ARCHITECTURE ===== -->
+<div id="tab-arch" class="panel">
+  <div class="card">
+    <div class="card-title">🏗️ MVVM + Clean Architecture – הפרויקט שלך</div>
+
+    <div class="arch-layer" style="border-color:#4f8ef7">
+      <div class="arch-title" style="background:rgba(79,142,247,.15);color:#4f8ef7">👁️ VIEW – Activities, Fragments, Custom Views</div>
+      <div class="arch-items">
+        <span class="arch-item">GameActivity</span>
+        <span class="arch-item">GameBoardView extends View</span>
+        <span class="arch-item">StatisticsActivity</span>
+        <span class="arch-item">LeaderboardActivity</span>
+        <span class="arch-item">NfcActivity</span>
+        <span class="arch-item">MultiplayerLobbyActivity</span>
+        <span class="arch-item">ProfileActivity</span>
+        <span class="arch-item">DailyChallengeActivity</span>
+        <span class="arch-item">AchievementsActivity</span>
+        <span class="arch-item">CustomMapCreatorActivity</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕ observe LiveData</div>
+
+    <div class="arch-layer" style="border-color:#f5a623">
+      <div class="arch-title" style="background:rgba(245,166,35,.15);color:#f5a623">🧠 VIEWMODEL – Logic + LiveData (survives rotation)</div>
+      <div class="arch-items">
+        <span class="arch-item">GameViewModel</span>
+        <span class="arch-item">StatisticsViewModel</span>
+        <span class="arch-item">AchievementsViewModel</span>
+        <span class="arch-item">LeaderboardViewModel</span>
+        <span class="arch-item">AuthViewModel</span>
+        <span class="arch-item">ProfileViewModel</span>
+        <span class="arch-item">VMFactory</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕ request data</div>
+
+    <div class="arch-layer" style="border-color:#22c55e">
+      <div class="arch-title" style="background:rgba(34,197,94,.15);color:#22c55e">📦 REPOSITORY – Single Source of Truth</div>
+      <div class="arch-items">
+        <span class="arch-item">GameRepository</span>
+        <span class="arch-item">ScoresRepository</span>
+        <span class="arch-item">CustomMapRepository</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--muted);margin:4px 0;font-size:1.1rem">↕</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="arch-layer" style="border-color:#a78bfa">
+        <div class="arch-title" style="background:rgba(167,139,250,.15);color:#a78bfa;font-size:.68rem">🏠 LOCAL – Room DB v6</div>
+        <div class="arch-items" style="flex-direction:column;gap:3px">
+          <span class="arch-item">AppDatabase</span>
+          <span class="arch-item">GameDao</span>
+          <span class="arch-item">BestScoreDao</span>
+          <span class="arch-item">AchievementDao</span>
+          <span class="arch-item">CustomMapDao</span>
+          <span class="arch-item">CustomPresetDao</span>
+        </div>
+      </div>
+      <div class="arch-layer" style="border-color:#f05252">
+        <div class="arch-title" style="background:rgba(240,82,82,.15);color:#f05252;font-size:.68rem">☁️ REMOTE – Firebase</div>
+        <div class="arch-items" style="flex-direction:column;gap:3px">
+          <span class="arch-item">FirebaseManager</span>
+          <span class="arch-item">SyncManager</span>
+          <span class="arch-item">Firestore (scores/users)</span>
+          <span class="arch-item">RTDB (multiplayer)</span>
+          <span class="arch-item">Auth</span>
+          <span class="arch-item">Storage (photos)</span>
+        </div>
+      </div>
+    </div>
+    <hr class="div">
+    <div class="arch-layer" style="border-color:#20d9c0">
+      <div class="arch-title" style="background:rgba(32,217,192,.1);color:#20d9c0;font-size:.68rem">⚙️ DOMAIN / USE CASE – Pure Java Logic (no Android)</div>
+      <div class="arch-items">
+        <span class="arch-item">GameEngine.java</span>
+        <span class="arch-item">initializeBoard()</span>
+        <span class="arch-item">placeMines()</span>
+        <span class="arch-item">floodReveal()</span>
+        <span class="arch-item">checkWinCondition()</span>
+        <span class="arch-item">serializeBoardState()</span>
+      </div>
+    </div>
+    <div class="highlight" style="margin-top:10px;font-size:.82rem">
+      <strong>🎯 מה חשוב לדעת:</strong> GameEngine לא תלוי ב-Android בכלל — ניתן לבדוק אותו ב-JUnit רגיל. זו Clean Architecture בפעולה: הלוגיקה הכי חשובה אינה תלויה בפלטפורמה.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔄 זרימת Offline First – מה קורה כשלוחצים על תא</div>
+    <div style="background:#060a10;border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Fira Code',monospace;font-size:.76rem;direction:ltr;text-align:left;line-height:2">
+      <span style="color:#22c55e">1. GameBoardView.onTouchEvent()</span> → listener.onCellClick(row,col)<br>
+      <span style="color:#4f8ef7">2. GameActivity</span> → gameViewModel.revealCell(x,y)<br>
+      <span style="color:#f5a623">3. GameViewModel</span> → gameEngine.revealCell(x,y) <span style="color:#6e7681">// pure logic</span><br>
+      <span style="color:#f5a623">4. GameViewModel</span> → liveData.setValue(game) <span style="color:#6e7681">// UI auto-updates</span><br>
+      <span style="color:#a78bfa">5. on WIN/LOSE</span> → repository.saveGameResult(result)<br>
+      <span style="color:#a78bfa">6. Repository</span> → Room.insert() <span style="color:#22c55e">✅ LOCAL FIRST</span><br>
+      <span style="color:#f05252">7. if(online)</span> → FirebaseManager.uploadScore() <span style="color:#6e7681">// async</span><br>
+      <span style="color:#f05252">8. if(offline)</span> → syncedToFirebase=0, WorkManager retries later
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏭 VMFactory – למה צריך Factory?</div>
+    <p style="font-size:.84rem;line-height:1.7;margin-bottom:10px">Android לא מאפשר ViewModel עם constructor parameters. VMFactory פותר את זה:</p>
+    <pre><span class="kw">public class</span> <span class="cn">VMFactory</span> <span class="kw">implements</span> <span class="cn">ViewModelProvider.Factory</span> {
+    <span class="kw">private final</span> <span class="cn">Context</span> context;
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> &lt;T <span class="kw">extends</span> <span class="cn">ViewModel</span>&gt; T <span class="fn">create</span>(<span class="cn">Class</span>&lt;T&gt; modelClass) {
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">GameViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">GameViewModel</span>();
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">StatisticsViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">StatisticsViewModel</span>(context);
+        <span class="kw">if</span> (modelClass.<span class="fn">isAssignableFrom</span>(<span class="cn">AchievementsViewModel</span>.<span class="kw">class</span>))
+            <span class="kw">return</span> (T) <span class="kw">new</span> <span class="cn">AchievementsViewModel</span>(context);
+        <span class="kw">throw new</span> <span class="cn">IllegalArgumentException</span>(<span class="st">"Unknown ViewModel"</span>);
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ===== CODE ===== -->
+<div id="tab-code" class="panel">
+  <div class="card">
+    <div class="card-title">💻 קוד אמיתי מהפרויקט – לפי נושאים</div>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:14px">כל קטע קוד נלקח מהפרויקט שלך. הבן כל שורה — אלה הן השאלות שיישאלו.</p>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>1️⃣ INetworkService – ה-Interface של שירותי הרשת</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight red">⚠️ חשוב לבגרות: ה-Interface הוא <strong>חובה</strong> בחלופת שירותי רשת. צריך לדעת להסביר למה.</div>
+      <pre><span class="kw">public interface</span> <span class="cn">INetworkService</span> {
+    <span class="cm">// שליפה (Read)</span>
+    <span class="kw">void</span> <span class="fn">fetchLeaderboard</span>(<span class="cn">String</span> difficulty, <span class="cn">NetworkCallback</span>&lt;<span class="cn">List</span>&lt;<span class="cn">LeaderboardEntry</span>&gt;&gt; callback);
+    <span class="cm">// הוספה (Create)</span>
+    <span class="kw">void</span> <span class="fn">uploadScore</span>(<span class="cn">LeaderboardEntry</span> entry, <span class="cn">NetworkCallback</span>&lt;<span class="cn">Boolean</span>&gt; callback);
+    <span class="cm">// עדכון (Update)</span>
+    <span class="kw">void</span> <span class="fn">updateProgress</span>(<span class="cn">String</span> userId, <span class="cn">PlayerProgress</span> progress, <span class="cn">NetworkCallback</span>&lt;<span class="cn">Boolean</span>&gt; callback);
+    <span class="cm">// מחיקה (Delete)</span>
+    <span class="kw">void</span> <span class="fn">deleteAccount</span>(<span class="cn">String</span> userId, <span class="cn">NetworkCallback</span>&lt;<span class="cn">Boolean</span>&gt; callback);
+}</pre>
+      <strong>למה Interface ולא מחלקה רגילה?</strong> עקרון Dependency Inversion — ה-ViewModel לא תלוי ב-Firebase ספציפית, אלא ב-Interface. אפשר להחליף ל-REST API בעתיד בלי לשנות את ה-ViewModel.
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>2️⃣ GameEngine – floodReveal (BFS/Recursion)</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight">זהו <strong>BusinessLogic</strong> — לוגיקת המשחק. GameEngine לא יורש מ-Android כלל.</div>
+      <pre><span class="cm">// חשיפת שטחים ריקים – BFS (Queue)</span>
+<span class="kw">private void</span> <span class="fn">floodReveal</span>(<span class="kw">int</span> startX, <span class="kw">int</span> startY) {
+    <span class="cn">Queue</span>&lt;<span class="kw">int</span>[]&gt; queue = <span class="kw">new</span> <span class="cn">LinkedList</span>&lt;&gt;();
+    queue.<span class="fn">add</span>(<span class="kw">new int</span>[]{startX, startY});
+
+    <span class="kw">while</span> (!queue.<span class="fn">isEmpty</span>()) {
+        <span class="kw">int</span>[] pos = queue.<span class="fn">poll</span>();
+        <span class="kw">int</span> x = pos[0], y = pos[1];
+
+        <span class="cm">// בדיקת 8 שכנים</span>
+        <span class="kw">for</span> (<span class="kw">int</span> dy = -1; dy &lt;= 1; dy++) {
+            <span class="kw">for</span> (<span class="kw">int</span> dx = -1; dx &lt;= 1; dx++) {
+                <span class="kw">if</span> (dx == 0 && dy == 0) <span class="kw">continue</span>;
+                <span class="kw">int</span> nx = x + dx, ny = y + dy;
+                <span class="kw">if</span> (!<span class="fn">isValidCoordinate</span>(nx, ny)) <span class="kw">continue</span>;
+                <span class="cn">Cell</span> neighbor = board[ny][nx];
+                <span class="kw">if</span> (!neighbor.<span class="fn">isRevealed</span>() && !neighbor.<span class="fn">isFlagged</span>() && !neighbor.<span class="fn">isMine</span>()) {
+                    neighbor.<span class="fn">setState</span>(<span class="cn">CellState</span>.<span class="nm">REVEALED</span>);
+                    game.<span class="fn">incrementTilesRevealed</span>();
+                    <span class="kw">if</span> (neighbor.<span class="fn">getAdjacentMines</span>() == 0)
+                        queue.<span class="fn">add</span>(<span class="kw">new int</span>[]{nx, ny});
+                }
+            }
+        }
+    }
+}</pre>
+      <strong>מבנה נתונים:</strong> Queue (תור) לאלגוריתם BFS. זה מבנה נתונים שהמורה ציינה ב-BusinessLogic (סעיף 9). BFS מבטיח שלא נקבל StackOverflow כמו ב-recursion על לוחות גדולים (30x16).
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>3️⃣ GameViewModel – finishGame + LiveData</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre><span class="kw">public class</span> <span class="cn">GameViewModel</span> <span class="kw">extends</span> <span class="cn">ViewModel</span> {
+    <span class="kw">private final</span> <span class="cn">GameRepository</span> repository;
+    <span class="kw">private final</span> <span class="cn">MutableLiveData</span>&lt;<span class="cn">GameStatus</span>&gt; gameState = <span class="kw">new</span> <span class="cn">MutableLiveData</span>&lt;&gt;();
+    <span class="kw">private final</span> <span class="cn">MutableLiveData</span>&lt;<span class="cn">Game</span>&gt; currentGame = <span class="kw">new</span> <span class="cn">MutableLiveData</span>&lt;&gt;();
+    <span class="kw">private final</span> <span class="cn">MutableLiveData</span>&lt;<span class="cn">Integer</span>&gt; timer = <span class="kw">new</span> <span class="cn">MutableLiveData</span>&lt;&gt;(0);
+
+    <span class="kw">public void</span> <span class="fn">finishGame</span>(<span class="kw">boolean</span> isWin, <span class="kw">long</span> timeSeconds, <span class="cn">String</span> difficulty) {
+        <span class="cn">GameResult</span> result = <span class="kw">new</span> <span class="cn">GameResult</span>(difficulty, timeSeconds, isWin);
+        <span class="cm">// 1. עדכון UI מיידי</span>
+        gameState.<span class="fn">setValue</span>(isWin ? <span class="cn">GameStatus</span>.<span class="nm">WON</span> : <span class="cn">GameStatus</span>.<span class="nm">LOST</span>);
+        <span class="cm">// 2. שמירה א-סינכרונית (לא חוסמת UI)</span>
+        repository.<span class="fn">saveGameResult</span>(result);
+        <span class="cm">// 3. חישוב XP</span>
+        <span class="cn">XpManager</span>.<span class="fn">calculateAndAddXp</span>(isWin, difficulty);
+    }
+}</pre>
+      <strong>תהליך:</strong> לחיצה על מוקש → GameEngine מחזיר LOST → ViewModel מעדכן LiveData → Activity רואה ומציג "Game Over" — הכל אוטומטי בלי לשאול "מה מצב המשחק?".
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>4️⃣ BaseFirebaseModel – ירושה בשכבת ה-Model</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight green">✅ זו הירושה (Inheritance) בשכבת ה-Model שנדרשת בבגרות — "בונוס עיצובי".</div>
+      <pre><span class="cm">// מחלקת בסיס — שדות משותפים לכל מסמך Firebase</span>
+<span class="kw">public class</span> <span class="cn">BaseFirebaseModel</span> {
+    <span class="kw">private</span> <span class="cn">String</span> documentId;
+    <span class="kw">private long</span> createdAt;
+    <span class="kw">private long</span> updatedAt;
+    <span class="cm">// getters/setters...</span>
+}
+
+<span class="cm">// UserRecord יורש → מקבל documentId ו-createdAt חינם</span>
+<span class="kw">public class</span> <span class="cn">UserRecord</span> <span class="kw">extends</span> <span class="cn">BaseFirebaseModel</span> {
+    <span class="kw">private</span> <span class="cn">String</span> userId;
+    <span class="kw">private int</span> gamesWon;
+    <span class="cm">// ...</span>
+}
+
+<span class="cm">// LeaderboardEntry גם יורש</span>
+<span class="kw">public class</span> <span class="cn">LeaderboardEntry</span> <span class="kw">extends</span> <span class="cn">BaseFirebaseModel</span> {
+    <span class="kw">private int</span> score;
+    <span class="kw">private</span> <span class="cn">String</span> playerName;
+}</pre>
+      <strong>יתרון:</strong> כל מחלקה שנשמרת ל-Firebase מקבלת אוטומטית documentId, createdAt, updatedAt — בלי לכתוב את זה שוב ושוב.
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>5️⃣ Room DB – Entity + DAO + Migration</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre><span class="cm">// Entity — הגדרת טבלה</span>
+<span class="an">@Entity</span>(tableName = <span class="st">"games"</span>)
+<span class="kw">public class</span> <span class="cn">GameEntity</span> {
+    <span class="an">@PrimaryKey</span>(autoGenerate = <span class="kw">true</span>)
+    <span class="kw">public int</span> id;
+    <span class="kw">public</span> <span class="cn">String</span> userId;
+    <span class="kw">public int</span> difficultyId; <span class="cm">// 1=Easy 2=Med 3=Hard 4=Custom</span>
+    <span class="kw">public</span> <span class="cn">String</span> status;    <span class="cm">// WON/LOST/IN_PROGRESS</span>
+    <span class="kw">public int</span> secondsElapsed;
+    <span class="kw">public</span> <span class="cn">String</span> boardState; <span class="cm">// JSON serialization</span>
+    <span class="kw">public boolean</span> syncedToFirebase;
+}
+
+<span class="cm">// DAO — שאילתות</span>
+<span class="an">@Dao</span>
+<span class="kw">public interface</span> <span class="cn">GameDao</span> {
+    <span class="an">@Insert</span>
+    <span class="kw">long</span> <span class="fn">insertGame</span>(<span class="cn">GameEntity</span> game);
+
+    <span class="an">@Query</span>(<span class="st">"SELECT * FROM games WHERE userId=:uid ORDER BY id DESC"</span>)
+    <span class="cn">List</span>&lt;<span class="cn">GameEntity</span>&gt; <span class="fn">getGamesByUser</span>(<span class="cn">String</span> uid);
+
+    <span class="an">@Query</span>(<span class="st">"SELECT * FROM games WHERE syncedToFirebase=0"</span>)
+    <span class="cn">List</span>&lt;<span class="cn">GameEntity</span>&gt; <span class="fn">getUnsynced</span>(); <span class="cm">// לsync worker</span>
+
+    <span class="an">@Update</span>
+    <span class="kw">void</span> <span class="fn">updateGame</span>(<span class="cn">GameEntity</span> game);
+}
+
+<span class="cm">// Migration 5→6</span>
+<span class="cn">Migration</span> MIGRATION_5_6 = <span class="kw">new</span> <span class="cn">Migration</span>(5, 6) {
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="fn">migrate</span>(<span class="cn">SupportSQLiteDatabase</span> db) {
+        db.<span class="fn">execSQL</span>(<span class="st">"ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0"</span>);
+    }
+};</pre>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>6️⃣ WorkManager – FirebaseSyncWorker</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight orange">זהו הליך א-סינכרוני – הרחבה 1 שנדרשת. WorkManager > AsyncTask (deprecated).</div>
+      <pre><span class="kw">public class</span> <span class="cn">FirebaseSyncWorker</span> <span class="kw">extends</span> <span class="cn">Worker</span> {
+    <span class="an">@Override</span>
+    <span class="kw">public</span> <span class="cn">Result</span> <span class="fn">doWork</span>() {
+        <span class="cm">// רץ ב-background thread, לא ב-UI thread</span>
+        <span class="cn">List</span>&lt;<span class="cn">GameEntity</span>&gt; unsynced = gameDao.<span class="fn">getUnsynced</span>();
+        <span class="kw">for</span> (<span class="cn">GameEntity</span> g : unsynced) {
+            firebaseManager.<span class="fn">uploadGame</span>(g);
+            g.syncedToFirebase = <span class="kw">true</span>;
+            gameDao.<span class="fn">updateGame</span>(g);
+        }
+        <span class="kw">return</span> <span class="cn">Result</span>.<span class="fn">success</span>();
+    }
+}
+
+<span class="cm">// תזמון כל 15 דקות רק כשיש רשת</span>
+<span class="cn">PeriodicWorkRequest</span> syncWork = <span class="kw">new</span> <span class="cn">PeriodicWorkRequest.Builder</span>(
+    <span class="cn">FirebaseSyncWorker</span>.<span class="kw">class</span>, 15, <span class="cn">TimeUnit</span>.<span class="nm">MINUTES</span>)
+    .<span class="fn">setConstraints</span>(<span class="kw">new</span> <span class="cn">Constraints.Builder</span>()
+        .<span class="fn">setRequiredNetworkType</span>(<span class="cn">NetworkType</span>.<span class="nm">CONNECTED</span>).<span class="fn">build</span>())
+    .<span class="fn">build</span>();</pre>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>7️⃣ NFC – NfcActivity + NfcHandler</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre><span class="cm">// בonCreate של NfcActivity</span>
+nfcHandler = <span class="kw">new</span> <span class="cn">NfcHandler</span>(<span class="kw">this</span>);
+
+<span class="cm">// simulation mode לבדיקה בלי חומרה</span>
+<span class="kw">boolean</span> simulate = getIntent().<span class="fn">getBooleanExtra</span>(<span class="st">"simulate_nfc"</span>, <span class="kw">false</span>);
+<span class="kw">if</span> (simulate) {
+    <span class="fn">simulateNfc</span>(); <span class="cm">// עוקף בדיקת חומרה</span>
+    <span class="kw">return</span>;
+}
+<span class="fn">checkNfcStatus</span>();
+<span class="fn">handleIntent</span>(<span class="fn">getIntent</span>());
+
+<span class="cm">// כשמקבלים NFC חדש (כשהמסך פתוח)</span>
+<span class="an">@Override</span>
+<span class="kw">protected void</span> <span class="fn">onNewIntent</span>(<span class="cn">Intent</span> intent) {
+    <span class="kw">super</span>.<span class="fn">onNewIntent</span>(intent);
+    <span class="fn">handleIntent</span>(intent); <span class="cm">// מעבד את ה-NDEF message</span>
+}</pre>
+      <strong>Manifest (חובה לדעת):</strong>
+      <pre>&lt;<span class="kw">uses-permission</span> android:<span class="nm">name</span>=<span class="st">"android.permission.NFC"</span>/&gt;
+&lt;<span class="kw">uses-feature</span> android:<span class="nm">name</span>=<span class="st">"android.hardware.nfc"</span> 
+              android:<span class="nm">required</span>=<span class="st">"false"</span>/&gt;</pre>
+      <code>required="false"</code> = האפליקציה עובדת גם בלי NFC (לא מחייב חומרה).
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>8️⃣ StatisticsViewModel – חישוב סטטיסטיקות</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre><span class="kw">public class</span> <span class="cn">StatisticsViewModel</span> <span class="kw">extends</span> <span class="cn">ViewModel</span> {
+    <span class="kw">public void</span> <span class="fn">loadStatistics</span>() {
+        isLoading.<span class="fn">setValue</span>(<span class="kw">true</span>);
+        <span class="cm">// Background thread — לא לחסום UI</span>
+        <span class="kw">new</span> <span class="cn">Thread</span>(() -&gt; {
+            <span class="cn">List</span>&lt;<span class="cn">Game</span>&gt; allGames = gameRepository.<span class="fn">getAllGames</span>();
+            <span class="cn">StatisticsData</span> stats = <span class="fn">calculateStatistics</span>(allGames);
+            statisticsData.<span class="fn">postValue</span>(stats); <span class="cm">// postValue מ-background thread!</span>
+        }).<span class="fn">start</span>();
+    }
+
+    <span class="cm">// חישוב Win Rate</span>
+    <span class="kw">int</span> gamesWon = 0, bestStreak = 0, tempStreak = 0;
+    <span class="kw">for</span> (<span class="cn">Game</span> game : allGames) {
+        <span class="kw">if</span> (game.<span class="fn">getStatus</span>() == <span class="cn">GameStatus</span>.<span class="nm">WON</span>) {
+            gamesWon++; tempStreak++;
+            <span class="kw">if</span> (tempStreak &gt; bestStreak) bestStreak = tempStreak;
+        } <span class="kw">else</span> { tempStreak = 0; }
+    }
+}</pre>
+      <strong>חשוב:</strong> <code>setValue()</code> רק מ-main thread. <code>postValue()</code> מ-background thread. טעות נפוצה בבגרות!
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="ta(this)"><span>9️⃣ Firestore Security Rules</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight red">זה מה שמגן על ה-DB בענן — ידיעה זו מפגינה הבנה מעמיקה.</div>
+      <pre style="direction:ltr;text-align:left"><span class="cm">// Firestore Security Rules</span>
+rules_version = <span class="st">'2'</span>;
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if true;   <span class="cm">// כולם קוראים</span>
+      allow write: if request.auth.uid == userId; <span class="cm">// רק הבעלים כותב</span>
+    }
+    match /scores/{scoreId} {
+      allow read: if true;   <span class="cm">// ציונים גלויים לכל</span>
+      allow create: if request.auth != null; <span class="cm">// רק מחוברים מוסיפים</span>
+    }
+  }
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOPICS ===== -->
+<div id="tab-topics" class="panel">
+  <div class="topic-grid">
+    <div class="topic-card" onclick="showTopic('async')"><div class="tc-icon">⚡</div><div class="tc-title">א-סינכרוני</div><div class="tc-desc">ExecutorService, WorkManager, postValue vs setValue</div></div>
+    <div class="topic-card" onclick="showTopic('db')"><div class="tc-icon">🗄️</div><div class="tc-title">מסד נתונים</div><div class="tc-desc">DSD, 5 טבלאות, קישור, migrations</div></div>
+    <div class="topic-card" onclick="showTopic('firebase_deep')"><div class="tc-icon">🔥</div><div class="tc-title">Firebase עמוק</div><div class="tc-desc">Firestore vs RTDB, Auth, Security Rules</div></div>
+    <div class="topic-card" onclick="showTopic('oop_deep')"><div class="tc-icon">🧩</div><div class="tc-title">OOP עמוק</div><div class="tc-desc">ירושה, הכלה, Singleton, Interface, DI</div></div>
+    <div class="topic-card" onclick="showTopic('gameengine')"><div class="tc-icon">🎮</div><div class="tc-title">GameEngine</div><div class="tc-desc">BFS flood fill, mine placement, win check, serialization</div></div>
+    <div class="topic-card" onclick="showTopic('network')"><div class="tc-icon">📡</div><div class="tc-title">שירותי רשת</div><div class="tc-desc">Interface, CRUD, הצפנה, תמונות</div></div>
+    <div class="topic-card" onclick="showTopic('android_lifecycle')"><div class="tc-icon">📱</div><div class="tc-title">Android Lifecycle</div><div class="tc-desc">Activity/Fragment lifecycle, ViewModel, onResume</div></div>
+    <div class="topic-card" onclick="showTopic('advanced')"><div class="tc-icon">🚀</div><div class="tc-title">נושאים מתקדמים</div><div class="tc-desc">NFC, Custom View, Multiplayer, DailyChallenge</div></div>
+  </div>
+  <div id="topic-detail" class="card"><div id="topic-content"></div></div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div id="tab-cards" class="panel">
+  <div class="card" style="text-align:center;padding:12px"><span style="font-size:.83rem;color:var(--muted)">לחץ על הכרטיסייה לראות את התשובה המלאה מהפרויקט</span></div>
+  <div class="progress-dots" id="fc-dots"></div>
+  <div class="fc-wrap">
+    <div class="flashcard" id="fc" onclick="flipFC()">
+      <div class="fc-q" id="fc-q"></div>
+      <div class="fc-a" id="fc-a"></div>
+      <span class="flip-hint">לחץ להפוך</span>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button onclick="prevFC()">→ הקודם</button>
+    <span class="fc-count" id="fc-count"></span>
+    <button onclick="nextFC()">הבא ←</button>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="tab-quiz" class="panel">
+  <div class="score-bar">
+    <div><div class="score-num" id="qs">0</div><div style="font-size:.75rem;color:var(--muted)">נכון</div></div>
+    <div style="flex:1">
+      <div style="font-size:.85rem;font-weight:600">ציון: <span id="qp">-</span></div>
+      <div style="font-size:.73rem;color:var(--muted)" id="qpr">ענה כדי לראות ציון</div>
+    </div>
+    <button onclick="resetQ()" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:7px 12px;cursor:pointer;font-family:'Rubik',sans-serif;font-size:.78rem">🔄 אפס</button>
+  </div>
+  <div id="qc"></div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ---- TABS ----
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+function ta(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+// ---- TOPICS ----
+const topics = {
+  async: {
+    title:'⚡ תכנות א-סינכרוני – 3 שכבות בפרויקט',
+    html:`
+<div class="highlight orange"><strong>למה חשוב?</strong> Android לא מאפשר פעולות רשת/DB ב-UI Thread — גורם ל-ANR (App Not Responding).</div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>שכבה 1: ExecutorService (Room)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre><span class="cm">// ב-Repository — שמירה ל-Room ברקע</span>
+<span class="cn">AppDatabase</span>.databaseWriteExecutor.<span class="fn">execute</span>(() -&gt; {
+    gameDao.<span class="fn">insert</span>(result);
+});</pre>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>שכבה 2: new Thread (StatisticsViewModel)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre><span class="kw">new</span> <span class="cn">Thread</span>(() -&gt; {
+    <span class="cn">List</span>&lt;<span class="cn">Game</span>&gt; games = gameRepository.<span class="fn">getAllGames</span>();
+    statisticsData.<span class="fn">postValue</span>(stats); <span class="cm">// postValue! לא setValue!</span>
+}).<span class="fn">start</span>();</pre>
+<strong>חוק:</strong> setValue() = main thread בלבד. postValue() = מכל thread.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>שכבה 3: WorkManager (Background Tasks)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+WorkManager = העבודה תתבצע גם אם האפליקציה נסגרה. <br>
+FirebaseSyncWorker (כל 15 דק') + AchievementSyncWorker (כל 24 שעות). <br>
+Constraint: <code>NetworkType.CONNECTED</code> — רץ רק עם אינטרנט.
+</div></div>
+`},
+  db: {
+    title:'🗄️ מסד הנתונים – Room v6',
+    html:`
+<div class="highlight"><strong>5 טבלאות ב-Room:</strong></div>
+<table class="cmp-table">
+<tr><th>טבלה</th><th>שדות עיקריים</th><th>תפקיד</th></tr>
+<tr><td><code>games</code></td><td>id, userId, difficultyId, status, secondsElapsed, boardState(JSON), syncedToFirebase</td><td>היסטוריית משחקים</td></tr>
+<tr><td><code>best_scores</code></td><td>id, userId, firebaseUid, playerName, difficultyId, seconds, syncedToFirebase</td><td>שיאים אישיים</td></tr>
+<tr><td><code>achievements</code></td><td>id, name, category, requirement, progress, unlocked, unlockedAt</td><td>הישגים</td></tr>
+<tr><td><code>custom_maps</code></td><td>id, name, rows, cols, bombPositions(JSON), source, userId</td><td>מפות מותאמות</td></tr>
+<tr><td><code>custom_presets</code></td><td>id, name, width, height, mines, createdAt</td><td>הגדרות מהירות</td></tr>
+</table>
+<div class="highlight orange"><strong>טבלת קישור (Junction Table) – חובה!</strong><br>
+<code>achievements</code> מקשרת בין Users לבין הישגים ספציפיים. כל משתמש יכול לפתוח אחוז שונה מהישגים שונים.
+</div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Migrations – למה יש 6 גרסאות?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">כל פעם שהוספת שדה חדש לטבלה (כמו syncedToFirebase), Room מחייב Migration. בלי Migration — האפליקציה קורסת למשתמשים עם גרסה ישנה. בפרויקט: migrations 1→2→3→4→5→6.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>boardState כ-JSON – למה?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">מצב הלוח (Cell[][]) לא ניתן לשמירה ישירה ב-Room. GameEngine.serializeBoardState() ממיר אותו ל-JSON string ושומר בעמודה אחת. בטעינה: deserialize חזרה.
+</div></div>
+`},
+  firebase_deep: {
+    title:'🔥 Firebase – השוואה מעמיקה',
+    html:`
+<table class="cmp-table">
+<tr><th>נושא</th><th>Firestore</th><th>Realtime Database</th></tr>
+<tr><td>מבנה</td><td>Collections/Documents (NoSQL)</td><td>JSON tree</td></tr>
+<tr><td>שאילתות</td><td>מורכבות, filtering, ordering</td><td>פשוטות, בעיקר לפי path</td></tr>
+<tr><td>Real-time</td><td>כן, עם listeners</td><td>כן, מהיר יותר</td></tr>
+<tr><td>שימוש בפרויקט</td><td>scores/, users/, daily_challenges/</td><td>rooms/ (Multiplayer)</td></tr>
+<tr><td>Offline support</td><td>מובנה</td><td>מובנה חלקי</td></tr>
+</table>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Firestore Collections בפרויקט</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+• <code>users/{uid}</code> — פרופיל, privacy settings<br>
+• <code>scores/</code> — לוח מובילים (userId, difficultyId, seconds, movesCount)<br>
+• <code>daily_challenges/{date}/scores/{userId}</code> — אתגר יומי<br>
+• <code>user_settings/{uid}</code> — themeMode, soundEnabled, hapticsEnabled
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Firebase Auth – 3 דרכי כניסה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+1. Email + Password<br>
+2. Google Sign-In<br>
+3. Anonymous (אורח — יכול לשחק, לא לגבות)<br><br>
+AuthActivity / AuthViewModel מנהלים את הלוגיקה. כל כתיבה ל-Firestore משתמשת ב-<code>getCurrentUser().getUid()</code>.
+</div></div>
+`},
+  oop_deep: {
+    title:'🧩 OOP מעמיק – כל הדפוסים בפרויקט',
+    html:`
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>ירושה (Inheritance) – 3 דוגמאות</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+1. <code>BaseNavigationActivity</code> ← GameActivity, StatisticsActivity... (bottom nav, toolbar)<br>
+2. <code>View</code> ← <code>GameBoardView</code> (Canvas drawing)<br>
+3. <code>Worker</code> ← <code>FirebaseSyncWorker</code>, <code>AchievementSyncWorker</code><br>
+4. <code>ViewModel</code> ← GameViewModel, StatisticsViewModel...<br>
+5. <code>BaseFirebaseModel</code> ← UserRecord, LeaderboardEntry
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Singleton Pattern – App.getInstance()</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre><span class="kw">public class</span> <span class="cn">App</span> <span class="kw">extends</span> <span class="cn">Application</span> {
+    <span class="kw">private static</span> <span class="cn">App</span> instance;
+    <span class="kw">private</span> <span class="cn">FirebaseManager</span> firebaseManager;
+    <span class="kw">private</span> <span class="cn">SettingsManager</span> settingsManager;
+    <span class="kw">private</span> <span class="cn">ThemeManager</span> themeManager;
+
+    <span class="kw">public static</span> <span class="cn">App</span> <span class="fn">getInstance</span>() { <span class="kw">return</span> instance; }
+}</pre>
+מופע אחד לכל חיי האפליקציה. כל Activity שולף: <code>App.getInstance().getFirebaseManager()</code>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Factory Pattern – VMFactory</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+Android לא מאפשר ViewModel עם parameters. VMFactory אחראי ליצור כל ViewModel עם ה-dependencies הנכונות. כך אפשר להזריק Context ו-Repository ל-ViewModels.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Repository Pattern – גישור בין data sources</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+Repository = שכבת תיווך. ViewModel לא יודע אם המידע מגיע מ-Room או Firebase. היתרון: אפשר לשנות את המקור בלי לגעת ב-ViewModel.
+<pre><span class="kw">public class</span> <span class="cn">GameRepository</span> {
+    <span class="kw">private final</span> <span class="cn">GameDao</span> gameDao;         <span class="cm">// local</span>
+    <span class="kw">private final</span> <span class="cn">FirebaseManager</span> firebase; <span class="cm">// remote</span>
+
+    <span class="kw">public void</span> <span class="fn">saveGame</span>(<span class="cn">GameResult</span> r) {
+        <span class="cm">// Offline First</span>
+        executor.<span class="fn">execute</span>(() -&gt; gameDao.<span class="fn">insert</span>(r));
+        <span class="kw">if</span> (firebase.<span class="fn">isOnline</span>()) firebase.<span class="fn">upload</span>(r);
+    }
+}</pre>
+</div></div>
+`},
+  gameengine: {
+    title:'🎮 GameEngine – לב הפרויקט',
+    html:`
+<div class="highlight green"><code>GameEngine.java</code> ב-domain/usecase — ללא תלות ב-Android. Pure Java.</div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>First Click Safe – למה?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">המוקשים מוצבים <strong>אחרי</strong> הלחיצה הראשונה כדי להבטיח שלא מפסידים בלחיצה הראשונה. <code>firstClick=true</code> → לחיצה ראשונה → <code>placeMines(excludeX, excludeY)</code> → המוקשים לא על התא שנלחץ.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Score Calculation – חישוב ניקוד</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre><span class="kw">int</span> timeBonus = <span class="cn">Math</span>.<span class="fn">max</span>(1000 - seconds, 0);
+<span class="kw">int</span> moveBonus = <span class="cn">Math</span>.<span class="fn">max</span>(500 - moves, 0);
+<span class="kw">int</span> difficultyBonus = difficulty * 10;
+<span class="kw">int</span> flagAccuracyBonus = (flagsPlaced == totalMines) ? 200 : ...;
+<span class="kw">return</span> timeBonus + moveBonus + difficultyBonus + flagAccuracyBonus;</pre>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Daily Challenge – seed קבוע</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<code>initializeBoard(width, height, mines, seed)</code> — seed=תאריך היום. כך כולם מקבלים בדיוק אותו לוח ביום מסוים. <code>new Random(seed)</code> מייצר אותה רצף אקראי בדיוק.
+</div></div>
+`},
+  network: {
+    title:'📡 שכבת שירותי רשת',
+    html:`
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>א. הגדרות רשת (Manifest)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre>&lt;<span class="kw">uses-permission</span> android:<span class="nm">name</span>=<span class="st">"android.permission.INTERNET"</span>/&gt;
+&lt;<span class="kw">uses-permission</span> android:<span class="nm">name</span>=<span class="st">"android.permission.ACCESS_NETWORK_STATE"</span>/&gt;</pre>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>ב. Interface – INetworkService</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">מגדיר Read, Create, Update, Delete — כולם עם Callback א-סינכרוני. FirebaseManager מממש את ה-Interface.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>ג. הרחבה 1 – תמונות (Firebase Storage + Glide)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+1. המשתמש בוחר תמונה מגלריה (ProfileActivity)<br>
+2. נדחסת במכשיר<br>
+3. מועלית ל-Firebase Storage (async)<br>
+4. URL נשמר ב-Firestore<br>
+5. Glide טוען את התמונה מה-URL עם cache
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>ד. הרחבה 2 – הצפנה (AES)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+AES = Advanced Encryption Standard — הצפנה סימטרית (אותו מפתח להצפנה ולפענוח). משמשת להגנה על נתונים רגישים לפני שמירה/שליחה לשרת. EncryptionUtil בפרויקט.
+</div></div>
+`},
+  android_lifecycle: {
+    title:'📱 Android Lifecycle',
+    html:`
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Activity Lifecycle – מחזור חיים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+onCreate → onStart → onResume [ACTIVE] → onPause → onStop → onDestroy<br><br>
+בפרויקט: <code>StatisticsActivity.onResume()</code> קורא ל-<code>viewModel.refresh()</code> כדי לטעון נתונים עדכניים כשחוזרים למסך.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>ViewModel vs Activity – הבדל קריטי</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+Activity נהרסת בסיבוב מסך. ViewModel <strong>שורד</strong> סיבוב מסך. לכן מצב המשחק (board, timer, score) נשמר ב-ViewModel ולא ב-Activity — המשחק לא מתאפס בסיבוב.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>BaseNavigationActivity – מה הוא עושה?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+כל מסך ראשי יורש ממנו. הוא מטפל ב:<br>
+• Bottom Navigation Bar (ניווט תחתון)<br>
+• Toolbar setup<br>
+• Window insets (מרווחים ל-status/navigation bars)<br>
+• Theme application<br><br>
+בלעדיו: כל Activity היה צריך לכתוב את אותו קוד — DRY principle (Don't Repeat Yourself).
+</div></div>
+`},
+  advanced: {
+    title:'🚀 נושאים מתקדמים',
+    html:`
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>NFC – תרחיש שימוש שלם</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+1. שחקן א' פותח NfcActivity ויוצר CustomMap Challenge<br>
+2. NfcHandler כותב NDEF Message עם פרטי המפה<br>
+3. שחקן ב' קרב את הטלפון — onNewIntent() מופעל<br>
+4. handleIntent() מפענח את ה-NDEF Message<br>
+5. btnAcceptChallenge מופעל — המשחק מתחיל עם אותה מפה בדיוק<br><br>
+<code>simulate_nfc=true</code> בIntent = בדיקה בלי חומרה אמיתית
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>Daily Challenge – איך עובד?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+Seed = תאריך היום (מחושב: שנה*10000 + חודש*100 + יום).<br>
+<code>GameViewModel.startNewGameWithSeed()</code> → <code>GameEngine.initializeBoard(seed)</code> → <code>new Random(seed)</code>.<br>
+כל ה-Firestore: <code>daily_challenges/{date}/scores/{userId}</code> — ניתן להשוות ציונים עם כולם.
+</div></div>
+<div class="acc"><div class="acc-h" onclick="ta(this)"><span>GameBoardView – Canvas ב-3 שלבים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+1. <code>setGame(game)</code> → מעדכן board reference → <code>invalidate()</code> = "ציור מחדש"<br>
+2. <code>onDraw(Canvas)</code> → לולאה על כל תא → <code>drawCell(canvas, r, c)</code><br>
+3. <code>onTouchEvent(MotionEvent)</code> → חישוב row/col לפי px → קריאה ל-listener<br><br>
+<code>invalidate()</code> חשוב: בלי קריאה אליו, הציור לא מתרענן!
+</div></div>
+`}
+};
+
+function showTopic(k) {
+  const t = topics[k];
+  document.getElementById('topic-detail').style.display='block';
+  document.getElementById('topic-content').innerHTML=`<div class="card-title">📖 ${t.title}</div>${t.html}`;
+  document.getElementById('topic-detail').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ---- FLASHCARDS ----
+const cards = [
+  {q:"מה ההבדל בין setValue() ל-postValue() ב-LiveData?", a:"setValue() — רק מ-main (UI) thread. postValue() — מכל thread (background). טעות: קריאה ל-setValue() מ-background thread → Exception. בפרויקט: StatisticsViewModel משתמש ב-postValue() אחרי חישוב ב-Thread חדש."},
+  {q:"למה בפרויקט יש VMFactory? מה הבעיה שהוא פותר?", a:"Android לא מאפשר ViewModel עם constructor parameters (רק no-arg constructor). VMFactory מממש ViewModelProvider.Factory ומאפשר ליצור ViewModels עם Context ו-Repository. בלי VMFactory — אי אפשר להעביר פרמטרים ל-ViewModel."},
+  {q:"מה זה 'Offline First' ואיך זה מיושם בפרויקט?", a:"שמירה תחילה ב-Room (מקומי, מהיר, עובד ללא רשת) → אחר כך סנכרון ל-Firebase ברקע. שדה syncedToFirebase=0 מסמן מה עדיין לא סונכרן. WorkManager מנסה שוב כשיש חיבור. תוצאה: האפליקציה עובדת מלא גם ללא אינטרנט."},
+  {q:"מה מיוחד ב-GameEngine לעומת שאר ה-classes?", a:"GameEngine.java נמצא ב-domain/usecase ולא תלוי ב-Android SDK כלל. רק Pure Java. זה מאפשר לבדוק אותו ב-JUnit ללא אמולטור. זוהי Clean Architecture: הלוגיקה הכי חשובה (מוקשים, flood fill, ניצחון) מופרדת מהפלטפורמה."},
+  {q:"מה ההבדל בין Firebase Firestore לבין Firebase Realtime Database? איך השתמשת בכל אחד?", a:"Firestore: NoSQL documents/collections, שאילתות מורכבות, offline support מובנה — שימוש: scores/, users/, daily_challenges/. RTDB: JSON tree, עדכונים מהירים בזמן אמת — שימוש: rooms/ לחדרי Multiplayer (כל שינוי מתפשט לכל הלקוחות מיד)."},
+  {q:"מה זה BaseFirebaseModel ולמה הוא קיים?", a:"מחלקת בסיס בשכבת ה-Model. מכילה שדות משותפים לכל מסמך Firebase: documentId, createdAt, updatedAt. UserRecord ו-LeaderboardEntry יורשים ממנה. יתרון: לא כותבים את אותם שדות שוב ושוב — DRY principle + ירושה מפחיתה code duplication."},
+  {q:"מה קורה בפרויקט כשהמשתמש לוחץ על תא (trace מלא)?", a:"GameBoardView.onTouchEvent() → listener.onCellClick(row,col) → GameActivity → GameViewModel.revealCell(x,y) → GameEngine.revealCell(x,y) (pure logic) → אם הצלחה: board.postValue() → GameBoardView מתרענן. אם מוקש: gameStatus.setValue(LOST) → Activity מציגה Game Over → Repository שומר ל-Room."},
+  {q:"מה ה-Constraint שמגדירים ל-FirebaseSyncWorker ולמה?", a:"NetworkType.CONNECTED — Worker רץ רק כשיש חיבור לאינטרנט. בלי זה Worker ינסה לסנכרן ל-Firebase גם כשאין רשת ויכשל. זה יעיל ומחסך סוללה."},
+  {q:"מה ההבדל בין FloodReveal ב-BFS לבין ב-Recursion? איזה בחרת ולמה?", a:"Recursion: פשוט לכתוב, אבל לוח גדול (30x16=480 תאים) עלול לגרום StackOverflow. BFS עם Queue: בטוח לכל גודל לוח. בפרויקט בחרתי BFS עם LinkedList Queue — מונע קריסה על לוחות Hard ו-Expert."},
+  {q:"למה NFC מוגדר ב-Manifest עם required=false?", a:"כי לא כל מכשיר תומך ב-NFC. required=true = האפליקציה לא תופיע בחנות למכשירים ללא NFC. required=false = האפליקציה עובדת על כולם, אבל תכונת NFC זמינה רק למי שיש לו חומרה. בפרויקט: checkNfcStatus() בודק זמינות ומציג הודעה מתאימה."},
+  {q:"מה ה-Firestore Security Rules בפרויקט ומה הן מגנות?", a:"users/{userId}: קריאה פתוחה לכולם (פרופילים ציבוריים), כתיבה רק ל-owner (request.auth.uid == userId). scores/: קריאה פתוחה (לוח מובילים), יצירה רק למחוברים (מניעת spam). הגנה מפני: גישה לנתונים של אחרים, הוספת ציונים כאורח."},
+  {q:"מה זה DailyChallenge ואיך ה-seed עובד?", a:"כל יום יש לוח ייחודי שכולם משחקים. seed = מספר שנגזר מהתאריך (כמו 20250502). new Random(seed) מייצר בדיוק את אותה רצף 'אקראי'. תוצאה: כל שחקן בעולם שפותח DailyChallengeActivity ביום מסוים מקבל את אותו לוח בדיוק."},
+];
+
+let fcIdx=0, fcFlip=false;
+function renderFC() {
+  const c=cards[fcIdx];
+  document.getElementById('fc-q').textContent=c.q;
+  document.getElementById('fc-a').textContent=c.a;
+  document.getElementById('fc-count').textContent=`${fcIdx+1} / ${cards.length}`;
+  const fc=document.getElementById('fc');
+  fc.classList.remove('flipped'); fcFlip=false;
+  const dots=document.getElementById('fc-dots');
+  dots.innerHTML=cards.map((_,i)=>`<div class="dot ${i<fcIdx?'done':i===fcIdx?'active':''}"></div>`).join('');
+}
+function flipFC() { document.getElementById('fc').classList.toggle('flipped'); fcFlip=!fcFlip; }
+function nextFC() { fcIdx=(fcIdx+1)%cards.length; renderFC(); }
+function prevFC() { fcIdx=(fcIdx-1+cards.length)%cards.length; renderFC(); }
+renderFC();
+
+// ---- QUIZ ----
+const qs=[
+  {q:"איזה thread מאפשר שימוש ב-setValue() של LiveData?", o:["רק main (UI) thread","רק background thread","כל thread","WorkManager thread בלבד"], c:0, e:"setValue() חייב להיקרא מה-main thread בלבד. לקריאה מ-background thread משתמשים ב-postValue() שהוא thread-safe. טעות זו גורמת ל-IllegalStateException בזמן ריצה."},
+  {q:"מה מגדיר ה-INetworkService Interface בפרויקט?", o:["רק שליפת נתונים","CRUD מלא: Read, Create, Update, Delete עם Callbacks","חיבור ל-Firebase בלבד","ניהול Room DB"], c:1, e:"INetworkService מגדיר את 4 פעולות CRUD: fetchLeaderboard (Read), uploadScore (Create), updateProgress (Update), deleteAccount (Delete). כולן א-סינכרוניות עם NetworkCallback. FirebaseManager מממש Interface זה."},
+  {q:"מה מספר גרסת Room DB בפרויקט?", o:["3","4","5","6"], c:3, e:"Room DB v6 עם migrations מ-1 עד 6. כל migration מוסיף שדות או טבלאות חדשות. Migration 5→6 הוסיף את עמודת syncedToFirebase לטבלת games."},
+  {q:"מה ה-difficultyId של רמת Hard?", o:["1","2","3","4"], c:2, e:"1=Easy (9x9, 10 mines), 2=Medium (16x16, 40 mines), 3=Hard (30x16, 99 mines), 4=Expert/Custom. מזהה זה נשמר ב-DB ומשמש לסינון ציונים בלוח המובילים."},
+  {q:"מה ה-Constraint שמוגדר ל-FirebaseSyncWorker?", o:["BatteryNotLow","NetworkType.CONNECTED","StorageNotLow","DeviceIdle"], c:1, e:"NetworkType.CONNECTED מבטיח ש-Worker רץ רק כשיש חיבור לאינטרנט. בלי זה, Worker ינסה לסנכרן גם כשאין רשת ויכשל. זה גם חוסך סוללה."},
+  {q:"מהו ה-Class שמכיל את לוגיקת placeMines ו-floodReveal?", o:["GameViewModel","GameRepository","GameEngine","GameBoardView"], c:2, e:"GameEngine.java ב-domain/usecase מכיל את כל לוגיקת המשחק הטהורה: initializeBoard, placeMines, floodReveal, checkWinCondition. הוא לא תלוי ב-Android כלל — Pure Java."},
+  {q:"איזה אלגוריתם משתמשים בו ב-floodReveal?", o:["DFS (Recursion)","BFS (Queue)","Binary Search","Dijkstra"], c:1, e:"BFS עם Queue (LinkedList). BFS בטוח ב-Stack ולא יגרום StackOverflow בלוחות גדולים (30x16). Recursion (DFS) עלולה לגרום StackOverflow כשמוקשים מועטים."},
+  {q:"מה ה-Firebase שירות המשמש ל-Multiplayer בזמן אמת?", o:["Firestore","Firebase Auth","Firebase Realtime Database","Firebase Storage"], c:2, e:"Firebase Realtime Database (RTDB) — JSON tree שמתעדכן בזמן אמת לכל הלקוחות המחוברים. ValueEventListener מקבל עדכון מיידי כשמשתמש אחד לוחץ על תא. Firestore משמש לציונים/פרופילים."},
+  {q:"מה ה-required בהגדרת NFC ב-Manifest ולמה?", o:["required=true – חובה לכל המכשירים","required=false – עובד גם בלי NFC","required=auto – Android מחליט","אין צורך להגדיר"], c:1, e:"required=false מאפשר שהאפליקציה תופיע בחנות גם למכשירים ללא NFC. checkNfcStatus() בודק זמינות ומציג הודעה מתאימה. אם required=true — האפליקציה לא תהיה זמינה לרוב המכשירים."},
+  {q:"מה הפתרון ל-ViewModel עם parameters ב-Android?", o:["ViewModelProvider.Factory (VMFactory)","Singleton Pattern","SharedPreferences","Application class"], c:0, e:"Android יוצר ViewModel עם no-arg constructor בלבד. VMFactory מממש ViewModelProvider.Factory ומאפשר ליצור ViewModels עם Context ו-Repository. בפרויקט: VMFactory.create() יוצר GameViewModel, StatisticsViewModel, AchievementsViewModel."},
+];
+
+let qScore=0, qAns=0;
+function renderQ() {
+  document.getElementById('qc').innerHTML=qs.map((q,qi)=>`
+    <div class="quiz-q" id="qq${qi}">
+      <div class="q-text">${qi+1}. ${q.q}</div>
+      <div class="quiz-opts">${q.o.map((o,oi)=>`<button class="qopt" onclick="ansQ(${qi},${oi})" id="qo${qi}${oi}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="qe${qi}">💡 ${q.e}</div>
+    </div>`).join('');
+}
+function ansQ(qi,oi) {
+  if(document.getElementById(`qo${qi}0`).classList.contains('disabled')) return;
+  qAns++;
+  const q=qs[qi];
+  for(let i=0;i<q.o.length;i++) {
+    const b=document.getElementById(`qo${qi}${i}`);
+    b.classList.add('disabled');
+    if(i===q.c) b.classList.add('correct');
+    else if(i===oi&&oi!==q.c) b.classList.add('wrong');
+  }
+  if(oi===q.c) qScore++;
+  document.getElementById(`qe${qi}`).classList.add('show');
+  document.getElementById('qs').textContent=qScore;
+  document.getElementById('qp').textContent=Math.round(qScore/qAns*100)+'%';
+  document.getElementById('qpr').textContent=`${qAns} מתוך ${qs.length} שאלות`;
+}
+function resetQ() {
+  qScore=0; qAns=0;
+  document.getElementById('qs').textContent=0;
+  document.getElementById('qp').textContent='-';
+  document.getElementById('qpr').textContent='ענה כדי לראות ציון';
+  renderQ();
+}
+renderQ();
+</script>
+</body>
+</html>
