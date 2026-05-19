@@ -152,6 +152,12 @@
     <a href="minesweeper/index.html" class="hero-cta">💣 פתח MineMaster</a>
   </div>
 
+  <!-- RECENTLY STUDIED -->
+  <div class="projects-section" id="recent-section" style="display:none">
+    <div class="projects-label">📚 המשך לימוד</div>
+    <div class="project-grid" id="recent-grid"></div>
+  </div>
+
   <!-- PROJECTS -->
   <div class="projects-section">
     <div class="projects-label">פרויקטים</div>
@@ -214,6 +220,91 @@
 
 <script src="shared/utils.js"></script>
 <script src="minesweeper/js/data.js"></script>
+<script>
+/* ---- Recently Studied widget ---- */
+(function () {
+  var PAGE_LABELS = {
+    'index.html':        'סקירה',
+    'architecture.html': 'ארכיטקטורה',
+    'code.html':         'קוד',
+    'topics.html':       'נושאים',
+    'flashcards.html':   'כרטיסיות',
+    'quiz.html':         'חידון',
+    'exam.html':         'מבחן',
+  };
+
+  function daysSince(ts) {
+    return Math.floor((Date.now() - ts) / 86400000);
+  }
+
+  function daysLabel(days) {
+    if (days === 0) return 'היום';
+    if (days === 1) return 'אתמול';
+    return 'לפני ' + days + ' ימים';
+  }
+
+  function getFcPct(key, altKey, total) {
+    var raw = localStorage.getItem(key);
+    if (!raw && altKey) raw = localStorage.getItem(altKey);
+    if (!raw) return 0;
+    try {
+      var v = JSON.parse(raw);
+      if (Array.isArray(v)) return Math.min(100, Math.round(v.length / total * 100));
+      if (typeof v === 'number') return Math.min(100, Math.round(v));
+    } catch (_) {}
+    return 0;
+  }
+
+  var projects = [
+    {
+      icon: '💣', title: 'MineMaster',
+      href: 'minesweeper/', cardClass: '', color: 'var(--accent)',
+      lastPageKey: 'mm_last_page', lastVisitKey: 'mm_last_visit',
+      fcKey: 'mm_fc_seen', fcAltKey: null, fcTotal: 20,
+    },
+    {
+      icon: '🤖', title: 'FRC #5135',
+      href: 'frc/', cardClass: 'frc', color: '#22c55e',
+      lastPageKey: 'frc_last_page', lastVisitKey: 'frc_last_visit',
+      fcKey: 'frc_flashcards_seen', fcAltKey: 'frc_fc_seen', fcTotal: 35,
+    },
+  ];
+
+  var grid    = document.getElementById('recent-grid');
+  var section = document.getElementById('recent-section');
+  var hasAny  = false;
+
+  projects.forEach(function (p) {
+    var lastPage  = localStorage.getItem(p.lastPageKey);
+    var lastVisit = Number(localStorage.getItem(p.lastVisitKey)) || 0;
+    var fcPct     = getFcPct(p.fcKey, p.fcAltKey, p.fcTotal);
+
+    if (!lastVisit && fcPct === 0) return;
+    hasAny = true;
+
+    var pageLabel = PAGE_LABELS[lastPage] || 'סקירה';
+    var pageHref  = p.href + (lastPage || 'index.html');
+    var timeStr   = lastVisit ? daysLabel(daysSince(lastVisit)) : '';
+    var c         = p.color;
+
+    grid.innerHTML += '<a href="' + pageHref + '" class="project-card ' + p.cardClass + '">'
+      + '<div class="pc-icon">' + p.icon + '</div>'
+      + '<div class="pc-title">' + p.title + '</div>'
+      + '<div class="pc-sub">עמוד אחרון: <span style="color:' + c + ';font-weight:600">' + pageLabel + '</span></div>'
+      + '<div style="margin:12px 0 10px">'
+      +   '<div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:5px">'
+      +     '<span style="color:var(--muted)">כרטיסיות</span>'
+      +     '<span style="color:' + c + ';font-family:var(--font-mono);font-weight:600">' + fcPct + '%</span>'
+      +   '</div>'
+      +   '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:' + fcPct + '%;background:' + c + '"></div></div>'
+      + '</div>'
+      + (timeStr ? '<div class="pc-arrow" style="color:' + c + '">' + timeStr + ' ←</div>' : '')
+      + '</a>';
+  });
+
+  if (hasAny) section.style.display = '';
+})();
+</script>
 <script>
 (function () {
   const seen    = Store.get(KEYS.FC_SEEN, []);
