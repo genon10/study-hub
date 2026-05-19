@@ -109,6 +109,20 @@
   margin-bottom: 2px;
 }
 .stat-card span { font-size: .75rem; color: var(--muted); }
+
+/* ---- FRC card green accent ---- */
+.project-card.frc::before {
+  background: linear-gradient(135deg, rgba(34,197,94,.6), rgba(16,185,129,.4));
+}
+.project-card.frc:hover {
+  box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 40px rgba(34,197,94,.15);
+}
+.project-card.frc .pc-badge {
+  background: rgba(34,197,94,.12);
+  color: #22c55e;
+  border-color: rgba(34,197,94,.25);
+}
+.project-card.frc .pc-arrow { color: #22c55e; }
 </style>
 </head>
 <body>
@@ -165,21 +179,26 @@
         <div class="pc-arrow">פתח לימוד ←</div>
       </a>
 
-      <!-- FRC (coming soon) -->
-      <div class="project-card coming-soon">
+      <!-- FRC Robotics -->
+      <a href="frc/index.html" class="project-card frc">
         <div class="pc-icon">🤖</div>
-        <div class="pc-title">FRC Robot Project</div>
-        <div class="pc-sub">בקרוב — Java, WPILib, PID, Computer Vision</div>
+        <div class="pc-title">FRC Robotics #5135</div>
+        <div class="pc-sub">Swerve · Shooter · Vision · AdvantageKit · Mechanical</div>
         <div class="pc-tags">
-          <span class="pc-badge" style="opacity:.4">Java</span>
-          <span class="pc-badge" style="opacity:.4">WPILib</span>
-          <span class="pc-badge" style="opacity:.4">PID</span>
-          <span class="pc-badge" style="opacity:.4">Vision</span>
+          <span class="pc-badge">Java</span>
+          <span class="pc-badge">WPILib</span>
+          <span class="pc-badge">Swerve</span>
+          <span class="pc-badge">Vision</span>
+          <span class="pc-badge">AdvantageKit</span>
         </div>
-        <div style="margin-top:16px">
-          <span class="badge" style="background:rgba(100,116,139,.1);border-color:rgba(100,116,139,.2);color:var(--muted)">🔒 בקרוב</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px">
+          <div class="badge badge-success">✅ מנגנונים</div>
+          <div class="badge badge-success">✅ קוד</div>
+          <div class="badge badge-success">✅ חיישנים</div>
+          <div class="badge badge-success">✅ מכניקה</div>
         </div>
-      </div>
+        <div class="pc-arrow">פתח לימוד ←</div>
+      </a>
 
     </div>
   </div>
