@@ -45,7 +45,7 @@ if (typeof t === 'undefined') {
 }
 
 // ----------------------------------------------------------------
-// FLASHCARDS (35 cards — covers all accordion sections + quiz Qs)
+// FLASHCARDS (55 cards — covers all accordion sections + quiz Qs)
 // ----------------------------------------------------------------
 const FLASHCARDS = [
   // ---- מרכב / Drivetrain ----
@@ -248,6 +248,45 @@ const FLASHCARDS = [
   {
     q: { he: 'מה ההבדל העיקרי ביעילות בין מנוע Brushed ל-Brushless?', en: 'What is the main efficiency difference between brushed and brushless motors?', mix: 'Brushed vs Brushless — יעילות?' },
     a: { he: 'Brushed: 75–80% (אנרגיה אבודה בחיכוך פחמים + ניצוצות). Brushless: 90–95% — קומוטציה אלקטרונית, ללא בלאי מכני.', en: 'Brushed: 75–80% efficient (energy lost to brush friction + sparks). Brushless: 90–95% — electronic commutation, no mechanical wear.', mix: 'Brushed: 75–80%. Brushless: 90–95%. No friction = higher efficiency.' }
+  },
+  // ---- מפרט רובוט / Robot Specs ----
+  {
+    q: { he: 'מה ממדי הרובוט ומשקלו, ומה מגבלות FRC?', en: 'What are the robot dimensions and weight, and what are the FRC limits?', mix: 'Robot dimensions + FRC limits?' },
+    a: { he: '67.5×72×74 ס"מ, 51.85 ק"ג. מגבלות FRC: היקף ≤279.4 ס"מ, גובה ≤76.2 ס"מ, משקל ≤56.2 ק"ג.', en: '67.5×72×74 cm, 51.85 kg. FRC limits: perimeter ≤279.4 cm, height ≤76.2 cm, weight ≤56.2 kg.', mix: '67.5×72×74cm, 51.85kg. FRC: perimeter ≤279.4cm, height ≤76.2cm, weight ≤56.2kg.' }
+  },
+  // ---- שדה REBUILD / Game Field ----
+  {
+    q: { he: 'מה ממדי שדה REBUILD, ה-HUB וה-TOWER?', en: 'What are REBUILD field dimensions, HUB, and TOWER?', mix: 'REBUILD field + HUB + TOWER?' },
+    a: { he: 'שדה: 807×1645 ס"מ. HUB: 119×119 ס"מ, פתח משושה 183 ס"מ, 1 נק\' לכל FUEL. TOWER: L1=68.55 ס"מ (10/15 נק\'), L2=114.3 ס"מ (20 נק\'), L3=160 ס"מ (30 נק\'). TRENCH פינוי 56.52 ס"מ.', en: 'Field: 807×1645 cm. HUB: 119×119 cm, hex opening 183 cm, 1 pt per FUEL. TOWER: L1=68.55 cm (10/15 pts), L2=114.3 cm (20 pts), L3=160 cm (30 pts). TRENCH clearance 56.52 cm.', mix: 'Field 807×1645cm. HUB 119×119cm, hex 183cm, 1pt/FUEL. Tower L1/L2/L3=10/20/30pts. TRENCH 56.52cm.' }
+  },
+  {
+    q: { he: 'מה FUEL ב-REBUILD ומה 5 תפקידי צוות הנהגים?', en: 'What is FUEL in REBUILD and what are the 5 drive team roles?', mix: 'FUEL + drive team roles?' },
+    a: { he: 'FUEL: כדור קצף 15 ס"מ, 203–227 גרם. צוות: Driver, Operator, Coach, Human Player, Technician. הפרות: Minor=5 נק\', Major=15 נק\'.', en: 'FUEL: foam ball 15 cm, 203–227 g. Team: Driver, Operator, Coach, Human Player, Technician. Violations: Minor=5 pts, Major=15 pts.', mix: 'FUEL: foam 15cm, 203-227g. Team: Driver/Operator/Coach/Human Player/Technician. Minor=5, Major=15pts.' }
+  },
+  // ---- מפרט מנועים / Motor Specs ----
+  {
+    q: { he: 'מה המפרט של NEO, NEO 550 ו-Falcon 500?', en: 'What are the specs of NEO, NEO 550, and Falcon 500?', mix: 'NEO / NEO550 / Falcon specs?' },
+    a: { he: 'NEO: 5676 RPM, 2.6 Nm, 105A שיא. NEO 550: 11000 RPM, 0.97 Nm, 100A שיא — מסה תרמית נמוכה, stall = שריפה. Falcon 500: 6380 RPM, 4.69 Nm, 257A שיא.', en: 'NEO: 5676 RPM, 2.6 Nm, 105A stall. NEO 550: 11000 RPM, 0.97 Nm, 100A stall — low thermal mass, stall = burns. Falcon 500: 6380 RPM, 4.69 Nm, 257A stall.', mix: 'NEO: 5676RPM/2.6Nm/105A. NEO550: 11000RPM/0.97Nm/100A (burns on stall). Falcon: 6380RPM/4.69Nm/257A.' }
+  },
+  // ---- פרופילי תנועה / Motion Profiles ----
+  {
+    q: { he: 'מה הבדל Trapezoidal לבין S-Curve motion profile?', en: 'What is the difference between Trapezoidal and S-Curve motion profiles?', mix: 'Trapezoidal vs S-Curve?' },
+    a: { he: 'Trapezoidal: תאוצה קבועה — קפיצה מיידית = jerk. S-Curve: תאוצה מתגברת בהדרגה = חלקה ללא jerk, פחות wheel slip. S-Curve עדיף לכוונון עדין ב-FRC.', en: 'Trapezoidal: constant acceleration — instant jump = jerk. S-Curve: smoothly increasing acceleration = no jerk, less wheel slip. S-Curve preferred for fine FRC tuning.', mix: 'Trapezoidal = constant accel = jerk. S-Curve = smooth accel, no jerk, less slip. S-Curve עדיף.' }
+  },
+  // ---- SuperStructure FSM ----
+  {
+    q: { he: 'מה מצבי ה-SuperStructure FSM וה-CLIMB guard?', en: 'What are the SuperStructure FSM states and the CLIMB guard?', mix: 'SuperStructure FSM states + CLIMB guard?' },
+    a: { he: 'מצבים: TRAVEL, SHOOT, SHOOT_CLOSE, SHOOT_ON_THE_MOVE, FETCH, CLIMB_OPEN, CLIMB, AUTO. CLIMB נגיש רק מ-CLIMB_OPEN — guard מפני טיפוס בטעות.', en: 'States: TRAVEL, SHOOT, SHOOT_CLOSE, SHOOT_ON_THE_MOVE, FETCH, CLIMB_OPEN, CLIMB, AUTO. CLIMB accessible only from CLIMB_OPEN — guard against accidental climbing.', mix: 'States: TRAVEL/SHOOT/SHOOT_CLOSE/SHOOT_ON_THE_MOVE/FETCH/CLIMB_OPEN/CLIMB/AUTO. CLIMB = only from CLIMB_OPEN.' }
+  },
+  // ---- קלע מתקדם + RobotState ----
+  {
+    q: { he: 'מה backspin דיפרנציאלי בקלע ומה RobotState Singleton?', en: 'What is differential backspin in the shooter and what is RobotState Singleton?', mix: 'Differential backspin + RobotState?' },
+    a: { he: 'גלגל ראשי + גלגל Hood מסתובבים בכיוונים מנוגדים → backspin מבוקר → יציבות תעופה (Magnus). RobotState Singleton: מאגר pose היסטורי + טבלת ירי (מרחק→זווית/מהירות).', en: 'Main wheel + Hood wheel spin opposite → controlled backspin → stable flight (Magnus). RobotState Singleton: historical pose buffer + shooting table (distance→angle/speed).', mix: 'Main+Hood opposite = backspin = stable flight (Magnus). RobotState: pose buffer + shooting table.' }
+  },
+  // ---- כימיה / Battery ----
+  {
+    q: { he: 'מה הכימיה של סוללת ה-FRC?', en: 'What is the chemistry of the FRC battery?', mix: 'FRC battery chemistry?' },
+    a: { he: 'SLA = Sealed Lead Acid. אנודה: Pb. קתודה: PbO₂. אלקטרוליט: H₂SO₄ (חומצה גופרתית). 6 תאים × 2.1V = 12.6V. FRC חייב SLA — לפי תקנות.', en: 'SLA = Sealed Lead Acid. Anode: Pb. Cathode: PbO₂. Electrolyte: H₂SO₄ (sulfuric acid). 6 cells × 2.1V = 12.6V. FRC mandates SLA — rules.', mix: 'Pb + PbO₂ + H₂SO₄. 6 cells × 2.1V = 12.6V. FRC = SLA mandatory.' }
   }
 ];
 
@@ -328,6 +367,16 @@ const TRUEFALSE_QUESTIONS = [
     statement: { he: 'FSM (Finite State Machine) מאפשר מצבים מקבילים בו-זמנית.', en: 'FSM allows multiple simultaneous parallel states.', mix: 'FSM = multiple states בו-זמנית?' },
     correct: false,
     explanation: { he: 'שגוי. FSM קלאסי = מצב אחד בלבד בכל רגע. הרובוט תמיד נמצא במצב מוגדר אחד.', en: 'False. Classic FSM = exactly one state at any moment. Robot always in one defined state.', mix: 'False! FSM = exactly one state. לא מקבילי.' }
+  },
+  {
+    statement: { he: 'Trapezoidal motion profile מייצרת תאוצה חלקה ללא jerk.', en: 'Trapezoidal motion profile produces smooth acceleration without jerk.', mix: 'Trapezoidal = smooth, no jerk.' },
+    correct: false,
+    explanation: { he: 'שגוי. Trapezoidal = תאוצה קבועה עם קפיצה מיידית = jerk. S-Curve = תאוצה מתגברת בהדרגה = חלקה ללא jerk.', en: 'False. Trapezoidal = constant acceleration with instant jump = jerk. S-Curve = gradually increasing = smooth, no jerk.', mix: 'False! Trapezoidal = jerk. S-Curve = smooth. להפך!' }
+  },
+  {
+    statement: { he: 'ניתן לעבור ל-CLIMB ישירות מכל מצב ב-SuperStructure FSM.', en: 'CLIMB state can be entered directly from any SuperStructure FSM state.', mix: 'CLIMB accessible from any FSM state.' },
+    correct: false,
+    explanation: { he: 'שגוי. CLIMB נגיש רק ממצב CLIMB_OPEN — guard מפני טיפוס בטעות במהלך משחק.', en: 'False. CLIMB is only accessible from CLIMB_OPEN — guard against accidental climbing during the match.', mix: 'False! CLIMB = only from CLIMB_OPEN. Guard prevents accidental activation.' }
   }
 ];
 
@@ -345,6 +394,8 @@ const WRITE_CARDS = [
   { prompt: { he: 'האלגוריתם שמחשב Pose 6DOF מ-AprilTag בתמונה', en: 'Algorithm computing 6DOF Pose from AprilTag in image', mix: '6DOF Pose from AprilTag' }, answer: 'SolvePnP' },
   { prompt: { he: '"קדימה" תמיד לכיוון המגרש — ע"י חיסור זווית ג\'יירו', en: '"Forward" always field-relative — by subtracting gyro angle', mix: 'Forward = field direction, gyro subtraction' }, answer: 'FOC (Field-Oriented Control)' },
   { prompt: { he: 'מנגנון מכני שמונע ירידת המעלית ללא כוח מנוע', en: 'Mechanical mechanism preventing climber descent without motor power', mix: 'Mechanical lock — climber stays up' }, answer: 'Ratchet' },
+  { prompt: { he: 'מצב FSM שממנו בלבד ניתן לעבור ל-CLIMB', en: 'The only FSM state from which CLIMB can be entered', mix: 'Only entry point to CLIMB state' }, answer: 'CLIMB_OPEN' },
+  { prompt: { he: 'Singleton שמכיל מאגר pose היסטורי + טבלת ירי לפי מרחק', en: 'Singleton containing historical pose buffer and shooting table by distance', mix: 'Pose buffer + shooting table Singleton' }, answer: 'RobotState' },
 ];
 
 // ----------------------------------------------------------------
