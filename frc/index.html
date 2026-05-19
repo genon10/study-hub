@@ -33,8 +33,66 @@
       <span class="tag" style="opacity:.5">Subsystems</span>
     </div>
     <a href="../index.html" class="btn btn-secondary" style="text-decoration:none">← חזור ל-Hub</a>
+
+    <div id="frc-progress" style="display:none;margin-top:28px;padding:20px 24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px">
+      <div style="font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:16px;text-align:center">📈 התקדמות שלך</div>
+      <div style="display:flex;gap:40px;justify-content:center;align-items:center" id="frc-rings"></div>
+    </div>
   </div>
 </div>
+
+<script>
+(function () {
+  function makeRing(pct, label, color) {
+    var r    = 22;
+    var circ = +(2 * Math.PI * r).toFixed(2);
+    var off  = +((1 - pct / 100) * circ).toFixed(2);
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:8px">'
+      + '<div class="progress-ring-wrap" style="width:56px;height:56px" title="' + pct + '% ' + label + '">'
+      + '<svg class="progress-ring" width="54" height="54" viewBox="0 0 54 54">'
+      + '<circle class="progress-ring-track" cx="27" cy="27" r="' + r + '"/>'
+      + '<circle class="progress-ring-fill"  cx="27" cy="27" r="' + r + '"'
+      + ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + off + '"'
+      + ' style="stroke:' + color + '"/>'
+      + '</svg>'
+      + '<span class="progress-ring-label" style="font-size:.62rem;color:' + color + '">' + pct + '%</span>'
+      + '</div>'
+      + '<span style="font-size:.72rem;color:var(--muted)">' + label + '</span>'
+      + '</div>';
+  }
+
+  var fcRaw = JSON.parse(localStorage.getItem('frc_flashcards_seen') || 'null');
+  var qzRaw = JSON.parse(localStorage.getItem('frc_quiz_score')      || 'null');
+
+  if (fcRaw === null && qzRaw === null) return;
+
+  var fcPct = 0, qzPct = 0, hasFC = false, hasQZ = false;
+
+  if (Array.isArray(fcRaw) && fcRaw.length) {
+    fcPct = Math.min(100, Math.round(fcRaw.length / 35 * 100));
+    hasFC = true;
+  } else if (typeof fcRaw === 'number') {
+    fcPct = Math.min(100, Math.round(fcRaw));
+    hasFC = true;
+  }
+
+  if (qzRaw !== null && typeof qzRaw === 'object' && qzRaw.total) {
+    qzPct = Math.min(100, Math.round(qzRaw.score / qzRaw.total * 100));
+    hasQZ = true;
+  } else if (typeof qzRaw === 'number') {
+    qzPct = Math.min(100, Math.round(qzRaw));
+    hasQZ = true;
+  }
+
+  var html = '';
+  if (hasFC) html += makeRing(fcPct, 'כרטיסיות', '#22c55e');
+  if (hasQZ) html += makeRing(qzPct, 'חידון',    '#a78bfa');
+
+  if (!html) return;
+  document.getElementById('frc-rings').innerHTML = html;
+  document.getElementById('frc-progress').style.display = '';
+})();
+</script>
 
 </body>
 </html>
