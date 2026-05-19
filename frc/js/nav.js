@@ -3,13 +3,9 @@
 
 (function () {
   const pages = [
-    { file: 'index.html',        label: 'סקירה' },
-    { file: 'architecture.html', label: 'ארכיטקטורה' },
-    { file: 'code.html',         label: 'קוד' },
-    { file: 'topics.html',       label: 'נושאים' },
-    { file: 'flashcards.html',   label: 'כרטיסיות' },
-    { file: 'quiz.html',         label: 'חידון' },
-    { file: 'exam.html',         label: 'מבחן' },
+    { file: 'index.html',  label: 'סקירה' },
+    { file: 'topics.html', label: 'נושאים' },
+    { file: 'exam.html',   label: 'מבחן' },
   ];
 
   const current = window.location.pathname.split('/').pop() || 'index.html';
