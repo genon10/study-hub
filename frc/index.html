@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מדריך לימוד FRC – Black Unicorns #5135 | רובוט הירי</title>
+<title>FRC #5135 – סקירה | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Heebo:wght@300;400;600;800&display=swap');
   :root {
@@ -42,11 +45,11 @@
   header h1 span{color:var(--accent);}
   header p{color:var(--muted);font-size:.88rem;margin-top:6px;}
 
-  /* NAV */
+  /* SECTION NAV (internal tabs — below top-nav) */
   nav{
     background:var(--surface);border-bottom:1px solid var(--border);
     display:flex;overflow-x:auto;scrollbar-width:none;
-    position:sticky;top:0;z-index:99;
+    position:sticky;top:56px;z-index:99;
   }
   nav::-webkit-scrollbar{display:none;}
   .nb{
@@ -176,12 +179,8 @@
 </style>
 </head>
 <body>
-
-<header>
-  <div class="badge">BLACK UNICORNS · #5135 · REBUILD 2026</div>
-  <h1>מדריך לימוד – <span>רובוט הירי</span></h1>
-  <p>כל המערכות: מרכב · מגלול · הופר · קלע · טיפוס · תוכנה · תיאוריה</p>
-</header>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
 
 <nav>
   <button class="nb active" onclick="go('overview')">🗺️ סקירת רובוט</button>
