@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC #5135 – מבחן | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="../minesweeper/css/style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<!-- TIMER BAR -->
+<div class="exam-timer-bar" id="timer-bar" style="display:none">
+  <div>
+    <div class="exam-timer" id="timer-display">30:00</div>
+    <div style="font-size:.7rem;color:var(--muted)">זמן נותר</div>
+  </div>
+  <div style="flex:1;padding:0 12px">
+    <div class="progress-bar-wrap" style="margin:0">
+      <div class="progress-bar-fill" id="timer-progress" style="width:100%;background:linear-gradient(90deg,#22c55e,#4ade80)"></div>
+    </div>
+  </div>
+  <div class="exam-progress-text" id="exam-progress-text">0 / 20 נענו</div>
+  <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
+</div>
+
+<div class="page-wrap">
+
+  <!-- START SCREEN -->
+  <div id="screen-start">
+    <div class="section-header">
+      <span class="section-icon">🤖</span>
+      <h1>מבחן FRC Robotics</h1>
+      <p>20 שאלות · 30 דקות · נושאי ליבה</p>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">📋 הנחיות</div>
+      <ul class="sl" style="font-size:.87rem;line-height:2">
+        <li>20 שאלות רב-ברירה על WPILib, PID, Swerve, Vision ועוד</li>
+        <li>כל שאלה שווה 5 נקודות (סה"כ 100)</li>
+        <li>ציון עובר: 60 ומעלה</li>
+        <li>זמן: 30 דקות</li>
+        <li>הגשה אוטומטית כשהזמן אוזל</li>
+        <li>בסוף: ניתוח לפי נושא — לאן כדאי לחזור</li>
+      </ul>
+    </div>
+
+    <div id="exam-history-card" class="card card-glass" style="display:none">
+      <div class="card-title">📊 ניסיונות קודמים</div>
+      <div id="exam-history-list"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="startExam()"
+        style="padding:13px 36px;font-size:1rem;background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+        🤖 התחל מבחן
+      </button>
+    </div>
+  </div>
+
+  <!-- EXAM SCREEN -->
+  <div id="screen-exam" style="display:none">
+    <div id="exam-questions"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="submitEarly()"
+        style="padding:11px 28px;background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+        ✅ הגש מבחן
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" style="display:none">
+
+    <div class="section-header" style="padding-top:16px">
+      <span class="section-icon" id="result-icon">🤖</span>
+      <h1 id="result-title">תוצאות המבחן</h1>
+    </div>
+
+    <div class="exam-grade-display">
+      <div class="grade-circle" id="grade-circle">—</div>
+      <div class="grade-label" id="grade-label"></div>
+      <div class="grade-sub"   id="grade-sub"></div>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">📊 סטטיסטיקות</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+        <div class="fc-stat"><strong id="stat-correct" style="color:var(--success)">—</strong>נכון</div>
+        <div class="fc-stat"><strong id="stat-wrong"   style="color:var(--danger)">—</strong>שגוי</div>
+        <div class="fc-stat"><strong id="stat-time"    style="color:var(--accent3)">—</strong>זמן ששימש</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="result-bar" style="width:0%"></div>
+        </div>
+        <div style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:4px" id="result-pct"></div>
+      </div>
+    </div>
+
+    <!-- TOPIC BREAKDOWN TABLE -->
+    <div class="card card-glass">
+      <div class="card-title">📋 ניתוח לפי נושא</div>
+      <table class="cmp-table" id="topic-table" style="margin:0">
+        <thead>
+          <tr>
+            <th style="text-align:right">נושא</th>
+            <th style="text-align:center">✅ נכון</th>
+            <th style="text-align:center">❌ שגוי</th>
+            <th style="text-align:center">ציון</th>
+            <th style="text-align:center">מצב</th>
+          </tr>
+        </thead>
+        <tbody id="topic-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card card-glass">
+      <div class="card-title">🔍 סקירת תשובות</div>
+      <div id="review-list"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="restartExam()"
+        style="background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+        🔄 נסה שוב
+      </button>
+      <a href="quiz.html"       class="btn btn-secondary" style="text-decoration:none">✏️ חידון</a>
+      <a href="flashcards.html" class="btn btn-secondary" style="text-decoration:none">🃏 כרטיסיות</a>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<div id="exam-toast" style="
+  display:none; position:fixed; top:70px; left:50%; transform:translateX(-50%);
+  background:var(--accent3); color:var(--bg); padding:10px 22px;
+  border-radius:var(--radius-md); font-weight:700; z-index:200;
+  white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,.4);
+"></div>
+
+<script>
+/* ---- DATA ---- */
+const EXAM_QUESTIONS = [
+  {
+    q: "מה עקרון 'Command-Based'? כיצד Subsystem קשור לCommand?",
+    o: [
+      "Subsystem מכיל לוגיקה עסקית, Command רק שולח פקודות רשת",
+      "Command 'דורש' Subsystem — WPILib מבטיח שרק Command אחד ירוץ על Subsystem בו-זמנית",
+      "ניתן להריץ כמה Commands על אותו Subsystem במקביל ללא הגבלה",
+      "Subsystem הוא Interface, Command הוא Class שמממש אותו"
+    ],
+    c: 1,
+    e: "Command-Based: כל Command מצהיר addRequirements(subsystem). Scheduler מבטיח mutex — אם Command חדש דורש Subsystem תפוס, הישן מופסק (end(true)) לפני שהחדש מתחיל."
+  },
+  {
+    q: "מה תפקיד ה-P בבקר PID?",
+    o: [
+      "מקטין oscillation על-ידי חישוב נגזרת השגיאה",
+      "מחסל שגיאה קבועה (steady-state error) על-ידי סיכום שגיאות",
+      "מייצר פלט פרופורציונלי לשגיאה הנוכחית",
+      "מגביל את מהירות המנוע למניעת נזק"
+    ],
+    c: 2,
+    e: "P (Proportional): output = Kp × error. ככל שהשגיאה גדולה, הפלט חזק יותר. לבד — יגרום ל-steady-state error. בFRC: ברגע שהרובוט רחוק מהמטרה P מאיץ; כשקרוב, מאט."
+  },
+  {
+    q: "מה תפקיד ה-I בבקר PID?",
+    o: [
+      "מחסל steady-state error על-ידי הצבר שגיאות לאורך זמן",
+      "מוסיף damping ומקטין overshoot",
+      "קובע את מהירות ה-setpoint",
+      "מגביל את הפלט המקסימלי"
+    ],
+    c: 0,
+    e: "I (Integral): output += Ki × ∫error dt. אם הרובוט תקוע ליד המטרה, I מצטבר ומדחף חזק יותר. סכנה: integrator windup — חייבים setIntegratorRange() ב-WPILib."
+  },
+  {
+    q: "מה תפקיד ה-D בבקר PID?",
+    o: [
+      "מחשב את כמות האנרגיה שנשרפת בבלמים",
+      "מחסל steady-state error",
+      "מדמה damping — מנגד לשינויים פתאומיים ומקטין overshoot",
+      "מגדיר את נקודת המטרה (setpoint)"
+    ],
+    c: 2,
+    e: "D (Derivative): output = Kd × d(error)/dt. מודד כמה מהר השגיאה משתנה. אם הרובוט מתקרב מהר מדי — D בולם. שימושי ב-arm/shooter angle control ב-FRC."
+  },
+  {
+    q: "מהו Encoder ומה הוא מודד ב-FRC?",
+    o: [
+      "חיישן מגנטי שמודד טמפרטורת המנוע",
+      "חיישן שמודד סיבובים (pulses) ומאפשר חישוב מרחק ומהירות",
+      "בקר המשנה את כיוון הזרם למנוע",
+      "מאיץ שמדווח על תאוצת הרובוט"
+    ],
+    c: 1,
+    e: "Encoder מייצר pulses לפי סיבוב הציר. Quadrature encoder = ערוצי A/B → כיוון + מרחק. WPILib: Encoder.getDistance() = pulses × distancePerPulse. Falcon/NEO יש encoder מובנה ב-CAN."
+  },
+  {
+    q: "מה ההבדל בין TalonSRX ל-SparkMAX?",
+    o: [
+      "TalonSRX תומך רק במנועים brushless, SparkMAX רק ב-DC",
+      "TalonSRX (CTRE) לmotors brushed, SparkMAX (REV) ל-NEO brushless — שניהם CAN",
+      "שניהם זהים — רק מותגים שונים",
+      "SparkMAX משתמש בPWM בלבד, TalonSRX בCAN בלבד"
+    ],
+    c: 1,
+    e: "TalonSRX (CTRE): brushed DC + CAN. TalonFX (Falcon/Kraken): brushless + CAN. SparkMAX (REV): NEO brushless + Vortex + CAN/PWM. בחירה לפי מנוע: Falcon → TalonFX, NEO → SparkMAX."
+  },
+  {
+    q: "מה NavX / Pigeon IMU ומה שימושו ב-FRC?",
+    o: [
+      "בקר מנוע אלחוטי",
+      "מצלמה לזיהוי AprilTags",
+      "Gyroscope + Accelerometer — מדווח Yaw/Pitch/Roll לodometry ויישור שדה",
+      "חיישן מרחק לזיהוי מכשולים"
+    ],
+    c: 2,
+    e: "IMU = Inertial Measurement Unit. Yaw = סיבוב אופקי — הכי שימושי. שימושים: Field-Relative Drive, Auto-Balance, Pose Estimation, יישור לTarget. WPILib: new AHRS(SPI.Port.kMXP)."
+  },
+  {
+    q: "מה CAN Bus ולמה הוא עדיף על PWM?",
+    o: [
+      "CAN אלחוטי, PWM חוטי — CAN עדיף כי אין כבלים",
+      "CAN = תקשורת דו-כיוונית: מנוע שולח telemetry בחזרה. PWM = חד-כיווני (רק פקודה) — CAN מאפשר closed-loop מובנה",
+      "PWM מהיר יותר בגלל bandwidth גבוה",
+      "אין הבדל — שינוי ממשק פיזי בלבד"
+    ],
+    c: 1,
+    e: "CAN Bus: כל מכשיר כתובת ייחודית, 1Mbit/s. יתרונות: closed-loop בתוך הcontroller (מהיר מroboRIO loop), telemetry (זרם/מהירות/טמפ'), daisy-chain כבל אחד לכל המנועים."
+  },
+  {
+    q: "מה Limelight ואיך הוא מתקשר עם הרובוט?",
+    o: [
+      "מצלמה USB המחוברת ישירות ל-roboRIO, מספקת video stream",
+      "מצלמה חכמה עם עיבוד תמונה מובנה — מדווחת דרך NetworkTables (tx, ty, ta, tv)",
+      "LiDAR לסריקת שדה תלת-מימדי",
+      "מצלמה שמשדרת ל-Driver Station בלבד"
+    ],
+    c: 1,
+    e: "Limelight = מצלמה + מחשב פנימי. מחשבת alignment → NetworkTables: tv (target visible), tx (horizontal °), ty (vertical °), ta (area %). getNumber('tx',0) → P-loop לסיבוב."
+  },
+  {
+    q: "מה AprilTag ב-FRC 2023 ואילך?",
+    o: [
+      "תג NFC לזיהוי שחקנים",
+      "QR Code לתפריטי Driver Station",
+      "מדבקת 2D barcode ייחודית על שדה — הרובוט מזהה מיקומו ב-6DOF לפי ID ומיקום ידוע",
+      "פרוטוקול תקשורת חדש בין roboRIO ל-Limelight"
+    ],
+    c: 2,
+    e: "AprilTag = fiducial marker. כל תג = ID + מיקום שדה → Limelight/PhotonVision מחשב Pose (x, y, heading). WPILib: poseEstimator.addVisionMeasurement() לFusion עם odometry."
+  },
+  {
+    q: "מה SequentialCommandGroup ומה ההבדל מ-ParallelCommandGroup?",
+    o: [
+      "Sequential = כל Commands ביחד, Parallel = תור",
+      "Sequential = Commands רצים אחד אחרי השני (הבא מתחיל רק כש-isFinished() = true). Parallel = כולם יחד",
+      "שניהם זהים אך שם שונה",
+      "Sequential = teleop, Parallel = auto בלבד"
+    ],
+    c: 1,
+    e: "Sequential: cmd1 → cmd2 → cmd3. Parallel: כולם מתחילים יחד, מסתיים כשכולם סיימו (AllOf) או הראשון (RaceWith/AnyOf). דוגמה: Sequential(DriveForward(2m), TurnDegrees(90), Shoot())."
+  },
+  {
+    q: "מה מתרחש כאשר Command מופסק (interrupted)?",
+    o: [
+      "execute() נקראת פעם נוספת לניקוי",
+      "end(true) נקראת — הפרמטר interrupted=true מסמן שלא הסתיים בעצמו",
+      "הCommand מופעל מחדש מ-initialize()",
+      "כלום — WPILib מתעלם מהפסקות"
+    ],
+    c: 1,
+    e: "Command lifecycle: initialize() → execute()[כל 20ms] → end(interrupted). interrupted=true: הופסק ע-י Scheduler. false: isFinished() החזיר true. חשוב: אפס מנועים ב-end() תמיד!"
+  },
+  {
+    q: "מה Odometry ב-WPILib?",
+    o: [
+      "אלגוריתם לחישוב מסלול אוטונומי מראש",
+      "מערכת תקשורת בין roboRIO ל-Driver Station",
+      "מעקב מיקום הרובוט (x, y, heading) מ-encoder + gyro בלי GPS",
+      "שיטה לכיול מנועים לפני תחרות"
+    ],
+    c: 2,
+    e: "Odometry מחשב Pose2d = Translation2d(x,y) + Rotation2d. Differential: encoder L/R + gyro. Swerve: 4 מודולים + gyro. מגרעת: drift לאורך זמן. פתרון: Vision fusion עם SwerveDrivePoseEstimator."
+  },
+  {
+    q: "מה Trajectory Follower (RAMSETE/Holonomic) ב-FRC?",
+    o: [
+      "כלי לתכנות ממשק Driver Station",
+      "בקר שעוקב אחר מסלול מחושב (spline) תוך תיקון שגיאת מיקום בזמן אמת",
+      "אלגוריתם לחישוב PID אוטומטי",
+      "פרוטוקול לסנכרון שעוני roboRIO"
+    ],
+    c: 1,
+    e: "PathPlanner/PathWeaver → Trajectory → RAMSETE (differential) / PPHolonomicController (swerve). הבקר מקבל Pose נוכחי ו-DesiredState → מחשב wheelSpeeds לתיקון. לא PID פשוט."
+  },
+  {
+    q: "מה Field-Relative Drive ב-Swerve?",
+    o: [
+      "נהיגה שמתייחסת לכיוון הרובוט — פנים הרובוט תמיד קדימה",
+      "joystick קדימה = תמיד לכיוון Driver Station ללא קשר לסיבוב הרובוט",
+      "מצב נהיגה מוגבל לחצי השדה",
+      "מצב אוטונומי בלבד"
+    ],
+    c: 1,
+    e: "Field-Relative: ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, gyroAngle). Driver לוחץ 'קדימה' → תמיד לכיוון מטרה, ללא קשר לסיבוב הרובוט. קריטי ל-Swerve."
+  },
+  {
+    q: "כמה פעמים בשנייה Scheduler קורא ל-execute() של Command פעיל?",
+    o: [
+      "100 פעמים (10ms loop)",
+      "20 פעמים (50ms loop)",
+      "50 פעמים (20ms loop)",
+      "תלוי בתכנות המשתמש"
+    ],
+    c: 2,
+    e: "WPILib TimedRobot: loop period = 20ms = 50Hz. כל 20ms: CommandScheduler.getInstance().run() → execute() על כל Command פעיל. FRC rules: robot code loop ≥ 50ms מינימום."
+  },
+  {
+    q: "מה defaultCommand ב-Subsystem?",
+    o: [
+      "Command שרץ בזמן disabled",
+      "Command שמסיים את כל Commands אחרים",
+      "Command שרץ אוטומטית כשאף Command אחר לא דורש את הSubsystem",
+      "Command שמאתחל את הSubsystem בעת הפעלה"
+    ],
+    c: 2,
+    e: "setDefaultCommand(new TeleopDrive(driveSubsystem, joystick)) — TeleopDrive רץ כשאין Command אחר שדורש DriveSubsystem. נפוץ ל-TeleopDrive, ArmManual. כשAuto מסתיים → defaultCommand חוזר."
+  },
+  {
+    q: "מה Trigger ב-Command-Based WPILib?",
+    o: [
+      "כפתור פיזי בלבד על ה-Joystick",
+      "כלי לקישור תנאי בוליאני לפעולת Command — onTrue/onFalse/whileTrue, לא רק כפתורים",
+      "אירוע שמופעל רק בסיום Auto",
+      "פרוטוקול לטריגר מנועים"
+    ],
+    c: 1,
+    e: "Trigger = BooleanSupplier. JoystickButton מרחיב Trigger. גמיש: new Trigger(() -> shooter.isReady()).onTrue(new Fire()). whileTrue() = רץ כל זמן התנאי אמת. onTrue() = מתחיל פעם אחת."
+  },
+  {
+    q: "מה PathPlanner ולמה משתמשים בו?",
+    o: [
+      "ספרייה לניהול pneumatics",
+      "כלי GUI לתכנון מסלול אוטונומי עם splines, constraints ואירועים — מייצר Trajectory",
+      "ממשק לכיול PID אוטומטי",
+      "תוסף לDriver Station לצפייה בtelemetry"
+    ],
+    c: 1,
+    e: "PathPlanner: GUI לציור מסלול → JSON → PathPlannerAuto.loadAuto('auto') בקוד. תמיכה ב-holonomic swerve ו-differential. Markers ל-Events בזמן ריצה. אלטרנטיב: PathWeaver (פחות נוח)."
+  },
+  {
+    q: "מה BootupTime ולמה הוא קריטי בתחרות FRC?",
+    o: [
+      "זמן הטעינה של NetworkTables",
+      "הזמן מרגע חיבור חשמל עד שRobot Code רץ — חשוב כי בתחרות יש ~5 שניות לפני Auto",
+      "זמן הפסק בין Teleop לEndgame",
+      "זמן שמכשירי CAN לוקחים להתחבר"
+    ],
+    c: 1,
+    e: "FRC Match: Auto מתחיל מיד אחרי Enable. אם roboRIO לא boot מהר → מחמיצים חלק מ-15 שניות Auto. יש להגביל startupCode, לוודא CAN devices מחוברים, ולבדוק Network לפני Enable."
+  }
+];
+
+const EXAM_TOPICS = [
+  'Command-Based',   // 0
+  'PID Control',     // 1
+  'PID Control',     // 2
+  'PID Control',     // 3
+  'Sensors',         // 4
+  'Motors',          // 5
+  'Sensors',         // 6
+  'CAN Bus',         // 7
+  'Computer Vision', // 8
+  'Computer Vision', // 9
+  'Command-Based',   // 10
+  'Command-Based',   // 11
+  'Odometry',        // 12
+  'Autonomous',      // 13
+  'Swerve Drive',    // 14
+  'WPILib',          // 15
+  'Command-Based',   // 16
+  'Command-Based',   // 17
+  'Autonomous',      // 18
+  'WPILib',          // 19
+];
+
+/* ---- STATE ---- */
+const EXAM_DURATION    = 30 * 60;
+const FRC_EXAM_KEY     = 'frc_exam_history';
+let timerInterval      = null;
+let timeLeft           = EXAM_DURATION;
+let examAnswers        = {};
+let examStartTime      = null;
+let questionOrder      = [];
+let tenMinWarningShown = false;
+
+/* ---- START ---- */
+function startExam() {
+  examAnswers         = {};
+  timeLeft            = EXAM_DURATION;
+  examStartTime       = Date.now();
+  tenMinWarningShown  = false;
+  questionOrder = shuffle([...Array(EXAM_QUESTIONS.length).keys()]).slice(0, 20);
+
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-exam').style.display  = 'block';
+  document.getElementById('timer-bar').style.display    = 'flex';
+
+  renderExamQuestions();
+  startTimer();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderExamQuestions() {
+  document.getElementById('exam-questions').innerHTML = questionOrder.map((qi, pos) => {
+    const q = EXAM_QUESTIONS[qi];
+    return `
+      <div class="quiz-q" id="eq${pos}">
+        <div class="q-text">${pos + 1}. ${esc(q.q)}</div>
+        <div class="quiz-opts">
+          ${q.o.map((o, oi) =>
+            `<button class="qopt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</button>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function ansExam(pos, oi) {
+  if (document.getElementById(`eo${pos}0`)?.classList.contains('disabled')) return;
+  examAnswers[pos] = oi;
+  const q = EXAM_QUESTIONS[questionOrder[pos]];
+  for (let i = 0; i < q.o.length; i++) {
+    const b = document.getElementById(`eo${pos}${i}`);
+    if (!b) continue;
+    b.classList.add('disabled');
+    if (i === oi) b.style.borderColor = '#22c55e';
+  }
+  document.getElementById('exam-progress-text').textContent =
+    `${Object.keys(examAnswers).length} / ${questionOrder.length} נענו`;
+}
+
+/* ---- TIMER ---- */
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) { clearInterval(timerInterval); submitExam(true); }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const display  = document.getElementById('timer-display');
+  const progress = document.getElementById('timer-progress');
+  display.textContent  = fmtTime(timeLeft);
+  progress.style.width = (timeLeft / EXAM_DURATION * 100) + '%';
+  if (timeLeft <= 180) {
+    display.classList.remove('warning-10');
+    display.classList.add('warning');
+    progress.style.background = 'var(--danger)';
+  } else if (timeLeft <= 600) {
+    if (!tenMinWarningShown) {
+      tenMinWarningShown = true;
+      display.classList.add('warning-10');
+      showToast('⚠️ נותרו 10 דקות!');
+    }
+    progress.style.background = 'linear-gradient(90deg,var(--accent3),var(--danger))';
+  }
+}
+
+function showToast(msg) {
+  const el = document.getElementById('exam-toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+/* ---- SUBMIT ---- */
+function submitEarly() {
+  const unanswered = questionOrder.length - Object.keys(examAnswers).length;
+  if (unanswered > 0 && !confirm(`יש לך ${unanswered} שאלות ללא תשובה. להגיש בכל זאת?`)) return;
+  clearInterval(timerInterval);
+  submitExam(false);
+}
+
+function submitExam(timeUp) {
+  clearInterval(timerInterval);
+  const timeUsed = EXAM_DURATION - timeLeft;
+  let correct = 0;
+  questionOrder.forEach((qi, pos) => {
+    if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) correct++;
+  });
+  const grade = bagrutGrade(correct, questionOrder.length);
+  const pass  = grade >= 60;
+
+  const history = JSON.parse(localStorage.getItem(FRC_EXAM_KEY) || '[]');
+  history.push({ date: todayStr(), grade, correct, total: questionOrder.length, timeUsed, timeUp });
+  if (history.length > 10) history.shift();
+  localStorage.setItem(FRC_EXAM_KEY, JSON.stringify(history));
+
+  showResults(correct, grade, pass, timeUsed);
+}
+
+/* ---- RESULTS ---- */
+function showResults(correct, grade, pass, timeUsed) {
+  document.getElementById('screen-exam').style.display    = 'none';
+  document.getElementById('timer-bar').style.display      = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+
+  const wrong = questionOrder.length - correct;
+  const pct   = Math.round(correct / questionOrder.length * 100);
+
+  document.getElementById('result-icon').textContent  = pass ? '🎉' : '📚';
+  document.getElementById('result-title').textContent = pass ? 'עברת את המבחן!' : 'המשך לתרגל — אתה מתקרב!';
+
+  const circle = document.getElementById('grade-circle');
+  circle.textContent = grade;
+  circle.className   = 'grade-circle ' + (pass ? 'pass' : 'fail');
+
+  document.getElementById('grade-label').textContent = pass ? '✅ עובר' : '❌ לא עובר';
+  document.getElementById('grade-sub').textContent   =
+    `${correct}/${questionOrder.length} נכון · ${pct}% · ציון ${grade}${pass ? '' : ' (נדרש 60)'}`;
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent   = wrong;
+  document.getElementById('stat-time').textContent    = fmtTime(timeUsed);
+  document.getElementById('result-bar').style.width      = pct + '%';
+  document.getElementById('result-bar').style.background = pctColor(pct);
+  document.getElementById('result-pct').textContent      = pct + '%';
+
+  renderTopicTable();
+  renderReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderExamHistory();
+}
+
+/* ---- TOPIC BREAKDOWN TABLE ---- */
+function renderTopicTable() {
+  const topicStats = {};
+  questionOrder.forEach((qi, pos) => {
+    const topic = EXAM_TOPICS[qi] || 'כללי';
+    if (!topicStats[topic]) topicStats[topic] = { correct: 0, wrong: 0 };
+    if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) {
+      topicStats[topic].correct++;
+    } else {
+      topicStats[topic].wrong++;
+    }
+  });
+
+  document.getElementById('topic-tbody').innerHTML = Object.entries(topicStats)
+    .sort((a, b) => (b[1].correct + b[1].wrong) - (a[1].correct + a[1].wrong))
+    .map(([topic, s]) => {
+      const total = s.correct + s.wrong;
+      const tp    = Math.round(s.correct / total * 100);
+      const color = pctColor(tp);
+      const badge = tp >= 80 ? '✅ מצוין'
+                  : tp >= 60 ? '⚠️ בסדר'
+                  :            '❌ לחזור';
+      return `<tr>
+        <td style="font-weight:600">${esc(topic)}</td>
+        <td style="text-align:center;color:var(--success)">${s.correct}</td>
+        <td style="text-align:center;color:var(--danger)">${s.wrong}</td>
+        <td style="text-align:center;font-weight:700;color:${color}">${tp}%</td>
+        <td style="text-align:center;font-size:.78rem">${badge}</td>
+      </tr>`;
+    }).join('');
+}
+
+/* ---- ANSWER REVIEW ---- */
+function renderReview() {
+  document.getElementById('review-list').innerHTML = questionOrder.map((qi, pos) => {
+    const q  = EXAM_QUESTIONS[qi];
+    const oi = examAnswers[pos];
+    const ok = oi === q.c;
+    return `
+      <div style="border-bottom:1px solid var(--border);padding:12px 0">
+        <div style="font-size:.84rem;font-weight:600;margin-bottom:5px">
+          ${ok ? '✅' : '❌'} ${pos + 1}. ${esc(q.q)}
+        </div>
+        ${oi === undefined ? `<div style="color:var(--muted);font-size:.78rem">לא נענה</div>` : ''}
+        ${oi !== undefined && !ok
+          ? `<div style="font-size:.78rem;color:var(--danger);margin-bottom:3px">❌ בחרת: ${esc(q.o[oi])}</div>`
+          : ''}
+        <div style="font-size:.78rem;color:var(--success)">✅ נכון: ${esc(q.o[q.c])}</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:4px;padding:6px 10px;
+          background:rgba(34,197,94,.05);border-radius:5px;border:1px solid rgba(34,197,94,.15)">
+          💡 ${esc(q.e)}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ---- HISTORY ---- */
+function renderExamHistory() {
+  const history = JSON.parse(localStorage.getItem(FRC_EXAM_KEY) || '[]');
+  const card    = document.getElementById('exam-history-card');
+  const list    = document.getElementById('exam-history-list');
+  if (!history.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = `
+    <table class="cmp-table">
+      <tr><th>תאריך</th><th>ציון</th><th>נכון</th><th>זמן</th><th>תוצאה</th></tr>
+      ${history.slice().reverse().map(h => {
+        const p = h.grade >= 60;
+        return `<tr>
+          <td>${h.date}</td>
+          <td style="font-weight:700;color:${p?'var(--success)':'var(--danger)'}">${h.grade}</td>
+          <td>${h.correct}/${h.total}</td>
+          <td style="direction:ltr">${fmtTime(h.timeUsed)}</td>
+          <td>${p ? '✅ עובר' : '❌ לא עובר'}</td>
+        </tr>`;
+      }).join('')}
+    </table>
+  `;
+}
+
+function restartExam() {
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-start').style.display   = 'block';
+  renderExamHistory();
+}
+
+renderExamHistory();
+</script>
+</body>
+</html>
