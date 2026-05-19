@@ -3,96 +3,966 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FRC Robot – בקרוב | Study Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/style.css">
-<link rel="stylesheet" href="../minesweeper/css/style.css">
+<title>מדריך לימוד FRC – Black Unicorns #5135 | רובוט הירי</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Heebo:wght@300;400;600;800&display=swap');
+  :root {
+    --bg: #08080f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: #25253a;
+    --accent: #7c6fff;
+    --green: #00d4aa;
+    --red: #ff5f5f;
+    --yellow: #ffd166;
+    --text: #e4e4f0;
+    --muted: #6060808;
+    --muted: #606080;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Heebo', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;}
+
+  /* HEADER */
+  header{
+    background:linear-gradient(160deg,#0c0c1e,#111125);
+    padding:40px 24px 32px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    position:relative;overflow:hidden;
+  }
+  header::after{
+    content:'';position:absolute;width:500px;height:300px;
+    background:radial-gradient(ellipse,rgba(124,111,255,.13) 0%,transparent 70%);
+    top:-50px;left:50%;transform:translateX(-50%);pointer-events:none;
+  }
+  .badge{display:inline-block;background:var(--accent);color:#fff;font-size:.68rem;font-weight:800;padding:3px 12px;border-radius:20px;letter-spacing:.08em;margin-bottom:10px;}
+  header h1{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;}
+  header h1 span{color:var(--accent);}
+  header p{color:var(--muted);font-size:.88rem;margin-top:6px;}
+
+  /* NAV */
+  nav{
+    background:var(--surface);border-bottom:1px solid var(--border);
+    display:flex;overflow-x:auto;scrollbar-width:none;
+    position:sticky;top:0;z-index:99;
+  }
+  nav::-webkit-scrollbar{display:none;}
+  .nb{
+    background:none;border:none;color:var(--muted);font-family:var(--sans);
+    font-size:.78rem;font-weight:700;padding:13px 18px;cursor:pointer;
+    white-space:nowrap;border-bottom:3px solid transparent;
+    transition:all .2s;letter-spacing:.03em;
+  }
+  .nb:hover{color:var(--text);}
+  .nb.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(124,111,255,.06);}
+
+  /* SECTIONS */
+  main{max-width:980px;margin:0 auto;padding:28px 18px 60px;}
+  .sec{display:none;}
+  .sec.active{display:block;}
+  .sec-title{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px;}
+  .sec-title span{color:var(--accent);}
+  .sec-sub{color:var(--muted);font-size:.86rem;margin-bottom:24px;}
+  hr.div{border:none;border-top:1px solid var(--border);margin:22px 0;}
+
+  /* ROBOT OVERVIEW MAP */
+  .robot-map{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:24px;margin-bottom:24px;
+    font-family:var(--mono);font-size:.76rem;
+    color:var(--green);line-height:1.9;
+    white-space:pre;overflow-x:auto;
+  }
+
+  /* ACCORDION */
+  .acc{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+  .acc-h{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 20px;cursor:pointer;font-weight:700;font-size:.92rem;
+    transition:background .2s;user-select:none;
+  }
+  .acc-h:hover{background:var(--surface2);}
+  .acc-h .arr{transition:transform .3s;color:var(--muted);font-size:.75rem;}
+  .acc-h.open{color:var(--accent);}
+  .acc-h.open .arr{transform:rotate(180deg);color:var(--accent);}
+  .acc-b{display:none;padding:0 20px 20px;border-top:1px solid var(--border);font-size:.88rem;}
+  .acc-b.open{display:block;}
+  .acc-b p{margin-top:12px;line-height:1.75;}
+  .acc-b ul{margin-top:10px;padding-right:20px;}
+  .acc-b li{margin-bottom:7px;}
+  .acc-b strong{color:var(--text);}
+
+  /* DIAGRAM */
+  .diagram{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:16px 18px;margin-top:14px;
+    font-family:var(--mono);font-size:.76rem;color:var(--green);
+    white-space:pre;overflow-x:auto;line-height:1.85;
+  }
+
+  /* TABLE */
+  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:.84rem;}
+  .tbl th{background:var(--surface2);padding:11px 14px;text-align:right;color:var(--accent);font-weight:700;border-bottom:2px solid var(--accent);}
+  .tbl td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tbl tr:hover td{background:rgba(255,255,255,.015);}
+  .pro{color:var(--green);}
+  .con{color:var(--red);}
+
+  /* TAGS */
+  .tag{display:inline-block;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:4px;letter-spacing:.07em;margin-left:6px;margin-bottom:8px;}
+  .th{background:rgba(0,212,170,.12);color:var(--green);}
+  .hw{background:rgba(255,95,95,.12);color:var(--red);}
+  .sw{background:rgba(124,111,255,.12);color:var(--accent);}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:20px;cursor:pointer;
+    transition:transform .2s,border-color .2s;position:relative;overflow:hidden;
+  }
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ca,var(--accent));}
+  .card:hover{transform:translateY(-3px);border-color:var(--ca,var(--accent));}
+  .card h3{font-size:.95rem;font-weight:700;margin-bottom:6px;}
+  .card p{font-size:.82rem;color:var(--muted);line-height:1.5;}
+  .card .ico{font-size:1.6rem;margin-bottom:10px;}
+
+  /* FLOW CHART */
+  .flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:14px;}
+  .fbox{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;font-size:.82rem;font-weight:600;
+    white-space:nowrap;
+  }
+  .fbox.hl{border-color:var(--accent);color:var(--accent);}
+  .farr{color:var(--muted);font-size:1rem;}
+
+  /* QUIZ */
+  .qcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px;margin-bottom:14px;}
+  .qcard .q{font-weight:700;font-size:.95rem;margin-bottom:16px;}
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:11px 15px;cursor:pointer;
+    font-size:.86rem;transition:all .2s;text-align:right;
+  }
+  .opt:hover{border-color:var(--accent);background:rgba(124,111,255,.07);}
+  .opt.ok{border-color:var(--green)!important;background:rgba(0,212,170,.09)!important;color:var(--green);}
+  .opt.bad{border-color:var(--red)!important;background:rgba(255,95,95,.09)!important;color:var(--red);}
+  .fb{margin-top:12px;padding:11px 14px;border-radius:8px;font-size:.84rem;display:none;}
+  .fb.show{display:block;}
+  .fb.ok{background:rgba(0,212,170,.08);color:var(--green);border:1px solid var(--green);}
+  .fb.bad{background:rgba(255,95,95,.08);color:var(--red);border:1px solid var(--red);}
+  .score-box{
+    background:linear-gradient(135deg,rgba(124,111,255,.12),rgba(0,212,170,.08));
+    border:1px solid var(--accent);border-radius:14px;padding:30px;text-align:center;
+    margin-top:20px;display:none;
+  }
+  .score-box.show{display:block;}
+  .score-box .big{font-size:2.8rem;font-weight:800;color:var(--accent);}
+  #rbtn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 26px;font-family:var(--sans);font-size:.86rem;font-weight:700;cursor:pointer;margin-top:14px;}
+  #rbtn:hover{opacity:.85;}
+
+  /* PROGRESS */
+  .prog-wrap{background:var(--surface2);border-radius:20px;height:5px;margin:6px 0 14px;}
+  .prog-bar{height:5px;border-radius:20px;background:var(--accent);transition:width .4s;}
+
+  /* HIGHLIGHT BOX */
+  .hbox{background:rgba(124,111,255,.07);border:1px solid rgba(124,111,255,.25);border-radius:9px;padding:14px 16px;margin-top:12px;font-size:.86rem;}
+  .hbox.green{background:rgba(0,212,170,.06);border-color:rgba(0,212,170,.25);}
+  .hbox.yellow{background:rgba(255,209,102,.06);border-color:rgba(255,209,102,.25);color:var(--yellow);}
+</style>
 </head>
 <body>
 
-<nav class="top-nav">
-  <div class="top-nav-inner">
-    <a href="../index.html" class="nav-back">🏠 Hub</a>
-  </div>
+<header>
+  <div class="badge">BLACK UNICORNS · #5135 · REBUILD 2026</div>
+  <h1>מדריך לימוד – <span>רובוט הירי</span></h1>
+  <p>כל המערכות: מרכב · מגלול · הופר · קלע · טיפוס · תוכנה · תיאוריה</p>
+</header>
+
+<nav>
+  <button class="nb active" onclick="go('overview')">🗺️ סקירת רובוט</button>
+  <button class="nb" onclick="go('drivetrain')">🏎️ מרכב</button>
+  <button class="nb" onclick="go('intake')">🤏 מגלול</button>
+  <button class="nb" onclick="go('hopper')">📦 הופר</button>
+  <button class="nb" onclick="go('shooter')">🎯 קלע</button>
+  <button class="nb" onclick="go('climber')">🧗 טיפוס</button>
+  <button class="nb" onclick="go('software')">💻 תוכנה</button>
+  <button class="nb" onclick="go('theory')">📐 תיאוריה</button>
+  <button class="nb" onclick="go('quiz')">🧠 חידון</button>
 </nav>
 
-<div class="page-wrap" style="display:flex;align-items:center;justify-content:center;min-height:70vh">
-  <div style="text-align:center">
-    <div style="font-size:4rem;margin-bottom:16px;animation:float 4s ease-in-out infinite">🤖</div>
-    <h1 style="font-size:2rem;font-weight:900;background:linear-gradient(130deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px">FRC Robot Project</h1>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:24px">Java · WPILib · PID · Computer Vision</p>
-    <div class="highlight" style="max-width:400px;margin:0 auto 24px;text-align:right">
-      <strong>בקרוב:</strong> תוכן לימוד לפרויקט הרובוט יתווסף כאן ברגע שיהיה מוכן.
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px">
-      <span class="tag" style="opacity:.5">WPILib</span>
-      <span class="tag" style="opacity:.5">PID Control</span>
-      <span class="tag" style="opacity:.5">Command-Based</span>
-      <span class="tag" style="opacity:.5">Computer Vision</span>
-      <span class="tag" style="opacity:.5">CAN Bus</span>
-      <span class="tag" style="opacity:.5">Subsystems</span>
-    </div>
-    <a href="../index.html" class="btn btn-secondary" style="text-decoration:none">← חזור ל-Hub</a>
+<main>
 
-    <div id="frc-progress" style="display:none;margin-top:28px;padding:20px 24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px">
-      <div style="font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:16px;text-align:center">📈 התקדמות שלך</div>
-      <div style="display:flex;gap:40px;justify-content:center;align-items:center" id="frc-rings"></div>
+<!-- =========== OVERVIEW =========== -->
+<div class="sec active" id="overview">
+  <div class="sec-title">סקירה כללית – <span>זרימת הכדור ברובוט</span></div>
+  <div class="sec-sub">הרובוט אוסף כדורים, מאחסן אותם ויורה לסל. הנה כל המסלול:</div>
+
+  <div class="robot-map">  ┌─────────────────────────────────────────────────────────┐
+  │                     ROBOT #5135                         │
+  │                                                         │
+  │  [מגלול / INTAKE]                                       │
+  │   • Four-bar mechanism (ציר סיבוב)                      │
+  │   • דפנות פוליקרבונט – ספיגת מכות                      │
+  │   • רולרים עם מיסבים פנימיים                           │
+  │       ↓                                                 │
+  │  [הופר / HOPPER]                                        │
+  │   • תא אחסון לכדורים                                    │
+  │   • מסוע בשיפוע בתחתית                                 │
+  │   • גלגלי מקאנום למירכוז הכדור                         │
+  │   • מנגנון הרחבה (קיר קדמי נפתח)                       │
+  │       ↓                                                 │
+  │  [קלע / SHOOTER]                                        │
+  │   • גלגלי ירי במהירות גבוהה                            │
+  │   • חגורות טימינג להעברה                               │
+  │   • Hood (כיסוי מתכוונן) – שולט בזווית היציאה          │
+  │                                                         │
+  │  [מרכב / DRIVETRAIN]   ←→   [טיפוס / CLIMBER]          │
+  │   Swerve MK4N                  מעלית על פרופיל          │
+  │   4 מודולות סווארב             יחס 1:64                 │
+  └─────────────────────────────────────────────────────────┘</div>
+
+  <div class="grid">
+    <div class="card" style="--ca:#7c6fff" onclick="go('drivetrain')">
+      <div class="ico">🏎️</div>
+      <h3>מרכב – Swerve MK4N</h3>
+      <p>4 מודולות סווארב, שלדת אלומיניום, יחס 1:5.9, Talon FX, אודומטריה מדויקת</p>
+    </div>
+    <div class="card" style="--ca:#ff5f5f" onclick="go('intake')">
+      <div class="ico">🤏</div>
+      <h3>מגלול – Four-bar</h3>
+      <p>מנגנון Four-bar מבוסס ציר, פוליקרבונט, ציר חורו, מיסבים פנימיים</p>
+    </div>
+    <div class="card" style="--ca:#ffd166" onclick="go('hopper')">
+      <div class="ico">📦</div>
+      <h3>הופר – מסוע + מקאנום</h3>
+      <p>אחסון כדורים, מסוע שיפוע, גלגלי מקאנום למירכוז, מנגנון הרחבה</p>
+    </div>
+    <div class="card" style="--ca:#00d4aa" onclick="go('shooter')">
+      <div class="ico">🎯</div>
+      <h3>קלע – גלגלי ירי + Hood</h3>
+      <p>גלגלי ירי במהירות גבוהה, Hood מתכוונן, חגורות טימינג, ירי בתנועה</p>
+    </div>
+    <div class="card" style="--ca:#ff9f43" onclick="go('climber')">
+      <div class="ico">🧗</div>
+      <h3>טיפוס – מעלית</h3>
+      <p>יחס 1:64, פרופיל יחיד, ראצ'ט + שרשרת, מיסבים מדויקים ±0.005 מ"מ</p>
+    </div>
+    <div class="card" style="--ca:#a29bfe" onclick="go('software')">
+      <div class="ico">💻</div>
+      <h3>תוכנה – Java + Vision</h3>
+      <p>FSM, PID, ירי בתנועה, סימולציה פיזיקלית, Kalman filter, מצלמות</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🏆 עקרונות התכנון של הקבוצה <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <p>כל רובוט בנוי על שלושה עמודי תווך:</p>
+      <ul>
+        <li><strong>פשטות:</strong> כמה שפחות נקודות כישלון. מערכת פשוטה = קל לתקן = מגיע רחוק יותר.</li>
+        <li><strong>אמינות:</strong> רובוט עם מערכות מדהימות לא שווה כלום אם לא ניתן לסמוך עליו שינקד משחק אחרי משחק.</li>
+        <li><strong>עמידות:</strong> השאיפה היא לצאת לתחרות עם רובוט חזק שידרוש כמה שפחות עבודה בפיט.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🏭 איך מייצרים את הרובוט? <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <p><strong>ייצור בסדנה:</strong></p>
+      <ul>
+        <li><strong>CNC:</strong> השנה לראשונה! כרסום בעצים, פלסטיקים ומתכת. פוליקרבונט עד אלומיניום.</li>
+        <li><strong>מדפסות 3D (×3):</strong> חלקים מורכבים שקשה לכרסם.</li>
+      </ul>
+      <p><strong>ייצור אצל ספונסרים:</strong></p>
+      <ul>
+        <li><strong>כנפית:</strong> הדפסה בניילון תעשייתי-צבאי ובאלומיניום. ~40 שנות ניסיון בתעשייה אווירית.</li>
+        <li><strong>טרילידור:</strong> מפעל בכרמיאל. מגוון מכונות חדשניות. ספונסר מאז פתיחת הקבוצה.</li>
+      </ul>
     </div>
   </div>
 </div>
 
+<!-- =========== DRIVETRAIN =========== -->
+<div class="sec" id="drivetrain">
+  <div class="sec-title">מרכב – <span>Swerve Drive MK4N</span></div>
+  <div class="sec-sub">מערכת ההנעה, השלדה, והניווט האוטונומי</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🔩 שלדה ובנייה מכנית <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span>
+      <ul>
+        <li><strong>4 פרופילי אלומיניום 50×25 מ"מ</strong> בתצורה מלבנית – עמידות בהתנגשויות + משקל נמוך</li>
+        <li><strong>פלטת בסיס</strong> = "רצפת" הרובוט. כולל חורי הפחתת משקל אסטרטגיים.</li>
+        <li><strong>שינוי ייחודי:</strong> המודלות הקדמיות סובבו ב-90° כדי לפנות מקום לאינטייק ולקלע במרכז.</li>
+        <li><strong>מנועים:</strong> Talon FX (Falcon) – שליטה מדויקת + ניצול אנרגיה חכם.</li>
+      </ul>
+      <div class="hbox">⚡ יחס ההעברה הוא <strong>1:5.9</strong> – מהיר מספיק לחצות את המגרש בשיא מהירות ולקצר זמני ביצוע.</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚙️ איך עובדת מודולת Swerve? <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>כל מודולה מכילה 2 מנועים עצמאיים:</p>
+      <div class="diagram">  ┌──────────────────────────────┐
+  │   מנוע 1 (Steer/כיוון)       │ ← מסובב את הגלגל 0°–360°
+  │   מנוע 2 (Drive/הנעה)        │ ← מסובב את הגלגל (מהירות)
+  │          ↓                    │
+  │      [גלגל]                  │
+  └──────────────────────────────┘
+  
+  4 מודולות כאלו → הרובוט נע לכל כיוון
+  ללא סיבוב הגוף (holonomic motion)</div>
+      <p>זה מאפשר:</p>
+      <ul>
+        <li>נסיעה לצד מבלי לסובב את הרובוט</li>
+        <li>תמרון מהיר – התחמקות מהגנה</li>
+        <li>נסיעה בכיוון קבוע תוך סיבוב הרובוט (לצורך ירי)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📍 ניווט מדויק – Odometry + Vision <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <p><strong>Odometry:</strong> מעקב אחר מיקום הרובוט על המגרש בדיוק של סנטימטרים, על ידי אינטגרציה של מהירות הגלגלים לאורך זמן.</p>
+      <p><strong>Vision (מצלמות + AprilTags):</strong></p>
+      <ul>
+        <li>אלגוריתם <strong>SolvePnP</strong> – מחשב מיקום הרובוט במרחב 3D מתוך תמונה</li>
+        <li><strong>Kalman Filter</strong> – ממזג אודומטריה + ראייה לאומדן מדויק יחיד</li>
+        <li>מדד האמינות מתחשב ב: מרחק מהטאג, כמות טאגים, מיקום בתמונה (שוליים = יותר עיוות)</li>
+      </ul>
+      <div class="diagram">  מיקום סופי = Kalman( Odometry + Vision )
+  
+  Odometry: encoder wheels → אינטגרציה
+  Vision: SolvePnP(AprilTag) → מיקום מוחלט
+  
+  ← ממוצע משוכלל לפי אמינות כל מקור</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🎮 שליטה: FOC ומגבלות תאוצה <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <p><strong>FOC – Field Oriented Control:</strong> הרובוט תמיד נע ביחס למגרש, לא ביחס לכיוון שפניו. גם אם הרובוט מסתובב – "קדימה" תמיד אותו כיוון. מממשים ע"י חיסור זווית הג'יירו מוקטור המהירות.</p>
+      <p style="margin-top:10px"><strong>מגבלות תאוצה:</strong> מונעות מהגלגלים להחליק ("wheel slip"). יתרונות:</p>
+      <ul>
+        <li>נסיעה חלקה יותר</li>
+        <li>אודומטריה מדויקת יותר (כי לא מניחים החלקה)</li>
+        <li>שליטת נהג טובה יותר</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =========== INTAKE =========== -->
+<div class="sec" id="intake">
+  <div class="sec-title">מגלול – <span>Four-Bar Mechanism</span></div>
+  <div class="sec-sub">מנגנון האיסוף, עקרון הפעולה ועמידות לפגיעות</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🔗 מנגנון Four-Bar – מה זה ולמה? <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>מנגנון ארבעת-הצלעות (Four-bar linkage) הוא מנגנון מבוסס <strong>ציר סיבוב</strong>, בניגוד לתנועה ליניארית קשיחה.</p>
+      <div class="diagram">  Four-bar linkage:
+  
+  [נקודה קבועה A]────[זרוע 1]────[חוליה חופשית]
+         |                              |
+  [נקודה קבועה B]────[זרוע 2]──────────┘
+  
+  → האינטייק מסתובב על ציר, לא נע בקו ישר</div>
+      <p><strong>למה זה טוב?</strong> בעת התנגשות עם רובוט אחר, האינטייק "בורח" כלפי מעלה/צד ומונע שבר. אחרי ההתנגשות הוא חוזר לעצמו.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🧱 חומרים ובנייה – פוליקרבונט וציר חורו <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span>
+      <p><strong>דפנות פוליקרבונט:</strong></p>
+      <ul>
+        <li>מתגמש בספיגת מכה וחוזר לצורתו → לא מתכופף לצמיתות כמו אלומיניום</li>
+        <li>קל בהרבה מאלומיניום → תנועה מהירה + מרכז כובד נמוך</li>
+      </ul>
+      <p><strong>ציר "חורו" (Churro):</strong></p>
+      <ul>
+        <li>צינור אלומיניום משושה קל וחזק</li>
+        <li>הוספנו הדפסות תמיכה פנימיות עם <strong>מיסבים</strong> כדי למנוע עיקום תחת עומס</li>
+        <li>המיסבים הפנימיים נכנסים לפעולה רק כשיש לחץ → סיבוב חלק תמיד</li>
+      </ul>
+      <div class="hbox green">🎯 ציר חורו + מיסבים פנימיים = ציר קל, חזק וחלק גם תחת עומס מלא</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== HOPPER =========== -->
+<div class="sec" id="hopper">
+  <div class="sec-title">הופר – <span>אחסון והזנה לקלע</span></div>
+  <div class="sec-sub">מנגנון ה"משפך": מקבל כדורים מהאינטייק, שומר אותם ומעביר לקלע</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📋 4 שלבי פעולת ההופר <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <div class="flow">
+        <div class="fbox hl">①  איסוף ואגירה</div>
+        <div class="farr">→</div>
+        <div class="fbox hl">② מסוע שיפוע</div>
+        <div class="farr">→</div>
+        <div class="fbox hl">③ גלגלי מקאנום</div>
+        <div class="farr">→</div>
+        <div class="fbox hl">④ הזנה לקלע</div>
+      </div>
+      <ul style="margin-top:14px">
+        <li><strong>① איסוף ואגירה:</strong> כדורים נכנסים מהאינטייק. תא סגור שמונע היתקעות.</li>
+        <li><strong>② מסוע שיפוע:</strong> בתחתית ההופר. אוסף רצועות סגורות סביב גלגלות – מניע כדורים קדימה.</li>
+        <li><strong>③ גלגלי מקאנום:</strong> שתי שורות זו מעל זו. הרולים המשופעים יוצרים תנועה צדית שממרכזת את הכדור.</li>
+        <li><strong>④ הזנה לקלע:</strong> הכדור מגיע מיושר ומדויק לגלגלי הירי.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">↔️ גלגלי מקאנום – למה הם ממרכזים? <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>גלגל מקאנום (Mecanum / Ilion wheel) הוא גלגל עם <strong>רולרים בזווית 45°</strong> על ציר הגלגל.</p>
+      <div class="diagram">  כוחות על גלגל מקאנום:
+  
+  ← הגלגל מסתובב קדימה
+  + רולים בזווית 45°
+  = מרכיב כוח צדי + קדמי
+  
+  גלגל שמאל: מרכיב צד ← ימינה
+  גלגל ימין: מרכיב צד ← שמאלה
+  → שניהם ← מושכים לאמצע!</div>
+      <p>בהופר, השתי שורות גורמות לכדור להתמקד באמצע בדיוק לפני כניסה לקלע.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📐 מנגנון הרחבה <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span>
+      <p>הקיר הקדמי של ההופר יכול <strong>להיפתח כלפי חוץ</strong>, מה שמגדיל את הנפח ומאפשר אגירה של יותר כדורים בבת אחת. שימושי כשרוצים לאסוף מהר מהשטח.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =========== SHOOTER =========== -->
+<div class="sec" id="shooter">
+  <div class="sec-title">קלע – <span>מנגנון הירי</span></div>
+  <div class="sec-sub">גלגלי ירי, Hood מתכוונן, וירי מדויק בתנועה מלאה</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚙️ מבנה הקלע – גלגלים, חגורות, Hood <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span>
+      <ul>
+        <li><strong>גלגלי ירי:</strong> מסתובבים במהירות גבוהה – מאיצים את הכדור ונותנים את הכוח</li>
+        <li><strong>חגורות טימינג:</strong> מעבירים את הכדור מהמסוע למעלה לכיוון גלגלי הירי</li>
+        <li><strong>Hood (כיסוי/מסלול עליון מתכוונן):</strong> ממוקם מעל מסלול הכדור. שולט ב<strong>זווית היציאה</strong>.</li>
+      </ul>
+      <div class="diagram">  מסלול הכדור בקלע:
+  
+  [כדור מהופר]
+       ↓
+  [חגורות טימינג] → העברה למעלה
+       ↓
+  ┌──────────────────────┐
+  │  [גלגל ירי עליון]   │ ← Hood (זווית מתכוונת)
+  │  ═══════════════════  │ ← הכדור
+  │  [גלגל ירי תחתון]   │
+  └──────────────────────┘
+       ↓
+  [כדור יוצא בזווית + מהירות מדויקים]</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🎯 Hood – שליטה בזווית היציאה <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span><span class="tag th">תיאוריה</span>
+      <p>ה-Hood הוא החלק שקובע <strong>באיזו זווית</strong> הכדור יוצא מהקלע. על ידי שינוי זווית ה-Hood:</p>
+      <ul>
+        <li>ירי ממרחק קרוב → זווית גבוהה (שליחה "גבוהה" עם קשת גדולה)</li>
+        <li>ירי ממרחק רחוק → זווית שטוחה יותר</li>
+        <li>לא צריך לשנות את מהירות הגלגלים בין כל מרחק</li>
+      </ul>
+      <div class="hbox">💡 Hood = "כוונת" הקלע. מהירות גלגלים = כוח הירי. ביחד הם קובעים את המסלול המושלם.</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🔬 סימולציה פיזיקלית – ירי בקו ישר <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span><span class="tag th">תיאוריה</span>
+      <p>כדי לדעת <strong>באיזו זווית ומהירות לירות</strong> מכל מרחק, בנינו סימולציה פיזיקלית שמתחשבת ב:</p>
+      <ul>
+        <li><strong>כוח הכבידה (g)</strong> – כדור נופל תוך כדי טיסה</li>
+        <li><strong>חיכוך אוויר</strong> – מאט את הכדור</li>
+        <li><strong>כוח מגנוס</strong> – כוח שנגרם כי הכדור מסתובב באוויר (כמו בכדורגל/טניס)</li>
+      </ul>
+      <div class="diagram">  כוח מגנוס:
+  כדור מסתובב + זרימת אוויר = לחץ שונה מסביב
+  → כדור מסתובב "כלפי מעלה" = עולה
+  → כדור מסתובב "כלפי מטה" = יורד מהר
+  
+  הסימולציה מוצאת את כל הזוויות+מהירויות
+  שיגיעו למטרה, ובוחרת את ה-OPTIMAL.</div>
+      <p style="margin-top:10px"><strong>מה "אופטימלי"?</strong> הפתרון שבו הכדור עמיד לשגיאות – גם אם הזווית לא מדויקת ב-1°, הכדור עדיין נכנס.</p>
+      <p style="margin-top:8px">הפתרונות נשמרים בקוד הרובוט. בזמן ירי, הרובוט עושה <strong>אינטרפולציה כפולה</strong> (ממוצע משוכלל לפי מרחק + מהירות הרובוט).</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🚗 ירי בתנועה מלאה – אלגוריתם מתקדם <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <p>הסימולציה עובדת רק בנסיעה בקו ישר לכיוון המטרה. אבל הנהג נוסע בכל כיוון! הפתרון:</p>
+      <ol style="margin-top:10px;padding-right:20px;line-height:2">
+        <li>מפרקים את מהירות הרובוט ל-2 רכיבים: לכיוון המטרה + מאונך למטרה</li>
+        <li>מחשבים <strong>זמן תעופה</strong> של הכדור (מהסימולציה)</li>
+        <li>מחשבים כמה הכדור יזוז צדדית בגלל המהירות הצדדית של הרובוט</li>
+        <li>מוסיפים את הסטייה למיקום הירי → נקודה "אפקטיבית"</li>
+        <li>חוזרים על התהליך כמה פעמים (כי שינוי מיקום משנה זמן תעופה)</li>
+      </ol>
+      <div class="diagram">  רובוט נוסע ימינה בזמן ירי:
+  
+  [מטרה]
+     ↑         
+     ↑   ← תוקנה מיקום ירי ←  
+  [רובוט→→→]
+  
+  בלי תיקון: כדור מפספס ימינה
+  עם תיקון: כדור נכנס!</div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== CLIMBER =========== -->
+<div class="sec" id="climber">
+  <div class="sec-title">טיפוס – <span>מערכת המעלית</span></div>
+  <div class="sec-sub">הרמת הרובוט מהרצפה בסוף המשחק – מערכת נפרדת משאר הרובוט</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🏗️ מבנה המעלית – שני חלקים <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span>
+      <div class="flow" style="margin-bottom:14px">
+        <div class="fbox hl">מודולת הטיפוס</div>
+        <div class="farr">+</div>
+        <div class="fbox hl">מערכת ההנעה</div>
+        <div class="farr">=</div>
+        <div class="fbox">מעלית מלאה</div>
+      </div>
+      <p><strong>מודולת הטיפוס</strong> = החלק שעולה ויורד:</p>
+      <ul>
+        <li>מחליקה על פרופיל 40×40 מ"מ (פרופיל יחיד! הורדנו 3.5 ק"ג מגרסה כפולה)</li>
+        <li>ווי הטיפוס – אלומיניום 8 מ"מ. פרוטוטייפים רבים עד לגרסה הסופית</li>
+        <li>בלוק מיסבים שיוצר ב-CNC עם דיוק <strong>±0.005 מ"מ</strong></li>
+      </ul>
+      <p style="margin-top:10px"><strong>מנגנון Wear-In מיוחד:</strong></p>
+      <div class="hbox green">כשהמעלית עולה ויורד, המיסבים שוחקים את הפרופיל במאית המילימטר עד שיתאים. במקום "wear-out" (התדרדרות) יש "wear-in" – המעלית רק משתפרת עם השימוש!</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚙️ מערכת ההנעה – יחס 1:64 <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag hw">חומרה</span><span class="tag th">תיאוריה</span>
+      <div class="diagram">  שרשרת ההנעה:
+  
+  [מנוע]
+     ↓ × 32 (ראצ'ט)
+  [תמסורת 1]
+     ↓ × 2  (שרשרת #35, 9:18)
+  [תמסורת 2]
+     ↓ × 1  (שרשרת #35, 10:10 עד לחלק העליון)
+  ─────────────────────────
+  סה"כ: 32 × 2 × 1 = יחס 1:64</div>
+      <p><strong>ראצ'ט (Ratchet):</strong> מנגנון מכני שמונע מהמעלית לרדת בלי שהמנוע פעיל – לא צריך להחזיק עם מנוע את משקל הרובוט כל הזמן.</p>
+      <p style="margin-top:8px"><strong>למה יחס גדול כל כך?</strong> הרובוט שוקל ~50 ק"ג. צריך טורק עצום להרמה. יחס 1:64 מגביר את הטורק פי 64.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =========== SOFTWARE =========== -->
+<div class="sec" id="software">
+  <div class="sec-title">תוכנה – <span>ארכיטקטורה ואלגוריתמים</span></div>
+  <div class="sec-sub">Java, Command-Based, PID, FSM, Vision – כל מה שצריך לדעת</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🏗️ ספריית תוכנה – מה בנינו לפני העונה <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <p>בהשראת קבוצות Top World (254, 1690, 2910, 6328), בנינו ספרייה מראש עם:</p>
+      <ul>
+        <li><strong>מערכת גנרית:</strong> "תבנית" לכל מערכת עם מנוע – חוסכת זמן ומונעת טעויות</li>
+        <li><strong>מגבלות תאוצה:</strong> נסיעה חלקה + אודומטריה מדויקת</li>
+        <li><strong>Input/Output separation:</strong> הלוגיקה זהה לסימולציה ולרובוט אמיתי</li>
+        <li><strong>סימולציה:</strong> בודקים ומתקנים לוגיקה לפני שנוגעים ברובוט</li>
+        <li><strong>FSM (Finite State Machines):</strong> לכל מערכת מצבים מוגדרים + מעברים ברורים</li>
+        <li><strong>"שידור חוזר":</strong> הקלטת ערכים מהמשחק → ניתוח בעיות לאחר מכן</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🤖 FSM – Finite State Machine <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span><span class="tag th">תיאוריה</span>
+      <p>אוטומט סופי = מכונת מצבים. הרובוט תמיד נמצא <strong>במצב מוגדר אחד</strong>, ועובר בין מצבים לפי תנאים.</p>
+      <div class="diagram">  FSM לקלע (דוגמה):
+
+  [IDLE] ──── לחיצת כפתור ──→ [SPINNING_UP]
+                                     │
+                          גלגלים הגיעו למהירות
+                                     ↓
+                               [READY_TO_FIRE]
+                                     │
+                             כפתור ירי לחוץ
+                                     ↓
+                                [FIRING]
+                                     │
+                            כדור יצא (חיישן)
+                                     ↓
+                                 [IDLE]</div>
+      <p>יתרון: קוד קריא ופשוט. לא יכול להיות "מצב לא ידוע".</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🎯 PID + Feedforward – בקרת מנועים <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>כל בקר מנוע ברובוט עובד עם <strong>PID + Feedforward</strong>:</p>
+      <ul>
+        <li><strong>P (Proportional):</strong> כוח יחסי לשגיאה הנוכחית</li>
+        <li><strong>I (Integral):</strong> מצטבר לאורך זמן – מתקן שגיאה קבועה</li>
+        <li><strong>D (Derivative):</strong> מגיב לשינוי מהיר – מונע overshoot</li>
+        <li><strong>Feedforward:</strong> מחשב ישירות כמה כוח צריך לפי פיזיקה (כוח כבידה, חיכוך) – לא מחכה לשגיאה</li>
+      </ul>
+      <div class="hbox">💡 Feedforward = "ניחוש מושכל" + PID = "תיקון שגיאות". ביחד = שליטה מהירה ומדויקת</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📷 מערכת Vision – מצלמות ו-AprilTags <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <p>בזכות ספונסר <strong>פייטל</strong> (מעבדי Raspberry Pi), השנה לראשונה יש לנו Vision!</p>
+      <ul>
+        <li><strong>SolvePnP:</strong> אלגוריתם שמחשב את מיקום המצלמה (= הרובוט) במרחב 3D מתוך מיקום AprilTag בתמונה</li>
+        <li><strong>אמינות:</strong> נמדדת לפי – מרחק מהטאג, כמות טאגים, מרחק מהשוליים</li>
+        <li><strong>Kalman Filter:</strong> ממזג את אומדן ה-Vision עם האודומטריה. משוקלל לפי אמינות.</li>
+      </ul>
+      <div class="diagram">  Kalman Filter:
+  
+  אודומטריה:  מיקום ±5 ס"מ (טעות מצטברת)
+  Vision:     מיקום ±2 ס"מ (מוחלט, ללא טעות מצטברת)
+  
+  Kalman: ממוצע משוכלל → ±1.5 ס"מ
+  (יותר טוב משני המקורות לחוד!)</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🕹️ שלטים – Driver ו-Operator <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag sw">תוכנה</span>
+      <table class="tbl">
+        <tr><th>תפקיד</th><th>שלט</th><th>שליטה</th></tr>
+        <tr><td><strong>Driver</strong></td><td>QX7 (FrSky) – שלט הרחפן</td><td>נסיעה, FOC/רובוט, מהירות max דרך פוטנציומטר</td></tr>
+        <tr><td><strong>Operator</strong></td><td>Xbox</td><td>אינטייק, ירי, עמדות קלע, טיפוס</td></tr>
+      </table>
+      <p style="margin-top:10px">גם השלטים ממשים ממשק IO → ניתן להחליף שלט מהר מבלי לשנות את הלוגיקה.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =========== THEORY =========== -->
+<div class="sec" id="theory">
+  <div class="sec-title">תיאוריה – <span>הסברים מעמיקים</span></div>
+  <div class="sec-sub">כל מה שהבגרות שואלת: מנועים, PWM, H-Bridge, תמסורות, בקרה</div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🔌 מנוע DC עם מברשות (Brushed) – איך עובד? <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>מנוע DC ממיר אנרגיה חשמלית לתנועה סיבובית בעזרת שדה מגנטי + זרם חשמלי (חוק לורנץ).</p>
+      <div class="diagram">  Brushed DC Motor:
+  
+  ┌──────────────────────────────────────┐
+  │  [מגנט +] ──── [סליל נחושת] ──── [מגנט -] │
+  │                    ↕                  │
+  │              [קומוטטור]              │
+  │              /          \            │
+  │       [מברשת פחם] [מברשת פחם]       │
+  │            +                -         │
+  └──────────────────────────────────────┘
+  
+  בעיה: מברשות מתבלות, ניצוצות, פחות יעיל</div>
+      <p><strong>רכיבים:</strong></p>
+      <ul>
+        <li><strong>Armature (סליל):</strong> חוטי נחושת – החלק הסובב. נושא זרם חשמלי.</li>
+        <li><strong>מגנטים קבועים:</strong> יוצרים שדה מגנטי סביב הסליל.</li>
+        <li><strong>Commutator:</strong> טבעת פלחים על הציר. מחליף כיוון הזרם בכל חצי סיבוב כדי שהכוח תמיד יהיה באותו כיוון.</li>
+        <li><strong>Brushes (מברשות פחם):</strong> מגע סטטי עם הקומוטטור המסתובב. מספקות את הזרם.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚡ מנוע Brushless – השיפור המהותי <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>ב-Brushless: <strong>המגנטים על הרוטור, הסלילים קבועים</strong>. הקומוטציה אלקטרונית.</p>
+      <div class="diagram">  Brushless Motor:
+  
+  [סטטור קבוע עם סלילים]
+          ↕ שדה מגנטי מתחלף
+  [רוטור מסתובב עם מגנטים]
+          ↕
+  [בקר אלקטרוני] ← מחליף זרם בסלילים
+          ↕
+  [חיישן Hall Effect / Encoder] ← יודע מיקום רוטור</div>
+      <table class="tbl" style="margin-top:12px">
+        <tr><th>קריטריון</th><th>Brushed</th><th>Brushless ✓</th></tr>
+        <tr><td>קומוטציה</td><td>מכנית (מברשות)</td><td>אלקטרונית</td></tr>
+        <tr><td>יעילות</td><td>~75-80%</td><td>~90-95%</td></tr>
+        <tr><td>תחזוקה</td><td>מברשות מתבלות</td><td>כמעט ללא</td></tr>
+        <tr><td>כוח/משקל</td><td>בינוני</td><td>גבוה מאוד</td></tr>
+        <tr><td>מחיר</td><td class="pro">זול</td><td class="con">יקר</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📡 PWM – Pulse Width Modulation <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>שיטה לשליטה בעוצמת מנוע על ידי <strong>שינוי יחס ON/OFF</strong> של האות החשמלי.</p>
+      <div class="diagram">  Duty Cycle:
+  
+  0%:   ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁  ← מנוע כבוי
+  25%:  ██▁▁▁▁▁█▁▁▁▁▁▁▁  ← 25% כוח
+  50%:  ████▁▁▁████▁▁▁▁  ← 50% כוח  
+  75%:  ██████▁██████▁▁  ← 75% כוח
+  100%: ███████████████  ← כוח מלא
+
+  Duty Cycle = זמן_ON / זמן_כולל × 100%</div>
+      <p><strong>למה לא פשוט להוריד מתח?</strong> רזיסטור במסלול יבזבז אנרגיה כחום. PWM חוסך אנרגיה ומדויק יותר.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🌉 H-Bridge – שינוי כיוון מנוע <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <div class="diagram">  H-Bridge – 4 מפסקים:
+  
+         +V
+          |
+    [S1]──┤──[S3]
+     |    |    |
+    [M]←──┘    └──[M]  ← מנוע
+     |              |
+    [S2]──────[S4]
+          |
+         GND
+  
+  קדימה:  S1+S4 סגורים → זרם: A→B
+  אחורה: S2+S3 סגורים → זרם: B→A
+  עצירה: כולם פתוחים</div>
+      <p>שילוב PWM + H-Bridge = שליטה מלאה על מהירות וכיוון.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚙️ תמסורות – טורק מול מהירות <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>תמסורת N:1 = המנוע מסתובב N פעמים לכל סיבוב אחד של הפלט. <strong>טורק מוגבר פי N, מהירות מחולקת ב-N.</strong></p>
+      <div class="diagram">  דוגמאות מהרובוט:
+  
+  הנעה (1:5.9):
+  מנוע 6380 RPM → פלט ~1080 RPM (מהיר!)
+  
+  ציר זרוע (1:36):
+  מנוע 5676 RPM → פלט ~157 RPM (איטי + חזק)
+  טורק: 2.6 Nm × 36 = 93.6 Nm × 2 מנועים ≈ 802 Nm!
+  
+  טיפוס (1:64):
+  מנוע → עצירה מינימלית + כוח להרמת ~50 ק"ג</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📻 CANbus – רשת תקשורת הרובוט <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <p>CANbus = Controller Area Network. רשת 2 חוטים (CAN-Hi, CAN-Lo) שמחברת את כל בקרי המנוע.</p>
+      <div class="diagram">  [RoboRIO]──CAN-Hi──[Falcon1]──[Falcon2]──[SparkMax]
+            ──CAN-Lo──────────────────────────────
+
+  כל רכיב: ID ייחודי, מאזין לכל, מגיב רק ל-ID שלו
+  עדיפות: ID נמוך יותר = עדיפות גבוהה יותר</div>
+      <p><strong>יתרונות על PWM:</strong> פחות חיווט, ניטור זרם/מתח בזמן אמת, אבחון בעיות.</p>
+      <p><strong>פתרון שלנו:</strong> הלחמת כבל CANbus ישירות למודולות הסווארב → אין כבל שיכול להתנתק!</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">📈 פרופילי תנועה – Trapezoidal ו-S-Curve <span class="arr">▼</span></div>
+    <div class="acc-b">
+      <span class="tag th">תיאוריה</span>
+      <div class="diagram">  ללא פרופיל תנועה → overshoot:
+  
+  מהירות ▲
+       max │    ███████████████
+           │   █              █████ (overshoot!)
+           │  █
+          0│█────────────────────► זמן
+  
+  Trapezoidal (תאוצה קבועה):
+  מהירות ▲
+       max │    ╔══════╗
+           │   ╱        ╲
+          0│──╱──────────╲──► זמן
+           תאוצה  שוות   האטה
+  
+  S-Curve (תאוצה משתנה בצורת טרפז):
+  מהירות ▲
+       max │    ╭──────╮
+           │  ╱          ╲  (חלק יותר!)
+          0│╱──────────────╲► זמן</div>
+      <p><strong>ברובוט:</strong> Trapezoidal בזרוע, S-Curve בסווארב (צריך תנועה חלקה במיוחד).</p>
+    </div>
+  </div>
+</div>
+
+<!-- =========== QUIZ =========== -->
+<div class="sec" id="quiz">
+  <div class="sec-title">חידון – <span>בדוק את עצמך</span></div>
+  <div class="sec-sub">12 שאלות על כל מערכות הרובוט + תיאוריה</div>
+  <div id="qwrap"></div>
+  <div class="score-box" id="sbox">
+    <div style="color:var(--muted);font-size:.88rem">תוצאה סופית</div>
+    <div class="big" id="stxt"></div>
+    <div id="smsg" style="color:var(--muted);margin-top:8px;font-size:.86rem"></div>
+    <button id="rbtn" onclick="resetQ()">נסה שוב</button>
+  </div>
+</div>
+
+</main>
+
 <script>
-(function () {
-  function makeRing(pct, label, color) {
-    var r    = 22;
-    var circ = +(2 * Math.PI * r).toFixed(2);
-    var off  = +((1 - pct / 100) * circ).toFixed(2);
-    return '<div style="display:flex;flex-direction:column;align-items:center;gap:8px">'
-      + '<div class="progress-ring-wrap" style="width:56px;height:56px" title="' + pct + '% ' + label + '">'
-      + '<svg class="progress-ring" width="54" height="54" viewBox="0 0 54 54">'
-      + '<circle class="progress-ring-track" cx="27" cy="27" r="' + r + '"/>'
-      + '<circle class="progress-ring-fill"  cx="27" cy="27" r="' + r + '"'
-      + ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + off + '"'
-      + ' style="stroke:' + color + '"/>'
-      + '</svg>'
-      + '<span class="progress-ring-label" style="font-size:.62rem;color:' + color + '">' + pct + '%</span>'
-      + '</div>'
-      + '<span style="font-size:.72rem;color:var(--muted)">' + label + '</span>'
-      + '</div>';
+const Qs = [
+  { q:"מה מאפשר מנגנון Four-bar באינטייק?",
+    opts:["תנועה ליניארית מדויקת","'בריחה' כלפי מעלה בעת התנגשות, ללא שבר","מהירות איסוף גבוהה יותר","שימוש בפחות מנועים"],
+    a:1, e:"ה-Four-bar מבוסס ציר סיבוב – בעת פגיעה האינטייק מסתובב ולא נשבר, וחוזר מיד לפעולה." },
+  { q:"למה דפנות האינטייק עשויות פוליקרבונט ולא אלומיניום?",
+    opts:["כי פוליקרבונט זול יותר","כי הוא מתגמש ומתאושש ממכות, וגם קל יותר","כי אלומיניום לא עמיד","כי כך פועל כל רובוט FRC"],
+    a:1, e:"פוליקרבונט לא מתכופף לצמיתות כמו אלומיניום, חוזר לצורתו, וגם קל – מוריד מרכז כובד." },
+  { q:"מה תפקיד גלגלי המקאנום בהופר?",
+    opts:["להאיץ את הכדורים לכיוון הסל","לאגור את הכדורים","למרכז את הכדור לפני כניסה לקלע","לשלוט על כמות הכדורים"],
+    a:2, e:"הרולים בזווית 45° יוצרים רכיב תנועה צדי שממרכז את הכדור תוך כדי התקדמותו." },
+  { q:"מה תפקיד ה-Hood בקלע?",
+    opts:["שולט במהירות גלגלי הירי","שולט בזווית היציאה של הכדור","מונע מהכדור לחזור פנימה","מחבר את הקלע להופר"],
+    a:1, e:"Hood הוא מסלול עליון מתכוונן. זווית ה-Hood קובעת באיזו זווית הכדור יוצא – מתאים לכל מרחק." },
+  { q:"אילו כוחות הסימולציה הפיזיקלית מתחשבת בהם?",
+    opts:["רק כוח הכבידה","כוח הכבידה + חיכוך אוויר + כוח מגנוס","כוח הכבידה + מהירות הרובוט","כל הכוחות הפיזיקליים הידועים"],
+    a:1, e:"הסימולציה מתחשבת בכבידה, חיכוך עם האוויר, וכוח מגנוס (הנגרם מסיבוב הכדור באוויר)." },
+  { q:"מהו יחס התמסורת הכולל של מערכת הטיפוס?",
+    opts:["1:32","1:48","1:64","1:128"],
+    a:2, e:"ראצ'ט 1:32 × שרשרת 1:2 × שרשרת 1:1 = יחס כולל 1:64." },
+  { q:"מה זה Finite State Machine (FSM) בתוכנה?",
+    opts:["מחשב שפועל בתדר קבוע","מערכת שמגדירה מצבים ומעברים מוגדרים מראש","ספריית PID","שיטה לחיווט הרובוט"],
+    a:1, e:"FSM = האוטומט הסופי. הרובוט תמיד נמצא במצב מוגדר אחד ועובר בין מצבים לפי תנאים." },
+  { q:"מה Kalman Filter עושה במערכת הניווט?",
+    opts:["מחשב מסלול אוטונומי","ממזג אודומטריה + Vision לאומדן מיקום מדויק יותר","שולט על מהירות הנסיעה","מגביל תאוצת הרובוט"],
+    a:1, e:"Kalman Filter ממוצע משוכלל בין מקורות מידע שונים לפי אמינותם → תוצאה מדויקת יותר מכל מקור לחוד." },
+  { q:"מה ה-Duty Cycle של 75% ב-PWM?",
+    opts:["המנוע מקבל 9V מ-12V","האות פעיל 75% מהזמן","המנוע מסתובב ב-75% ממהירות מקס","המנוע פועל בהתפרצויות של 75 מ\"ש"],
+    a:1, e:"Duty Cycle = אחוז זמן שהאות במצב ON. 75% = האות גבוה 3/4 מהזמן." },
+  { q:"מה ההבדל בין Brushed ל-Brushless?",
+    opts:["Brushless מהיר תמיד","Brushless אין לו קומוטטור ומברשות – קומוטציה אלקטרונית","Brushed חזק יותר","אין הבדל משמעותי"],
+    a:1, e:"ב-Brushless אין קומוטטור ומברשות. בקר אלקטרוני מחליף זרם בסלילים לפי מיקום הרוטור – יעיל ועמיד יותר." },
+  { q:"מה יתרון CANbus על חיווט PWM רגיל?",
+    opts:["CANbus מהיר יותר פי 10","פחות חוטים, ניטור בזמן אמת, אבחון בעיות","CANbus זול יותר","CANbus תומך ביותר מנועים"],
+    a:1, e:"CAN = 2 חוטים לכל הרשת + ניטור זרם/מתח + אבחון. PWM = חוט נפרד לכל רכיב, ללא ניטור." },
+  { q:"למה הורדנו ממעלית כפולה לפרופיל יחיד?",
+    opts:["כי פרופיל כפול הוריד ביצועים","כי פרופיל כפול לא היה חזק מספיק","כדי להוריד 3.5 ק\"ג ממשקל הרובוט","כי לא היה לנו חומר"],
+    a:2, e:"מגבלות משקל אילצו מעבר לפרופיל יחיד – זה הוריד 3.5 ק\"ג משמעותיים מהרובוט." }
+];
+
+let done=new Array(Qs.length).fill(false), score=0;
+
+function buildQ(){
+  const w=document.getElementById('qwrap');
+  w.innerHTML='';
+  done=new Array(Qs.length).fill(false);score=0;
+  document.getElementById('sbox').classList.remove('show');
+  Qs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='qcard';d.id='q'+i;
+    d.innerHTML=`<div class="q">${i+1}. ${q.q}</div>
+    <div class="opts">${q.opts.map((o,j)=>`<div class="opt" onclick="ans(${i},${j})">${o}</div>`).join('')}</div>
+    <div class="fb" id="f${i}"></div>`;
+    w.appendChild(d);
+  });
+}
+
+function ans(qi,oi){
+  if(done[qi])return;
+  done[qi]=true;
+  const q=Qs[qi];
+  document.querySelectorAll(`#q${qi} .opt`).forEach((o,i)=>{
+    if(i===q.a)o.classList.add('ok');
+    else if(i===oi&&oi!==q.a)o.classList.add('bad');
+    o.style.cursor='default';
+  });
+  const fb=document.getElementById('f'+qi);
+  if(oi===q.a){score++;fb.textContent='✓ נכון! '+q.e;fb.className='fb show ok';}
+  else{fb.textContent='✗ לא נכון. '+q.e;fb.className='fb show bad';}
+  if(done.every(x=>x)){
+    setTimeout(()=>{
+      const p=Math.round(score/Qs.length*100);
+      document.getElementById('stxt').textContent=score+'/'+Qs.length;
+      document.getElementById('smsg').textContent=p>=85?'🎉 מעולה! אתה מוכן':p>=65?'👍 טוב, כדאי לחזור על מה שטעית':'📚 לחזור על החומר שוב';
+      document.getElementById('sbox').classList.add('show');
+    },400);
   }
+}
 
-  var fcRaw = JSON.parse(localStorage.getItem('frc_flashcards_seen') || 'null');
-  var qzRaw = JSON.parse(localStorage.getItem('frc_quiz_score')      || 'null');
+function resetQ(){buildQ();}
 
-  if (fcRaw === null && qzRaw === null) return;
+const IDS=['overview','drivetrain','intake','hopper','shooter','climber','software','theory','quiz'];
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nb')[IDS.indexOf(id)].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-  var fcPct = 0, qzPct = 0, hasFC = false, hasQZ = false;
+function tog(h){
+  h.classList.toggle('open');
+  h.nextElementSibling.classList.toggle('open');
+}
 
-  if (Array.isArray(fcRaw) && fcRaw.length) {
-    fcPct = Math.min(100, Math.round(fcRaw.length / 35 * 100));
-    hasFC = true;
-  } else if (typeof fcRaw === 'number') {
-    fcPct = Math.min(100, Math.round(fcRaw));
-    hasFC = true;
-  }
-
-  if (qzRaw !== null && typeof qzRaw === 'object' && qzRaw.total) {
-    qzPct = Math.min(100, Math.round(qzRaw.score / qzRaw.total * 100));
-    hasQZ = true;
-  } else if (typeof qzRaw === 'number') {
-    qzPct = Math.min(100, Math.round(qzRaw));
-    hasQZ = true;
-  }
-
-  var html = '';
-  if (hasFC) html += makeRing(fcPct, 'כרטיסיות', '#22c55e');
-  if (hasQZ) html += makeRing(qzPct, 'חידון',    '#a78bfa');
-
-  if (!html) return;
-  document.getElementById('frc-rings').innerHTML = html;
-  document.getElementById('frc-progress').style.display = '';
-})();
+buildQ();
 </script>
-
 </body>
 </html>
