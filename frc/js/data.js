@@ -223,6 +223,31 @@ const FLASHCARDS = [
   {
     q: { he: 'מה סוג הסוללה בFRC ומה הנתונים שלה?', en: 'What battery type is used in FRC and what are its specs?', mix: 'FRC battery specs?' },
     a: { he: 'SLA (Sealed Lead Acid) — 12V, 18Ah. 6 תאים × ~2.1V. לא ניתן לשנות — לפי תקנות FRC. יש לטעון לפני כל משחק.', en: 'SLA (Sealed Lead Acid) — 12V, 18Ah. 6 cells × ~2.1V. Cannot be changed — FRC rules. Must charge before each match.', mix: 'SLA 12V 18Ah, 6 cells × 2.1V. FRC mandatory.' }
+  },
+  // ---- REBUILT — שדה, מפרט, מנועים ----
+  {
+    q: { he: 'מה ה-BUMP ואיזה אילוץ הוא מטיל על עיצוב הרובוט?', en: 'What is the BUMP and what design constraint does it impose?', mix: 'BUMP — אילוץ עיצובי?' },
+    a: { he: 'רמפה 1854 ס"מ רוחב, 16.54 ס"מ גובה, זווית 15° בכל צד. הרובוט חייב CoG נמוך ושלד יציב כדי לעבור ללא היפוך.', en: 'Ramp 1854 cm wide, 16.54 cm high, 15° on each side. Robot needs low CoG and stable frame to cross without tipping.', mix: 'BUMP: 16.54 ס"מ גובה, 15°. Low CoG = חובה.' }
+  },
+  {
+    q: { he: 'מה יחס זרוע פריסת האינטייק ולמה דווקא 1:96?', en: 'What is the intake deploy arm gear ratio and why 1:96?', mix: 'Intake deploy ratio — למה 1:96?' },
+    a: { he: '1:96 — נותן טורק גבוה לשמירה על הזרוע פרוסה ללא בלימה חשמלית מתמדת, מונע התחממות המנוע.', en: '1:96 — gives high torque to hold the arm extended without constant electrical braking, preventing motor overheating.', mix: '1:96: hold arm without braking → no overheating.' }
+  },
+  {
+    q: { he: 'למה החלפנו לוחות הוד מפלדה לאלומיניום?', en: 'Why did we switch hood plates from steel to aluminum?', mix: 'Hood plates: steel → aluminum — למה?' },
+    a: { he: 'הוד נמצא בחלק עליון. פלדה כבדה גבוה → CoG גבוה. אלומיניום קל → CoG יורד → יציבות משתפרת בתנועה מהירה.', en: 'Hood is high up. Heavy steel = high CoG. Aluminum is lighter → lower CoG → better stability at speed.', mix: 'Hood = גבוה. פלדה = CoG גבוה → אלומיניום = CoG נמוך.' }
+  },
+  {
+    q: { he: 'מה החולשה התרמית של NEO 550?', en: 'What is the thermal weakness of NEO 550?', mix: 'NEO 550 thermal weakness?' },
+    a: { he: 'מסה תרמית נמוכה מאוד. בעת stall כוח הופך לחום ואין מספיק מסה לספיגה → שריפה מהירה. להימנע מ-stall ממושך.', en: 'Very low thermal mass. During stall power becomes heat with no mass to absorb it → burns fast. Avoid prolonged stall.', mix: 'Low thermal mass → stall = שריפה מהירה.' }
+  },
+  {
+    q: { he: 'מה גובה מרכז הכובד שהשגנו ומה הייתה האסטרטגיה העיקרית?', en: 'What CoM height did we achieve and what was the main strategy?', mix: 'CoM height + main strategy?' },
+    a: { he: '~16.4 ס"מ מהרצפה. אסטרטגיה עיקרית: שקיעת הסוללה (הרכיב הכבד ביותר) לתוך מרכז השלד בגובה הנמוך ביותר.', en: '~16.4 cm from ground. Main strategy: sinking the battery (heaviest component) into the center of the frame at the lowest possible height.', mix: '~16.4 ס"מ. Battery sunk into frame center = main strategy.' }
+  },
+  {
+    q: { he: 'מה ההבדל העיקרי ביעילות בין מנוע Brushed ל-Brushless?', en: 'What is the main efficiency difference between brushed and brushless motors?', mix: 'Brushed vs Brushless — יעילות?' },
+    a: { he: 'Brushed: 75–80% (אנרגיה אבודה בחיכוך פחמים + ניצוצות). Brushless: 90–95% — קומוטציה אלקטרונית, ללא בלאי מכני.', en: 'Brushed: 75–80% efficient (energy lost to brush friction + sparks). Brushless: 90–95% — electronic commutation, no mechanical wear.', mix: 'Brushed: 75–80%. Brushless: 90–95%. No friction = higher efficiency.' }
   }
 ];
 
@@ -618,6 +643,55 @@ const EXAM_QUESTIONS = [
     o: ['מהירות קטנה, טורק גדל', 'מהירות גדלה (היקף גדול יותר), טורק קטן. רדיוס גדול יותר = יותר מהירות קו', 'שניהם גדלים', 'אין שינוי — תלוי רק ביחס תמסורת'],
     c: 1,
     e: 'היקף גלגל = π × d. 4 אינץ\' → 12.6 ס"מ. 6 אינץ\' → 18.8 ס"מ. כל סיבוב = מרחק גדול יותר → מהירות גבוהה יותר, אך טורק קטן יותר (ידית ארוכה יותר).'
+  },
+  // ---- REBUILT — שאלות עומק רמות 2–3 ----
+  {
+    q: 'מה ה-BUMP וכיצד גובהו משפיע על עיצוב הרובוט?',
+    o: ['מחסום שמונע כניסה לאזור היריב', 'רמפה ברוחב 1854 ס"מ, גובה 16.54 ס"מ עם זוויות 15° — דורש CoG נמוך ושלד יציב כדי לעבור ללא היפוך', 'מחסום קבוע שלא ניתן לעבור עליו', 'אזור ניטרלי בין הקבוצות'],
+    c: 1,
+    e: 'ה-BUMP גבוה 16.54 ס"מ עם רמפות 15°. CoG גבוה = מומנט הפיכה גדול בעת מעבר. לכן שקענו הסוללה לתחתית.'
+  },
+  {
+    q: 'מה יחס ההעברה שבחרנו לזרוע פריסת האינטייק ולמה?',
+    o: ['1:10 — לפריסה מהירה', '1:32 — כמו המטפס', '1:96 — טורק גבוה לשמירת זרוע פרוסה ומניעת התחממות', '1:5.9 — כמו המרכב'],
+    c: 2,
+    e: '1:96 נותן טורק גבוה כדי שהמנוע יחזיק את הזרוע פרוסה ללא בלימה חשמלית מתמדת — מונע התחממות יתר.'
+  },
+  {
+    q: 'למה החלפנו את לוחות ההוד מפלדה לאלומיניום?',
+    o: ['כי אלומיניום זול יותר מפלדה', 'כי פלדה אינה עמידה בתנאי תחרות', 'כדי להוריד מסה בחלק העליון ולהנמיך את מרכז הכובד', 'כדי לעמוד בתקנות FRC'],
+    c: 2,
+    e: 'לוחות ההוד נמצאים גבוה. פלדה כבדה גבוה = CoG גבוה. אלומיניום קל → CoG יורד → יציבות בתנועה מהירה.'
+  },
+  {
+    q: 'מה החולשה התרמית של מנוע NEO 550?',
+    o: ['הוא לא יכול לפעול מעל 12V', 'מסה תרמית נמוכה — חסימה (stall) ממושכת שורפת אותו מהר', 'אין לו בקר פנימי', 'הוא מייצר רעש אלקטרומגנטי רב'],
+    c: 1,
+    e: 'ל-NEO 550 מסה תרמית נמוכה מאוד. בעת stall כל האנרגיה הופכת לחום ואין מספיק מסה לספיגה → שריפה מהירה.'
+  },
+  {
+    q: 'מה גובה מרכז הכובד שהשגנו ומה האסטרטגיה העיקרית?',
+    o: ['25 ס"מ — שימוש בפרופילים קלים', '~16.4 ס"מ — שקיעת הסוללה (הרכיב הכבד ביותר) לתוך מרכז השלד', '10 ס"מ — הורדת כל המנועים לרצפה', '20 ס"מ — שימוש בחלקים מודפסים'],
+    c: 1,
+    e: 'CoG = ~16.4 ס"מ. הסוללה — הרכיב הכבד ביותר — שוקעת לתוך מרכז השלד בגובה נמוך ככל האפשר.'
+  },
+  {
+    q: 'למה סובבנו את מודולות ה-Swerve הקדמיות ב-90°?',
+    o: ['לשיפור יציבות בפניות', 'לפינוי מקום פיזי לאינטייק ולקלע בקדמת הרובוט', 'להורדת מרכז הכובד', 'כי כך עובד מנגנון MK4N'],
+    c: 1,
+    e: 'סיבוב 90° משנה כיוון תפרסות המודולה ומפנה מקום בקצה הקדמי לאינטייק ולקלע ללא חסימה.'
+  },
+  {
+    q: 'מתי תבחר Mecanum ומתי Swerve?',
+    o: ['Mecanum תמיד עדיף כי פשוט יותר', 'Swerve לתחרויות מהירות בלבד', 'Mecanum: תקציב נמוך, שדה ישר, אחיזה פחות קריטית. Swerve: ביצועים מקסימליים, תמרון מלא, אחיזה חזקה', 'שניהם זהים בביצועים'],
+    c: 2,
+    e: 'Mecanum זול ופשוט אך מאבד אחיזה בקלות. Swerve יקר ומורכב אך holonomic מלא עם אחיזה — מתאים לרמה גבוהה של FRC.'
+  },
+  {
+    q: 'מה קורה אם מרכז הכובד גבוה מדי בתנועת Swerve מהירה?',
+    o: ['הרובוט מאבד קשר WiFi', 'גלגלים מחליקים בפניות חדות → חוסר יציבות, אודומטריה שגויה ועד להיפוך', 'המנועים מתחממים יותר', 'הגיירו מדווח קריאות שגויות'],
+    c: 1,
+    e: 'CoG גבוה = מומנט עצום בפנייה. גלגלים מאבדים אחיזה → wheel slip → אודומטריה שגויה → בעיות שליטה ועד להיפוך.'
   }
 ];
 
@@ -658,6 +732,14 @@ const EXAM_TOPICS_MAP = [
   'תיאוריה',    // 32 — ArmFeedforward
   'אלקטרוניקה', // 33 — PDH vs PDP
   'מרכב',       // 34 — wheel diameter effect
+  'שדה',        // 35 — BUMP design constraint
+  'מגלול',      // 36 — intake deploy ratio
+  'קלע',        // 37 — hood plates steel→aluminum
+  'מנועים',     // 38 — NEO 550 thermal weakness
+  'מרכב',       // 39 — CoM height strategy
+  'מרכב',       // 40 — swerve module 90° rotation
+  'מרכב',       // 41 — mecanum vs swerve
+  'מרכב',       // 42 — high CoM consequences
 ];
 
 // ----------------------------------------------------------------
@@ -1104,6 +1186,239 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
 <strong>💡 בגרות:</strong> רמה 1 — מה PDH? רמה 2 — מה יתרון CAN על PWM? רמה 3 — איזה פיוז מתאים לFalcon ולמה?
 </div>`
+  },
+  {
+    key: 'game',
+    icon: '🎮',
+    title: 'שדה ומשחק',
+    desc: 'REBUILT 2025 — ממדי שדה, HUB, BUMP, TRENCH, TOWER, FUEL',
+    content: `
+<div class="highlight green"><strong>עונת REBUILT 2025:</strong> שדה סימטרי, שתי ברית (3 רובוטים כל אחת), אוסף ויריית FUEL לתוך HUB.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📐 ממדי שדה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>גודל שדה: <strong>807 × 1645 ס"מ</strong>. מחולק ע"י Neutral Zone.</p>
+<table class="tbl">
+<tr><th>מרכיב</th><th>ממדים / גובה</th><th>הערה</th></tr>
+<tr><td>HUB</td><td>119×119 ס"מ, פתח hex 106 ס"מ בגובה 183 ס"מ</td><td>יעד ירייה</td></tr>
+<tr><td>BUMP</td><td>1854 ס"מ רוחב, 16.54 ס"מ גובה, רמפות 15°</td><td>CoG נמוך = חובה</td></tr>
+<tr><td>TRENCH</td><td>166.8 ס"מ רוחב, פינוי 56.52 ס"מ</td><td>רובוט חייב לעבור תחתיו</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗼 TOWER — שלושה שלבי טיפוס</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>שלב</th><th>גובה</th><th>ניקוד</th></tr>
+<tr><td>L1</td><td>68.55 ס"מ</td><td>10 נק' (15 אוטו)</td></tr>
+<tr><td>L2</td><td>114.3 ס"מ</td><td>20 נק'</td></tr>
+<tr><td>L3</td><td>160 ס"מ</td><td>30 נק'</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚽ FUEL + עונשים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>FUEL:</strong> כדור קצף, ∅15 ס"מ, 203–227 גרם.</p>
+<p><strong>Minor Foul:</strong> 5 נק' ליריב | <strong>Major Foul:</strong> 15 נק' ליריב.</p>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה גובה BUMP? רמה 2 — איזה אילוץ מטיל ה-TRENCH על עיצוב הרובוט? רמה 3 — איך ה-BUMP משפיע על מיקום מרכז הכובד?</div>`
+  },
+  {
+    key: 'specs',
+    icon: '📏',
+    title: 'מפרט הרובוט',
+    desc: 'ממדים, משקל, שלד, מרכז כובד ו-6 אסטרטגיות',
+    content: `
+<div class="highlight green"><strong>הרובוט שלנו:</strong> 67.5×72×74 ס"מ, 51.85 ק"ג, CoG ~16.4 ס"מ מהרצפה.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📐 ממדים ומשקל</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>פרמטר</th><th>הרובוט שלנו</th><th>מגבלת FRC</th></tr>
+<tr><td>גודל (א×ר×ג)</td><td>67.5 × 72 × 74 ס"מ</td><td>היקף ≤ 279.4 ס"מ</td></tr>
+<tr><td>גובה</td><td>74 ס"מ</td><td>≤ 76.2 ס"מ</td></tr>
+<tr><td>משקל</td><td>51.85 ק"ג</td><td>≤ 56.2 ק"ג</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🏗️ שלד ובנייה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>4 פרופילי אלומיניום <strong>50×25 מ"מ</strong> מלבניים. לוח תחתית אלומיניום עם חורי הקלת משקל.</p>
+<p>מודולות Swerve קדמיות סובבו <strong>90°</strong> לפינוי מקום לאינטייק + קלע.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚖️ 6 אסטרטגיות להנמכת מרכז כובד</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<ol>
+<li><strong>סוללה שקועה</strong> — הרכיב הכבד ביותר במרכז תחתית השלד</li>
+<li><strong>PDH + 8 Talon FX</strong> — ברמת הרצפה</li>
+<li><strong>דפנות אינטייק פוליקרבונט</strong> — קלות בנקודות הגבוהות ביותר</li>
+<li><strong>לוחות הוד: פלדה → אלומיניום</strong> — הפחתת מסה בחלק עליון</li>
+<li><strong>חלקים מודפסים עם תשתית משושית</strong> — חוזק גבוה, מסה נמוכה</li>
+<li><strong>חורי הקלת משקל בלוח תחתית</strong></li>
+</ol>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה CoG הרובוט? רמה 2 — מה האסטרטגיה העיקרית להנמכת CoG? רמה 3 — למה CoG נמוך קריטי בתנועת Swerve מהירה?</div>`
+  },
+  {
+    key: 'drivetrain_theory',
+    icon: '🔩',
+    title: 'תיאוריית מרכב',
+    desc: 'סוגי מרכב, יתרונות/חסרונות, Swerve vs אחרים',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> בחירת מרכב = פשרה בין תמרון, אחיזה, מורכבות ועלות.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📊 השוואת 4 סוגי מרכב</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>מרכב</th><th>יתרונות</th><th>חסרונות</th></tr>
+<tr><td>Tank (6 גלגלים)</td><td class="pro">זול, פשוט, עובר מכשולים</td><td class="con">ללא תנועה צדית</td></tr>
+<tr><td>Rhino (זחלים)</td><td class="pro">אחיזה מעולה, דחיפה חזקה</td><td class="con">ללא תנועה צדית</td></tr>
+<tr><td>Mecanum</td><td class="pro">תנועה לכל ציר, קומפקטי, FOC</td><td class="con">מאבד אחיזה בקלות</td></tr>
+<tr><td><strong>Swerve ✓</strong></td><td class="pro">holonomic מלא, אחיזה חזקה, 5 שנות ניסיון</td><td class="con">מורכב, יקר</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔄 היגוי: סינכרוני vs דיפרנציאלי</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>סינכרוני:</strong> כל הגלגלים כיוון + מהירות זהים → תנועה ישרה מדויקת.</p>
+<p><strong>דיפרנציאלי:</strong> הפרש מהירות בין צדדים → פנייה. Swerve משתמש בשניהם בו-זמנית.</p>
+<p><strong>סימטרי:</strong> שני הצדדים זהים — הפרש מהירות = פנייה.</p>
+<p><strong>א-סימטרי:</strong> סוגי גלגלים/עמדות שונות → תנועות ייחודיות.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚖️ CoM, יציבות ותמרון</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>בסיס רחב</strong> = יציב יותר, תמרון פחות זריז.</p>
+<p><strong>בסיס צר</strong> = תמרוני יותר, פחות יציב.</p>
+<p><strong>CoM גבוה</strong> → מומנט עצום בפנייה → wheel slip → אודומטריה שגויה → סכנת היפוך.</p>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — 2 יתרונות Swerve על Mecanum. רמה 2 — מה ההבדל בין היגוי סינכרוני לדיפרנציאלי? רמה 3 — למה Mecanum לא מתאים לשדות עם מכשולים?</div>`
+  },
+  {
+    key: 'subsystems',
+    icon: '🤖',
+    title: 'תת-מערכות — עומק',
+    desc: 'אינטייק, הופר, קלע, מטפס — פירוט מלא',
+    content: `
+<div class="highlight green"><strong>הרובוט = 4 תת-מערכות:</strong> אינטייק → הופר → קלע → מטפס. כל אחת עיצוב עצמאי עם אילוצים מכניים ואלקטרוניים.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🤏 אינטייק — עומק</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>מנגנון <strong>Four-Bar</strong>: סיבובי, לא ליניארי. בעת פגיעה — בורח אחורה, לא נשבר.</p>
+<p>דפנות <strong>פוליקרבונט</strong>: זיכרון צורה, ספיגת הלם, קלות → CoG נמוך.</p>
+<p>צירי <strong>Churro</strong> עם בלוקי מיסבים CNC מותאמים.</p>
+<p>2 מנועי NEO (SparkMax): גלגלות (אינטייק) + זרוע פריסה.</p>
+<p>יחס זרוע פריסה: <strong>1:96</strong> → טורק גבוה, זרוע מחזיקה עצמה, ללא התחממות.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📦 הופר + הנעת רצועה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>גלגלי <strong>מקאנום</strong> למירכוז הכדור לרוחב.</p>
+<p>2 מנועי NEO 550 (30A): Belt Lower + Belt Upper — בקרה נפרדת לתחתון ועליון.</p>
+<p>קיר קדמי דינמי — מתרחב לאחסון נפח גדול יותר.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🎯 קלע — עומק</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>Main Wheel + Hood Wheel</strong> (2 × NEO, 40A). הפרש מהירות → backspin על הכדור → יציבות בטיסה.</p>
+<p><strong>הוד:</strong> NEO 550, זווית יציאה משתנה. לוחות: פלדה → אלומיניום (CoG).</p>
+<p><strong>אלגוריתם Interpolation:</strong> מחשב מהירות + זווית אופטימליים לפי מרחק.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧗 מטפס — עומק</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>פרופיל אלומיניום יחיד <strong>40×40 מ"מ</strong> — חסך 3.5 ק"ג לעומת כפול.</p>
+<p>בלוקי מיסבים CNC: דיוק <strong>±0.005 מ"מ</strong>.</p>
+<p>מנוע NEO + מנגנון <strong>ratchet</strong>: מונע נפילה בהפסקת חשמל.</p>
+<p>יחס סה"כ: <strong>1:64</strong> = ratchet 1:32 × שרשרת 1:2.</p>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — למה ratchet במטפס? רמה 2 — מה יחס ההעברה לזרוע פריסה ולמה? רמה 3 — למה שינינו לוחות הוד מפלדה לאלומיניום?</div>`
+  },
+  {
+    key: 'motors_deep',
+    icon: '⚡',
+    title: 'מנועים — עומק',
+    desc: 'Falcon 500, NEO, NEO 550, Brushed vs Brushless',
+    content: `
+<div class="highlight green"><strong>3 מנועים, 3 שימושים:</strong> Falcon 500 (כוח מקסימלי), NEO (יחסים גבוהים), NEO 550 (מהירות, כוח נמוך).</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🦅 Falcon 500 (Talon FX)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>פרמטר</th><th>ערך</th></tr>
+<tr><td>סוג</td><td>Brushless + בקר מובנה, CAN bus</td></tr>
+<tr><td>מתח / RPM</td><td>12V | 6,380 RPM</td></tr>
+<tr><td>טורק stall / זרם</td><td>4.69 Nm | 257A</td></tr>
+</table>
+<p><strong>שימוש:</strong> מרכב — דורש עוצמה מקסימלית + מהירות.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🌀 NEO (SparkMax)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>פרמטר</th><th>ערך</th></tr>
+<tr><td>סוג</td><td>Brushless, בקר SparkMax חיצוני</td></tr>
+<tr><td>מתח / RPM</td><td>12V | 5,676 RPM</td></tr>
+<tr><td>טורק stall / זרם</td><td>2.6 Nm | 105A</td></tr>
+</table>
+<p><strong>שימוש:</strong> אינטייק, הופר, מטפס — עם יחסי הילוכים גבוהים.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ NEO 550 (SparkMax)</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>פרמטר</th><th>ערך</th></tr>
+<tr><td>סוג</td><td>Brushless outrunner קומפקטי</td></tr>
+<tr><td>מתח / RPM</td><td>12V | 11,000 RPM</td></tr>
+<tr><td>טורק stall / זרם</td><td>0.97 Nm | 100A | 279W מקס</td></tr>
+</table>
+<p class="con"><strong>⚠️ אזהרה:</strong> מסה תרמית נמוכה — stall ממושך שורף מהר!</p>
+<p><strong>שימוש:</strong> הוד, הנעת רצועה — מהירות גבוהה, כוח נמוך.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 Brushed vs Brushless — תיאוריה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>קריטריון</th><th>Brushed</th><th>Brushless</th></tr>
+<tr><td>קומוטציה</td><td>מכנית (פחמים + commutator)</td><td>אלקטרונית (בקר + Hall/Encoder)</td></tr>
+<tr><td>יעילות</td><td class="con">75–80%</td><td class="pro">90–95%</td></tr>
+<tr><td>בלאי</td><td class="con">פחמים בולים, ניצוצות</td><td class="pro">ללא בלאי מכני</td></tr>
+<tr><td>מורכבות</td><td class="pro">פשוט</td><td class="con">דורש בקר חכם</td></tr>
+</table>
+<p>רוטור Brushless = מגנטים. סלילים קבועים. בקר מחליף זרם לפי מיקום (Hall Effect).</p>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה יתרון Brushless? רמה 2 — למה NEO 550 מסוכן ב-stall? רמה 3 — מה תפקיד Hall Effect ב-Brushless?</div>`
+  },
+  {
+    key: 'electronics_deep',
+    icon: '🔌',
+    title: 'אלקטרוניקה — עומק',
+    desc: 'סוללה SLA, PWM, H-Bridge, CANbus, PDH',
+    content: `
+<div class="highlight green"><strong>עומק אלקטרוניקה:</strong> מעגלי שליטה מלאים — סוללה, PWM, H-Bridge, CAN, PDH.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔋 סוללה SLA — כימיה ומספרים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>SLA = Sealed Lead Acid:</strong> 12V, 18Ah. 6 תאים × 2.1V = 12.6V טעון מלא.</p>
+<p><strong>אלקטרודות:</strong> Pb (עופרת) + PbO₂ (תחמוצת עופרת). <strong>אלקטרוליט:</strong> H₂SO₄ (חומצה גופרתית).</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📶 PWM — שליטה ב-Duty Cycle</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>Duty Cycle</strong> = זמן ON / תקופה כוללת × 100%.</p>
+<p><strong>מתח ממוצע</strong> = מתח אספקה × Duty Cycle.</p>
+<p class="pro"><strong>למה לא נגד?</strong> נגד מבזבז אנרגיה כחום. PWM = 100% יעיל.</p>
+<div class="diagram">PWM 75%: ████████░░░░ → ממוצע = 0.75 × 12V = 9V</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🌉 H-Bridge — שליטת כיוון מנוע</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>4 מתגים בצורת H. שולטים בכיוון הזרם דרך המנוע.</p>
+<table class="tbl">
+<tr><th>מצב</th><th>מתגים סגורים</th><th>תוצאה</th></tr>
+<tr><td>קדימה</td><td>S1 + S4</td><td>סיבוב קדימה</td></tr>
+<tr><td>אחורה</td><td>S2 + S3</td><td>סיבוב אחורה</td></tr>
+<tr><td>בלימה</td><td>S1+S3 או S2+S4</td><td>שני הצדדים קוטב זהה → עצירה</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📡 CANbus — רשת תקשורת</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>2 חוטים בלבד: <strong>CAN-Hi + CAN-Lo</strong>. כל רכיבי הרובוט על אותה רשת.</p>
+<p>כל רכיב = <strong>ID ייחודי</strong>. עדיפות = לפי מספר ID.</p>
+<p>אצלנו: מחוברים ישירות למודולות Swerve בלחמה — ללא מחברים שיתנתקו.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ PDH + רכיבים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>רכיב</th><th>תפקיד</th></tr>
+<tr><td>PDH</td><td>18 ערוצים, פיוזים 15A/30A/40A, ניטור CAN</td></tr>
+<tr><td>VRM</td><td>5V/12V מוסדרים לחיישנים</td></tr>
+<tr><td>RSL</td><td>נורת מצב: OFF=מנותק, בוהק=פעיל, מהבהב=מושבת</td></tr>
+<tr><td>RoboRIO</td><td>מוח הרובוט: FPGA + ARM, מריץ Java</td></tr>
+</table>
+</div></div>
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה Duty Cycle? רמה 2 — איך H-Bridge הופך כיוון מנוע? רמה 3 — מה יתרון CAN על PWM בניטור?</div>`
   }
 ];
 
