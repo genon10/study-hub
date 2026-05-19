@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC #5135 – נושאים | Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="../minesweeper/css/style.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* ---- topic content extras ---- */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-family: var(--font-mono);
+    font-size: .76rem;
+    color: #22c55e;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.85;
+    direction: ltr;
+    text-align: left;
+  }
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: .83rem;
+  }
+  .tbl th {
+    background: var(--surface);
+    padding: 9px 12px;
+    text-align: right;
+    color: #22c55e;
+    font-weight: 700;
+    border-bottom: 2px solid #22c55e;
+  }
+  .tbl td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .tbl tr:hover td { background: rgba(255,255,255,.015); }
+  .pro { color: #22c55e; }
+  .con { color: var(--danger); }
+  .acc-arrow { font-size: .75rem; transition: transform .3s; }
+  .acc-h.open .acc-arrow { transform: rotate(180deg); }
+  .highlight.green,
+  .highlight[style*="rgba(34,197,94"] {
+    border-color: rgba(34,197,94,.3) !important;
+    background: rgba(34,197,94,.07) !important;
+  }
+  /* bagrut tip box */
+  .bagrut-tip {
+    background: rgba(34,197,94,.06);
+    border: 1px solid rgba(34,197,94,.25);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    margin-top: 14px;
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+  /* level badges */
+  .lvl {
+    display: inline-block;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    letter-spacing: .04em;
+  }
+  .lvl-1 { background: rgba(34,197,94,.15);  color: #22c55e; }
+  .lvl-2 { background: rgba(245,158,11,.15); color: var(--accent3); }
+  .lvl-3 { background: rgba(239,68,68,.15);  color: var(--danger); }
+</style>
+</head>
+<body>
+<script src="../shared/utils.js"></script>
+<script src="js/nav.js"></script>
+
+<div class="page-wrap">
+
+  <div class="section-header">
+    <span class="section-icon">📚</span>
+    <h1>נושאים</h1>
+    <p>לחץ על נושא לצלילה מעמיקה | <span class="lvl lvl-1">ידע</span><span class="lvl lvl-2">הבנה</span><span class="lvl lvl-3">ניתוח</span></p>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="חפש נושא, מושג, מונח..." autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+
+  <!-- TOPIC GRID -->
+  <div class="topic-grid" id="topic-grid"></div>
+
+  <!-- TOPIC DETAIL -->
+  <div class="card card-glass" id="topic-detail" style="display:none">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <button id="topic-back" class="btn btn-secondary" style="font-size:.8rem">← חזור לנושאים</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <span class="lvl lvl-1">רמה 1 — ידע</span>
+        <span class="lvl lvl-2">רמה 2 — הבנה</span>
+        <span class="lvl lvl-3">רמה 3 — ניתוח</span>
+      </div>
+    </div>
+    <div id="topic-content"></div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="js/data.js"></script>
+<script src="js/search.js"></script>
+<script>
+  const grid   = document.getElementById('topic-grid');
+  const detail = document.getElementById('topic-detail');
+  const back   = document.getElementById('topic-back');
+
+  // Render topic cards
+  grid.innerHTML = TOPICS.map(topic => `
+    <div class="topic-card" onclick="showTopic('${topic.key}')">
+      <div class="tc-icon">${topic.icon}</div>
+      <div class="tc-title">${topic.title}</div>
+      <div class="tc-desc">${topic.desc}</div>
+    </div>
+  `).join('');
+
+  function showTopic(key) {
+    const topic = TOPICS.find(x => x.key === key);
+    if (!topic) return;
+    document.getElementById('topic-content').innerHTML =
+      `<div class="card-title" style="margin-bottom:16px">${topic.icon} ${topic.title}</div>${topic.content}`;
+    grid.style.display   = 'none';
+    detail.style.display = 'block';
+    window.location.hash = key;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  back.addEventListener('click', () => {
+    grid.style.display   = 'grid';
+    detail.style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+  });
+
+  // Deep-link: topics.html#cog
+  const hash = window.location.hash.slice(1);
+  if (hash) showTopic(hash);
+
+  function onLangChange() {}
+</script>
+</body>
+</html>

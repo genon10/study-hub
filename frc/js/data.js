@@ -195,6 +195,34 @@ const FLASHCARDS = [
   {
     q: { he: 'כמה שחקנים בקבוצה — Driver ו-Operator — ומה כל אחד שולט?', en: 'Driver vs Operator — what does each control?', mix: 'Driver vs Operator roles?' },
     a: { he: 'Driver (QX7 FrSky — שלט רחפן): נסיעה, FOC, מהירות מקס. Operator (Xbox): אינטייק, ירי, עמדות קלע, טיפוס.', en: 'Driver (FrSky QX7 — drone controller): driving, FOC, max speed. Operator (Xbox): intake, shooting, shooter positions, climbing.', mix: 'Driver = QX7 (נסיעה + FOC). Operator = Xbox (ירי, אינטייק, טיפוס).' }
+  },
+  // ---- מרכז כובד / CoG ----
+  {
+    q: { he: 'מה מרכז כובד ולמה כדאי להנמיך אותו?', en: 'What is center of gravity and why lower it?', mix: 'CoG — למה להנמיך?' },
+    a: { he: 'נקודה שבה כל מסת הרובוט "מרוכזת" תיאורטית. CoG גבוה = מומנט גדול יותר → קל יותר להפיל. CoG נמוך = יציבות גבוהה.', en: 'Point where all robot mass is theoretically concentrated. Higher CoG = larger moment → easier to tip. Lower CoG = more stability.', mix: 'CoG = מרכז מסה. גבוה = מומנט גדול = קל להפיל. נמוך = יציב.' }
+  },
+  {
+    q: { he: 'מה מומנט כוח וקשרו לרובוט?', en: 'What is moment of force and its relation to the robot?', mix: 'Moment of force — קשר לרובוט?' },
+    a: { he: 'מומנט = מרחק מציר × כוח. CoG גבוה → מרחק גדול יותר → מומנט גדול יותר = הפלה קלה. לכן משקל כבד בתחתית + קל בחלק העליון.', en: 'Moment = distance from pivot × force. High CoG → larger distance → larger moment = easy tip. Heavy at base, light at top.', mix: 'Moment = distance × force. CoG גבוה → מומנט גדול → יציבות נמוכה.' }
+  },
+  // ---- גלגלים ומרכב / Drivetrain theory ----
+  {
+    q: { he: 'מה ההבדל בין בסיס גלגלים רחב לצר?', en: 'Wide vs narrow wheelbase — what is the trade-off?', mix: 'Wheelbase: רחב vs צר?' },
+    a: { he: 'רחב → יציב יותר, פחות זריז. צר → זריז יותר, פחות יציב. לא ניתן לקבל שניהם — trade-off בין יציבות לתמרון.', en: 'Wide → more stable, less maneuverable. Narrow → more maneuverable, less stable. Cannot have both — stability vs maneuverability trade-off.', mix: 'Wider = stable, Narrower = maneuverable. Trade-off — cannot have both.' }
+  },
+  // ---- בקרה / Control theory ----
+  {
+    q: { he: 'מה הבדל Open-Loop ל-Closed-Loop?', en: 'Open-loop vs Closed-loop control — what is the difference?', mix: 'Open-loop vs Closed-loop?' },
+    a: { he: 'Open-loop: פקודה ← אין משוב, לא יודע מה קרה. Closed-loop: פקודה + חיישן → משווה מצב נוכחי למטרה → מתקן. PID = closed-loop.', en: 'Open-loop: command with no feedback, does not know what happened. Closed-loop: command + sensor → compare current to target → correct. PID = closed-loop.', mix: 'Open = no feedback. Closed = sensor + correction. PID = closed-loop.' }
+  },
+  // ---- אלקטרוניקה / Electronics ----
+  {
+    q: { he: 'מה PDH ומה תפקידו?', en: 'What is the PDH and its role?', mix: 'PDH — מה תפקיד?' },
+    a: { he: 'Power Distribution Hub — 18 ערוצים עם פיוזים (15A/30A/40A). מחלק חשמל לכל רכיבי הרובוט, ניטור זרם בזמן אמת דרך CAN.', en: 'Power Distribution Hub — 18 channels with fuses (15A/30A/40A). Distributes power to all robot components, real-time current monitoring via CAN.', mix: 'PDH: 18 channels, fuses 15/30/40A, real-time CAN monitoring.' }
+  },
+  {
+    q: { he: 'מה סוג הסוללה בFRC ומה הנתונים שלה?', en: 'What battery type is used in FRC and what are its specs?', mix: 'FRC battery specs?' },
+    a: { he: 'SLA (Sealed Lead Acid) — 12V, 18Ah. 6 תאים × ~2.1V. לא ניתן לשנות — לפי תקנות FRC. יש לטעון לפני כל משחק.', en: 'SLA (Sealed Lead Acid) — 12V, 18Ah. 6 cells × ~2.1V. Cannot be changed — FRC rules. Must charge before each match.', mix: 'SLA 12V 18Ah, 6 cells × 2.1V. FRC mandatory.' }
   }
 ];
 
@@ -529,6 +557,67 @@ const EXAM_QUESTIONS = [
     o: ['תכנות מהיר יותר', 'שידור חוזר (replay) של משחק שלם בסימולציה לאיתור באגים', 'ניהול CAN IDs', 'אוטו-כיול PID'],
     c: 1,
     e: 'AdvantageKit מקליט את כל ערכי ה-IO. לאחר תחרות → replay בסימולציה → רואים מה קרה בדיוק ומאיינים באגים.'
+  },
+  // --- 10 new theory/bagrut questions ---
+  {
+    q: 'מה קורה ליציבות הרובוט אם מעלים את הסוללה מהתחתית לחלק העליון?',
+    o: ['יציבות גדלה כי המסה גבוהה יותר', 'יציבות קטנה כי מרכז הכובד עולה ומומנט ההפלה גדל', 'אין שינוי — המסה זהה', 'תלוי בגודל הרובוט'],
+    c: 1,
+    e: 'מרכז כובד גבוה יותר → מומנט גדול יותר סביב ציר המגע עם הרצפה → ניתן להפיל את הרובוט בכוח קטן יותר. עיקרון: מומנט = מרחק × כוח.'
+  },
+  {
+    q: 'מה קורה למהירות ולטורק אם מגדילים יחס תמסורת מ-1:32 ל-1:64?',
+    o: ['מהירות × 2, טורק ÷ 2', 'מהירות ÷ 2, טורק × 2', 'שניהם גדלים', 'שניהם קטנים'],
+    c: 1,
+    e: 'כפל היחס ב-2 → מהירות מחולקת ב-2, טורק מוכפל ב-2. שימור הספל: P = τ × ω = const. לכן 1:64 מרים רובוט שלם, 1:32 מהיר יותר אך טורק נמוך.'
+  },
+  {
+    q: 'למה Brushless עדיף על Brushed למרכב, למרות שיקר יותר?',
+    o: ['כי Brushless קל יותר', 'כי יעילות 90–95% + ללא תחזוקה + כוח/משקל גבוה = חיוני לתחרות', 'כי WPILib תומך רק ב-Brushless', 'כי Brushed לא עמיד לחום'],
+    c: 1,
+    e: 'יעילות גבוהה → פחות חום → פחות throttling. ללא מברשות → ללא תקלות קומוטטור במהלך תחרות. כוח/משקל גבוה → רובוט קל ומהיר יותר.'
+  },
+  {
+    q: 'מה קורה לרדיוס הפניה אם מגדילים המרחק בין הגלגלים?',
+    o: ['רדיוס פניה קטן — זריז יותר', 'רדיוס פניה גדל — פחות זריז', 'אין שינוי', 'תלוי במהירות בלבד'],
+    c: 1,
+    e: 'בסיס גלגלים רחב יותר → רדיוס פניה גדול יותר (פחות זריז) אך יציבות גבוהה יותר. Trade-off: stability ↔ maneuverability.'
+  },
+  {
+    q: 'מה ההבדל בין Open-Loop ל-Closed-Loop control?',
+    o: ['Open = מהיר יותר, Closed = איטי', 'Open = ללא משוב מחיישן. Closed = מקבל משוב, משווה למטרה, מתקן', 'Closed = ידני, Open = אוטומטי', 'אין הבדל מעשי'],
+    c: 1,
+    e: 'Open-loop: שולח פקודה ולא יודע מה קרה. Closed-loop (PID): מודד מצב נוכחי, משווה לsetpoint, מחשב שגיאה → מתקן. הרבה יותר מדויק.'
+  },
+  {
+    q: 'מה תפקיד ה-I (Integral) ב-PID ומה סכנתו?',
+    o: ['מאיץ את ההגעה למטרה', 'מצבר שגיאות לאורך זמן — מתקן שגיאה קבועה (steady-state error). סכנה: Integral Windup', 'מגביל את מהירות ההתקרבות', 'מחליף את ה-P כשהשגיאה קטנה'],
+    c: 1,
+    e: 'I = Ki × ∫e dt. אם הרובוט "תקוע" ליד המטרה, I מצטבר ומדחף חזק יותר. Integral Windup = I גדל מאוד ויוצר overshoot חזק. פתרון: clamp לI.'
+  },
+  {
+    q: 'איזה פיוז מתאים למנוע Falcon 500 בCAN?',
+    o: ['15A', '30A', '40A', '60A'],
+    c: 2,
+    e: 'Falcon 500 = מנוע חזק. שיא זרם ~150A לזמן קצר, עובד עם פיוז 40A ב-PDH. פיוז 15A = יפוצץ מיד. פיוז 30A = אפשרי, 40A = סטנדרט.'
+  },
+  {
+    q: 'מה Feedforward ב-ArmFeedforward ואיך מתחשב בכבידה?',
+    o: ['חישוב קבוע ללא קשר לזווית', 'kG × cos(θ) — כוח הכבידה משתנה לפי cos הזווית', 'I × R (ספל חשמלי)', 'kV × velocity (פריקציה)'],
+    c: 1,
+    e: 'זרוע אופקית (θ=0°) → cos(0)=1 → כוח מקסימלי לנגד כבידה. אנכית (θ=90°) → cos(90°)=0 → אין כוח כבידה. ArmFeedforward: kG×cos(θ) + kV×v + kA×a.'
+  },
+  {
+    q: 'מה PDH ומה יתרונו על PDP ישן?',
+    o: ['PDH זול יותר', 'PDH: 18 ערוצים + ניטור CAN בזמן אמת + LED status. PDP: 16 ערוצים, פחות ניטור', 'PDP תומך יותר מנועים', 'אין הבדל משמעותי'],
+    c: 1,
+    e: 'PDH (Power Distribution Hub, REV): 18 ערוצים, ניטור זרם/מתח לכל ערוץ דרך CAN, LED לאבחון. פיוזים: 15A / 30A / 40A. עדכני יותר מ-PDP של CTRE.'
+  },
+  {
+    q: 'אם נשנה גלגל מרכב מקוטר 4 אינץ\' ל-6 אינץ\' — מה ישתנה?',
+    o: ['מהירות קטנה, טורק גדל', 'מהירות גדלה (היקף גדול יותר), טורק קטן. רדיוס גדול יותר = יותר מהירות קו', 'שניהם גדלים', 'אין שינוי — תלוי רק ביחס תמסורת'],
+    c: 1,
+    e: 'היקף גלגל = π × d. 4 אינץ\' → 12.6 ס"מ. 6 אינץ\' → 18.8 ס"מ. כל סיבוב = מרחק גדול יותר → מהירות גבוהה יותר, אך טורק קטן יותר (ידית ארוכה יותר).'
   }
 ];
 
@@ -559,6 +648,16 @@ const EXAM_TOPICS_MAP = [
   'תוכנה',      // 22
   'תוכנה',      // 23
   'תוכנה',      // 24
+  'תיאוריה',    // 25 — CoG stability
+  'תיאוריה',    // 26 — gear ratio change
+  'תיאוריה',    // 27 — brushless advantage
+  'מרכב',       // 28 — wheelbase maneuverability
+  'תיאוריה',    // 29 — open vs closed loop
+  'תיאוריה',    // 30 — PID integral windup
+  'אלקטרוניקה', // 31 — PDH fuse
+  'תיאוריה',    // 32 — ArmFeedforward
+  'אלקטרוניקה', // 33 — PDH vs PDP
+  'מרכב',       // 34 — wheel diameter effect
 ];
 
 // ----------------------------------------------------------------
@@ -731,6 +830,280 @@ const TOPICS = [
 <p>2 חוטים: CAN-Hi + CAN-Lo. כל רכיב עם ID ייחודי. תקשורת <strong>דו-כיוונית</strong>: ניטור זרם/מתח/טמפ\'.</p>
 <p>PWM = חד-כיווני + חוט נפרד לכל רכיב. CAN = רשת אחת לכולם.</p>
 </div></div>`
+  },
+  // ================================================================
+  // NEW THEORY TOPICS — BAGRUT LEVEL
+  // ================================================================
+  {
+    key: 'cog',
+    icon: '⚖️',
+    title: 'מרכז כובד',
+    desc: 'CoG, מומנט, יציבות, טכניקות הנמכה',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> מרכז כובד נמוך + במרכז בסיס הגלגלים = רובוט יציב שקשה להפיל.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📖 רמה 1 — הגדרה: מה זה מרכז כובד?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>מרכז כובד (CoG)</strong> = הנקודה שבה כל מסת הגוף "מרוכזת" תיאורטית. אם תלה את הרובוט מנקודה זו — הוא יהיה בשיווי משקל מושלם.</p>
+<p>שני תנאים לרובוט יציב:</p>
+<ul><li>CoG <strong>נמוך</strong> ככל האפשר</li><li>CoG <strong>במרכז</strong> נקודות מגע הגלגלים (סימטריה)</li></ul>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 רמה 2 — הבנה: למה CoG נמוך = יציב יותר?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>מומנט כוח = מרחק מציר × כוח.</strong></p>
+<p>כשרובוט נוטה להתהפך, ציר הסיבוב = גלגל הקצה. CoG גבוה → מרחק גדול → מומנט גדול → כוח קטן מספיק להפיל.</p>
+<p>CoG נמוך → מרחק קטן → מומנט קטן → צריך כוח גדול יותר להפיל.</p>
+<div class="diagram">גבוה:  ⬆ CoG       נמוך:  CoG ⬇
+│ מרחק גדול │      │ מרחק קטן │
+[pivot]────┘      [pivot]──┘
+→ מומנט גדול      → מומנט קטן</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 רמה 3 — ניתוח: מה קורה אם מעלים את הסוללה?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>סוללה SLA = ~6 ק"ג — מסה גדולה מאוד. העלאה מהתחתית לחלק העליון:</p>
+<ul>
+<li>מרכז הכובד הכולל עולה משמעותית</li>
+<li>מומנט ההפלה גדל</li>
+<li>רובוט נהיה <strong>הרבה</strong> יותר קל להפיל</li>
+<li>בתחרות — רובוטים מתנגשים ← <strong>סכנה אמיתית</strong></li>
+</ul>
+<p>לכן הסוללה תמיד בתחתית הרובוט, לרוב על לוח הבסיס.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🏭 טכניקות הנמכת CoG ברובוט שלנו</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<ul>
+<li>פרופילי <strong>50×25 מ"מ עם דופן 3 מ"מ</strong> (לא סטנדרט 1.5 מ"מ) → כבדים יותר בבסיס</li>
+<li><strong>לוח בסיס אלומיניום מלא</strong> על פני כל הרובוט</li>
+<li><strong>לוחות פלדה</strong> בתחתית לוח הבסיס</li>
+<li><strong>פוליקרבונט באינטייק</strong> (בגובה הגבוה ביותר) — חומר קל</li>
+<li>פרופיל <strong>80×80 מ"מ עם כרסום CNC</strong> — הסרת מסה מהחלק העליון</li>
+<li>מילוי <strong>Honeycomb ב-3D print</strong> — מסיר חומר ללא פגיעה בחוזק</li>
+</ul>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — הגדרת מרכז כובד. רמה 2 — הסבר מומנט כוח והשפעה על יציבות. רמה 3 — ניתוח: מה קורה כשמשנים מיקום מסה כבדה?
+</div>`
+  },
+  {
+    key: 'drivetrain_theory',
+    icon: '🔩',
+    title: 'מרכב — תיאוריה',
+    desc: 'גלגלים, בסיס, סוגי הנעה, היגוי',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> כל בחירה בסוג ההנעה וממדי הגלגלים היא trade-off בין יציבות, זריזות וכוח.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📖 רמה 1 — גלגלים: קוטר ורוחב</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>היקף גלגל = π × קוטר.</strong> כל סיבוב = מרחק שווה להיקף.</p>
+<ul>
+<li>גלגל <strong>גדול</strong> (קוטר גדול): מהיר יותר, טורק נמוך יותר</li>
+<li>גלגל <strong>קטן</strong>: איטי יותר, טורק גבוה יותר</li>
+<li>גלגל <strong>רחב</strong>: יותר אחיזה, יותר חיכוך (התנגדות)</li>
+<li>גלגל <strong>צר</strong>: פחות חיכוך, פחות אחיזה</li>
+</ul>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 רמה 2 — בסיס גלגלים: יציבות ↔ תמרון</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>המרחק בין גלגלים = <strong>wheelbase</strong>.</p>
+<table class="tbl"><tr><th>בסיס רחב</th><th>בסיס צר</th></tr>
+<tr><td class="pro">יציב יותר</td><td class="con">פחות יציב</td></tr>
+<tr><td class="con">רדיוס פניה גדול</td><td class="pro">רדיוס פניה קטן</td></tr>
+<tr><td class="con">פחות זריז</td><td class="pro">זריז יותר</td></tr></table>
+<p>לא ניתן לקבל שניהם — <strong>trade-off מובנה</strong>.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ סוגי הנעה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>1. דיפרנציאלי:</strong> מנוע אחד (או יותר) לכל צד. פניה = הפרש מהירויות בין צדדים. פשוט, אמין, כוח דחיפה טוב.</p>
+<p><strong>2. סינכרוני:</strong> כל הגלגלים מצביעים לאותו כיוון ונעים באותה מהירות. תנועה ישרה מדויקת.</p>
+<p><strong>3. Swerve (שלנו):</strong> מנוע נפרד להנעה ומנוע נפרד להיגוי לכל גלגל. holonomic motion — כל כיוון ללא סיבוב גוף. מורכב ביותר, כי יכול ביותר.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 רמה 3 — ניתוח: מה קורה אם מגדילים מרחק גלגלים?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>הגדלת מרחק הגלגלים:</p>
+<ul>
+<li>יציבות <strong>גדלה</strong> — קשה יותר להפיל</li>
+<li>רדיוס פניה <strong>גדל</strong> — פחות זריז</li>
+<li>משקל <strong>גדל</strong> — שלדה ארוכה יותר</li>
+<li>לכן: תמיד בוחרים wheelbase אופטימלי לפי אתגרי המשחק</li>
+</ul>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — הגדרת wheelbase וסוגי הנעה. רמה 2 — מה trade-off בגודל הבסיס? רמה 3 — מה קורה לזריזות אם מרחיקים גלגלים?
+</div>`
+  },
+  {
+    key: 'motors_theory',
+    icon: '⚡',
+    title: 'מנועים',
+    desc: 'Brushed, Brushless, קומוטציה, Hall Effect',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> מנוע ממיר אנרגיה חשמלית לתנועה סיבובית. הבדל Brushed/Brushless = שיטת הקומוטציה.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📖 רמה 1 — מנוע Brushed: מה קומוטטור?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>קומוטטור</strong> = חלק מכני על הציר, מחולק לפלחים. מברשות פחם קבועות נוגעות בו תוך כדי סיבוב.</p>
+<p>תפקיד: לחלף כיוון הזרם בסליל בכל חצי סיבוב → הכוח תמיד באותו כיוון → סיבוב רציף.</p>
+<div class="diagram">+V → [מברשת] → [קומוטטור] → [סליל] → [קומוטטור] → [מברשת] → GND
+                    ↑ מסתובב עם הציר, מחליף זרם כל חצי סיבוב</div>
+<p><strong>בעיות:</strong> מברשות מתבלות, ניצוצות, יעילות ~75–80%, תחזוקה תדירה.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 רמה 2 — Brushless: איך בלי מברשות?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>ב-Brushless: <strong>מגנטים על הרוטור</strong> (מסתובב), <strong>סלילים קבועים בסטטור</strong>.</p>
+<p>בקר אלקטרוני (TalonFX / SparkMax) מחלף זרם בסלילים לפי מיקום הרוטור — נמדד ע"י <strong>Hall Effect sensor</strong> או encoder.</p>
+<table class="tbl">
+<tr><th>קריטריון</th><th>Brushed</th><th>Brushless</th></tr>
+<tr><td>קומוטציה</td><td>מכנית (מברשות)</td><td class="pro">אלקטרונית (בקר)</td></tr>
+<tr><td>יעילות</td><td class="con">~75–80%</td><td class="pro">~90–95%</td></tr>
+<tr><td>תחזוקה</td><td class="con">מברשות שוחקות</td><td class="pro">כמעט אפס</td></tr>
+<tr><td>מחיר</td><td class="pro">זול</td><td class="con">יקר</td></tr>
+<tr><td>כוח/משקל</td><td class="con">בינוני</td><td class="pro">גבוה מאוד</td></tr>
+</table>
+<p><strong>מנועינו:</strong> Falcon 500 (TalonFX) = Brushless, 6380 RPM, 4.69 Nm stall.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 רמה 3 — למה Brushless למרות עלות גבוהה?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<ul>
+<li>יעילות 90–95% → פחות חום → פחות throttling בתחרות</li>
+<li>ללא תקלות קומוטטור/מברשות בזמן משחק</li>
+<li>כוח/משקל גבוה → רובוט קל ומהיר יותר</li>
+<li>TalonFX = closed-loop מובנה + CAN telemetry → אבחון בזמן אמת</li>
+<li>לתחרות FRC: אמינות > עלות</li>
+</ul>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — מה קומוטטור? רמה 2 — השוואת Brushed vs Brushless. רמה 3 — למה לבחור Brushless לתחרות?
+</div>`
+  },
+  {
+    key: 'transmission_theory',
+    icon: '⚙️',
+    title: 'תמסורות',
+    desc: 'יחסי שיניים, שרשראות, טורק ↔ מהירות',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> תמסורת = trade-off בין טורק למהירות. לא ניתן להרוויח שניהם — שימור הספל.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📖 רמה 1 — מה יחס תמסורת N:1?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>יחס N:1 → המנוע מסתובב N פעמים לכל סיבוב אחד של הפלט.</p>
+<p>תוצאה: <strong>טורק × N</strong>, <strong>מהירות ÷ N</strong>.</p>
+<p>דוגמה — 1:64: מנוע 6380 RPM → פלט ~100 RPM, אך טורק גדל פי 64.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 רמה 2 — שרשראות ושיניים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>שרשרת מחברת שני גלגלי שיניים (sprockets). יחס = שיניים_מנוהל / שיניים_מניע.</p>
+<p><strong>9:18 = 1:2</strong> — 9 שיניים מניע, 18 מנוהל → מהירות ÷2, טורק ×2.</p>
+<table class="tbl">
+<tr><th>יותר שיניים על מנוהל</th><th>יותר שיניים על מניע</th></tr>
+<tr><td class="pro">טורק גדל</td><td class="pro">מהירות גדלה</td></tr>
+<tr><td class="con">מהירות קטנה</td><td class="con">טורק קטן</td></tr></table>
+<p><strong>סוגי שרשראות:</strong> שרשרת #35 (חזקה, בטיפוס), חגורת טימינג (ללא החלקה, בקלע).</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📊 תמסורות ברובוט שלנו</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>מערכת</th><th>יחס</th><th>מטרה</th></tr>
+<tr><td>מרכב (Drive)</td><td>1:5.9</td><td class="pro">מהיר — חצייה מהירה</td></tr>
+<tr><td>טיפוס</td><td>1:64</td><td class="pro">טורק עצום — הרמת 50 ק"ג</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 רמה 3 — מה קורה אם נשנה 1:64 → 1:32?</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>יחס 1:32 = מהירות ×2, טורק ÷2 לעומת 1:64.</p>
+<ul>
+<li>המעלית תעלה מהר פי 2</li>
+<li>הטורק יחצה ב-2 — ייתכן <strong>לא יספיק</strong> להרים את הרובוט (50 ק"ג)</li>
+<li>המנוע עלול לשרוף (stall current גבוה)</li>
+</ul>
+<p>לכן 1:64 — הרובוט עולה לאט, אך בטוח ועם שפע טורק.</p>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — מה יחס 1:32? רמה 2 — מה קורה לטורק ולמהירות? רמה 3 — אם משנים 1:64 ל-1:32 בטיפוס?
+</div>`
+  },
+  {
+    key: 'control_theory',
+    icon: '📐',
+    title: 'בקרה',
+    desc: 'Open/Closed loop, PID, Feedforward, Motion Profiles',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> Closed-loop + Feedforward = שליטה מדויקת ומהירה. PID בלבד = איטי ויש לו מגבלות.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📖 רמה 1 — Open vs Closed Loop</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>Open-loop:</strong> שולח פקודה — לא יודע מה קרה. כמו נהיגה בעיניים עצומות.</p>
+<p><strong>Closed-loop:</strong> פקודה + חיישן → משווה מצב נוכחי לmטרה → מתקן. כמו נהיגה עם עיניים פקוחות.</p>
+<div class="diagram">Open:   [Setpoint] → [Robot] → ?
+Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה לController</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 רמה 2 — PID: כל מונח עם אנלוגיה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>output = Kp×e + Ki×∫e dt + Kd×(de/dt)</strong></p>
+<table class="tbl">
+<tr><th>מונח</th><th>שאלה</th><th>אנלוגיה</th><th>בעיה אם גדול מדי</th></tr>
+<tr><td><strong>P</strong></td><td>"כמה רחוק?"</td><td>דחיפה יחסית לשגיאה</td><td>Overshoot + oscillation</td></tr>
+<tr><td><strong>I</strong></td><td>"כמה זמן שגיאה?"</td><td>תיקון שגיאה קבועה</td><td>Integral Windup</td></tr>
+<tr><td><strong>D</strong></td><td>"כמה מהר מתקרב?"</td><td>בלם לפני הגעה</td><td>רגיש לרעש</td></tr>
+</table>
+<p><strong>Integral Windup:</strong> כשI מצטבר מאוד → overshoot חזק. פתרון: clamp על ערך I.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ Feedforward — חישוב מראש</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p>Feedforward = חישוב כוח לפי פיזיקה, לא מחכה לשגיאה.</p>
+<p><strong>ArmFeedforward:</strong> <code>kG × cos(θ)</code> — מתחשב בכבידה לפי זווית.</p>
+<ul>
+<li>θ=0° (אופקי): cos(0)=1 → כוח מקסימלי לנגד כבידה</li>
+<li>θ=90° (אנכי): cos(90°)=0 → אין כוח כבידה, אין צורך לנגד</li>
+</ul>
+<p><strong>ביחד:</strong> FF מגיע קרוב למטרה, PID מדייק. שליטה מהירה + מדויקת.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📈 Motion Profiles: Trapezoidal vs S-Curve</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>Trapezoidal:</strong> תאוצה קבועה → מהירות קבועה → עצירה. שינוי חד בתאוצה → רעידות.</p>
+<p><strong>S-Curve:</strong> תאוצה עולה בהדרגה → smooth. שימושי ל-Swerve לאודומטריה מדויקת.</p>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — מה כל אות PID? רמה 2 — הסבר Integral Windup. רמה 3 — מה קורה אם Kp גדול מדי?
+</div>`
+  },
+  {
+    key: 'electronics_theory',
+    icon: '🔋',
+    title: 'אלקטרוניקה',
+    desc: 'סוללה, PDH, CANbus, PWM, RoboRIO',
+    content: `
+<div class="highlight green"><strong>עיקרון:</strong> כל רובוט FRC פועל על 12V SLA. PDH מחלק חשמל. CAN מקשר הכל.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔋 סוללה — 12V SLA</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>SLA = Sealed Lead Acid</strong> — 12V, 18Ah. 6 תאים × ~2.1V.</p>
+<p>לא ניתן לשנות — תקנות FRC. יש לטעון לפני כל משחק. שיא זרם ~400A לרגע.</p>
+<p>מיקום: <strong>תחתית הרובוט</strong> — CoG נמוך + בטיחות.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ PDH — Power Distribution Hub</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>PDH (REV):</strong> 18 ערוצים עם פיוזים (15A / 30A / 40A).</p>
+<p>מחלק חשמל לכל רכיבי הרובוט. <strong>ניטור זרם בזמן אמת</strong> דרך CAN → רואים כל חריגה.</p>
+<table class="tbl">
+<tr><th>פיוז</th><th>שימוש</th></tr>
+<tr><td>15A</td><td>חיישנים, Raspberry Pi, מצלמות</td></tr>
+<tr><td>30A</td><td>מנועים קטנים</td></tr>
+<tr><td>40A</td><td>Falcon 500, TalonFX</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📡 CANbus vs PWM — השוואה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>קריטריון</th><th>PWM</th><th>CAN</th></tr>
+<tr><td>חוטים</td><td class="con">חוט נפרד לכל רכיב</td><td class="pro">2 חוטים לכולם</td></tr>
+<tr><td>כיוון</td><td class="con">חד-כיווני</td><td class="pro">דו-כיווני</td></tr>
+<tr><td>ניטור</td><td class="con">אין</td><td class="pro">זרם, מתח, טמפ\'</td></tr>
+<tr><td>closed-loop</td><td class="con">ב-roboRIO בלבד</td><td class="pro">בתוך הבקר (מהיר)</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🤖 RoboRIO + RSL + VRM</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>RoboRIO:</strong> המוח — FPGA + ARM processor. מריץ את קוד Java. מחובר ל-Driver Station ב-Wi-Fi.</p>
+<p><strong>RSL (Robot Signal Light):</strong> נורת מצב — מחוברת = OFF, enabled = בוהק, disabled = מהבהב.</p>
+<p><strong>VRM (Voltage Regulator Module):</strong> מספק 5V / 12V מוסדרים לחיישנים ומצלמות.</p>
+</div></div>
+<div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
+<strong>💡 בגרות:</strong> רמה 1 — מה PDH? רמה 2 — מה יתרון CAN על PWM? רמה 3 — איזה פיוז מתאים לFalcon ולמה?
+</div>`
   }
 ];
 
