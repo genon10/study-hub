@@ -207,7 +207,7 @@ const DESIGN_DECISIONS = [
 ];
 
 // ----------------------------------------------------------------
-// FLASHCARDS (20 cards, multilanguage)
+// FLASHCARDS (25 cards, multilanguage)
 // ----------------------------------------------------------------
 const FLASHCARDS = [
   {
@@ -448,6 +448,66 @@ const FLASHCARDS = [
       he: "@Database(version=6): 5 entities: games (היסטוריה + syncedToFirebase), best_scores (שיאים), achievements (הישגים + progress), custom_maps (מפות), custom_presets (הגדרות). Migration 5→6: ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0.",
       en: "@Database(version=6): 5 entities: games (history + syncedToFirebase), best_scores (records), achievements (with progress), custom_maps (maps), custom_presets (settings). Migration 5→6: ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0.",
       mix: "Room v6, 5 entities. Migration 5→6: הוספת syncedToFirebase ל-games. Critical for Offline First."
+    }
+  },
+  {
+    q: {
+      he: "מה Cell class ב-GameEngine ומה מצבי CellState?",
+      en: "What is the Cell class in GameEngine and what are the CellState values?",
+      mix: "Cell class — שדות ו-CellState enum?"
+    },
+    a: {
+      he: "Cell: x, y (קואורדינטות), isMine (boolean), adjacentMines (int), state (CellState). CellState enum: COVERED (מכוסה — מצב התחלתי), REVEALED (נחשף), FLAGGED (מסומן). isCovered(): state==COVERED. isFlagged(): state==FLAGGED. לא ניתן לסמן תא REVEALED.",
+      en: "Cell: x, y (coordinates), isMine (boolean), adjacentMines (int), state (CellState). CellState enum: COVERED (initial), REVEALED, FLAGGED. isCovered(): state==COVERED. isFlagged(): state==FLAGGED. Cannot flag a REVEALED cell.",
+      mix: "Cell: x,y,isMine,adjacentMines,CellState. CellState: COVERED(initial)/REVEALED/FLAGGED. isCovered()=state==COVERED."
+    }
+  },
+  {
+    q: {
+      he: "איך GameEngine מזהה ניצחון או הפסד?",
+      en: "How does GameEngine detect win or loss?",
+      mix: "Win/lose detection — איך עובד?"
+    },
+    a: {
+      he: "הפסד: revealCell() חושף תא עם isMine()==true → gameStatus=LOST. ניצחון: incrementTilesRevealed() → tilesRevealed == (width*height - totalMines) → gameStatus=WON. בדיקת ניצחון מתרחשת בכל חשיפה.",
+      en: "Loss: revealCell() reveals isMine()==true → gameStatus=LOST. Win: incrementTilesRevealed() → tilesRevealed == (width*height - totalMines) → gameStatus=WON. Win checked on every reveal.",
+      mix: "Loss: mine revealed = LOST. Win: tilesRevealed == (total - mines) = WON. Checked every reveal."
+    }
+  },
+  {
+    q: {
+      he: "מה RecyclerView + Adapter ולמה לא בחרנו בו ללוח המשחק?",
+      en: "What is RecyclerView + Adapter and why not used for the game board?",
+      mix: "RecyclerView — מה זה ולמה לא נבחר?"
+    },
+    a: {
+      he: "RecyclerView: רשימה יעילה עם ViewHolder לשימוש חוזר. Adapter מחבר נתונים ל-Views. לוח משחק: Canvas עדיף — onTouchEvent() מחשב row/col ב-O(1) מ-pixel. RecyclerView = מתאים לרשימות, לא לגריד אינטראקטיבי עם מאות תאים קטנים.",
+      en: "RecyclerView: efficient list with ViewHolder reuse. Adapter connects data to Views. Game board: Canvas preferred — onTouchEvent() computes row/col in O(1) from pixel coordinates. RecyclerView = fits lists, not interactive grids with hundreds of small cells.",
+      mix: "RecyclerView = list + Adapter + ViewHolder reuse. Game board needs Canvas (O(1) touch). RecyclerView = לרשימות, לא boards."
+    }
+  },
+  {
+    q: {
+      he: "מה Intent ו-Bundle ב-Android ומה ההבדל ביניהם?",
+      en: "What are Intent and Bundle in Android and what is the difference?",
+      mix: "Intent vs Bundle — מה ההבדל?"
+    },
+    a: {
+      he: "Intent: מסר בין רכיבי Android. putExtra(key, value) שולח נתונים. getIntent().getStringExtra(KEY) מקבל. Bundle: אוסף מפתח-ערך לשמירת state בסיבוב מסך — onSaveInstanceState(Bundle). GameActivity מקבל difficulty level דרך Intent extras.",
+      en: "Intent: message between Android components. putExtra(key, value) sends data. getIntent().getStringExtra(KEY) receives. Bundle: key-value collection for state on screen rotation — onSaveInstanceState(Bundle). GameActivity receives difficulty level via Intent extras.",
+      mix: "Intent = component message + putExtra/getExtra. Bundle = state on rotation (onSaveInstanceState). GameActivity ← Intent extras."
+    }
+  },
+  {
+    q: {
+      he: "מה Fragment ב-Android ומה מחזור חייו?",
+      en: "What is an Android Fragment and what is its lifecycle?",
+      mix: "Fragment — מה זה ומחזור חיים?"
+    },
+    a: {
+      he: "Fragment: רכיב UI לשימוש חוזר בתוך Activity. מחזור חיים: onAttach → onCreate → onCreateView → onStart → onResume → onPause → onStop → onDestroyView → onDetach. יתרון: לוגיקת UI ניתנת לשימוש במסכים שונים. בפרויקט: לא השתמשנו ב-Fragments — Activities ישירות.",
+      en: "Fragment: reusable UI component inside an Activity. Lifecycle: onAttach → onCreate → onCreateView → onStart → onResume → onPause → onStop → onDestroyView → onDetach. Advantage: UI logic reusable across screens. In project: no Fragments — direct Activities.",
+      mix: "Fragment = reusable UI inside Activity. Lifecycle: onAttach→onCreate→onCreateView→...→onDetach. פרויקט: Activities ישירות, לא Fragments."
     }
   }
 ];
