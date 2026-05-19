@@ -7,7 +7,15 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object -ExpandProperty FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object -ExpandProperty FullName)",
+      "Bash(node --check \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\\\\minesweeper\\\\js\\\\data.js\")",
+      "Bash(node --check minesweeper/js/data.js)",
+      "Bash(mkdir -p \"/c/Users/yinon/Documents/cyber/study hub/frc/css\")",
+      "Bash(mkdir -p \"/c/Users/yinon/Documents/cyber/study hub/frc/js\")",
+      "Bash(Select-Object FullName)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\\\\frc\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\\\\frc\\\\js\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\yinon\\\\Documents\\\\cyber\\\\study hub\" -Recurse -Filter \"SuperStructure.java\" -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })"
     ]
   }
 }

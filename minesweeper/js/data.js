@@ -185,6 +185,7 @@ const DESIGN_DECISIONS = [
   },
   {
     topic: 'Timer Implementation',
+  
     chosen: 'java.util.Timer (or Handler + postDelayed)',
     rejected: 'new Thread() with sleep(1000)',
     why: {
