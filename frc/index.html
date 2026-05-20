@@ -8,24 +8,7 @@
 <link rel="stylesheet" href="../shared/style.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Heebo:wght@300;400;600;800&display=swap');
-  :root {
-    --bg: #08080f;
-    --surface: #111118;
-    --surface2: #18181f;
-    --border: #25253a;
-    --accent: #7c6fff;
-    --green: #00d4aa;
-    --red: #ff5f5f;
-    --yellow: #ffd166;
-    --text: #e4e4f0;
-    --muted: #6060808;
-    --muted: #606080;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'Heebo', sans-serif;
-  }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;}
 
   /* HEADER */
   header{
@@ -59,7 +42,7 @@
     transition:all .2s;letter-spacing:.03em;
   }
   .nb:hover{color:var(--text);}
-  .nb.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(124,111,255,.06);}
+  .nb.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(34,197,94,.06);}
 
   /* SECTIONS */
   main{max-width:980px;margin:0 auto;padding:28px 18px 60px;}
@@ -74,8 +57,8 @@
   .robot-map{
     background:var(--surface);border:1px solid var(--border);
     border-radius:14px;padding:24px;margin-bottom:24px;
-    font-family:var(--mono);font-size:.76rem;
-    color:var(--green);line-height:1.9;
+    font-family:var(--font-mono);font-size:.76rem;
+    color:var(--accent);line-height:1.9;
     white-space:pre;overflow-x:auto;
   }
 
@@ -99,25 +82,25 @@
 
   /* DIAGRAM */
   .diagram{
-    background:var(--surface2);border:1px solid var(--border);
+    background:var(--surface);border:1px solid var(--border);
     border-radius:8px;padding:16px 18px;margin-top:14px;
-    font-family:var(--mono);font-size:.76rem;color:var(--green);
+    font-family:var(--font-mono);font-size:.76rem;color:var(--accent);
     white-space:pre;overflow-x:auto;line-height:1.85;
   }
 
   /* TABLE */
   .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:.84rem;}
-  .tbl th{background:var(--surface2);padding:11px 14px;text-align:right;color:var(--accent);font-weight:700;border-bottom:2px solid var(--accent);}
+  .tbl th{background:var(--surface);padding:11px 14px;text-align:right;color:var(--accent);font-weight:700;border-bottom:2px solid var(--accent);}
   .tbl td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
   .tbl tr:hover td{background:rgba(255,255,255,.015);}
-  .pro{color:var(--green);}
-  .con{color:var(--red);}
+  .pro{color:var(--accent);}
+  .con{color:var(--danger);}
 
   /* TAGS */
   .tag{display:inline-block;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:4px;letter-spacing:.07em;margin-left:6px;margin-bottom:8px;}
-  .th{background:rgba(0,212,170,.12);color:var(--green);}
-  .hw{background:rgba(255,95,95,.12);color:var(--red);}
-  .sw{background:rgba(124,111,255,.12);color:var(--accent);}
+  .th{background:rgba(34,197,94,.12);color:var(--accent);}
+  .hw{background:rgba(239,68,68,.12);color:var(--danger);}
+  .sw{background:rgba(99,102,241,.12);color:#818cf8;}
 
   /* GRID */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
@@ -139,7 +122,7 @@
     border-radius:8px;padding:10px 14px;font-size:.82rem;font-weight:600;
     white-space:nowrap;
   }
-  .fbox.hl{border-color:var(--accent);color:var(--accent);}
+  .fbox.hl{border-color:var(--accent);color:var(--accent);background:rgba(34,197,94,.06);}
   .farr{color:var(--muted);font-size:1rem;}
 
   /* QUIZ */
@@ -151,21 +134,21 @@
     border-radius:8px;padding:11px 15px;cursor:pointer;
     font-size:.86rem;transition:all .2s;text-align:right;
   }
-  .opt:hover{border-color:var(--accent);background:rgba(124,111,255,.07);}
-  .opt.ok{border-color:var(--green)!important;background:rgba(0,212,170,.09)!important;color:var(--green);}
-  .opt.bad{border-color:var(--red)!important;background:rgba(255,95,95,.09)!important;color:var(--red);}
+  .opt:hover{border-color:var(--accent);background:rgba(34,197,94,.07);}
+  .opt.ok{border-color:var(--accent)!important;background:rgba(34,197,94,.09)!important;color:var(--accent);}
+  .opt.bad{border-color:var(--danger)!important;background:rgba(239,68,68,.09)!important;color:var(--danger);}
   .fb{margin-top:12px;padding:11px 14px;border-radius:8px;font-size:.84rem;display:none;}
   .fb.show{display:block;}
-  .fb.ok{background:rgba(0,212,170,.08);color:var(--green);border:1px solid var(--green);}
-  .fb.bad{background:rgba(255,95,95,.08);color:var(--red);border:1px solid var(--red);}
+  .fb.ok{background:rgba(34,197,94,.08);color:var(--accent);border:1px solid var(--accent);}
+  .fb.bad{background:rgba(239,68,68,.08);color:var(--danger);border:1px solid var(--danger);}
   .score-box{
-    background:linear-gradient(135deg,rgba(124,111,255,.12),rgba(0,212,170,.08));
+    background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(74,222,128,.08));
     border:1px solid var(--accent);border-radius:14px;padding:30px;text-align:center;
     margin-top:20px;display:none;
   }
   .score-box.show{display:block;}
   .score-box .big{font-size:2.8rem;font-weight:800;color:var(--accent);}
-  #rbtn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 26px;font-family:var(--sans);font-size:.86rem;font-weight:700;cursor:pointer;margin-top:14px;}
+  #rbtn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 26px;font-family:var(--font-body);font-size:.86rem;font-weight:700;cursor:pointer;margin-top:14px;}
   #rbtn:hover{opacity:.85;}
 
   /* PROGRESS */
@@ -173,9 +156,9 @@
   .prog-bar{height:5px;border-radius:20px;background:var(--accent);transition:width .4s;}
 
   /* HIGHLIGHT BOX */
-  .hbox{background:rgba(124,111,255,.07);border:1px solid rgba(124,111,255,.25);border-radius:9px;padding:14px 16px;margin-top:12px;font-size:.86rem;}
-  .hbox.green{background:rgba(0,212,170,.06);border-color:rgba(0,212,170,.25);}
-  .hbox.yellow{background:rgba(255,209,102,.06);border-color:rgba(255,209,102,.25);color:var(--yellow);}
+  .hbox{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:9px;padding:14px 16px;margin-top:12px;font-size:.86rem;}
+  .hbox.green{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.25);}
+  .hbox.yellow{background:rgba(255,209,102,.06);border-color:rgba(255,209,102,.25);color:var(--accent3);}
 </style>
 </head>
 <body>

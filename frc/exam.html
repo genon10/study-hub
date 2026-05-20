@@ -21,7 +21,7 @@
   </div>
   <div style="flex:1;padding:0 12px">
     <div class="progress-bar-wrap" style="margin:0">
-      <div class="progress-bar-fill" id="timer-progress" style="width:100%;background:linear-gradient(90deg,#22c55e,#4ade80)"></div>
+      <div class="progress-bar-fill" id="timer-progress" style="width:100%;background:linear-gradient(90deg,var(--accent),var(--frc-2))"></div>
     </div>
   </div>
   <div class="exam-progress-text" id="exam-progress-text">0 / 20 נענו</div>
@@ -57,7 +57,7 @@
 
     <div style="text-align:center;margin-top:20px">
       <button class="btn btn-primary" onclick="startExam()"
-        style="padding:13px 36px;font-size:1rem;background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+        style="padding:13px 36px;font-size:1rem">
         🤖 התחל מבחן
       </button>
     </div>
@@ -68,7 +68,7 @@
     <div id="exam-questions"></div>
     <div style="text-align:center;margin-top:20px">
       <button class="btn btn-primary" onclick="submitEarly()"
-        style="padding:11px 28px;background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+        style="padding:11px 28px">
         ✅ הגש מבחן
       </button>
     </div>
@@ -126,12 +126,11 @@
     </div>
 
     <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="restartExam()"
-        style="background:linear-gradient(135deg,#22c55e,#4ade80);border-color:#22c55e">
+      <button class="btn btn-primary" onclick="restartExam()">
         🔄 נסה שוב
       </button>
-      <a href="quiz.html"       class="btn btn-secondary" style="text-decoration:none">✏️ חידון</a>
-      <a href="flashcards.html" class="btn btn-secondary" style="text-decoration:none">🃏 כרטיסיות</a>
+      <a href="topics.html" class="btn btn-secondary" style="text-decoration:none">📚 נושאים</a>
+      <a href="index.html"  class="btn btn-secondary" style="text-decoration:none">🏠 סקירה</a>
     </div>
   </div>
 
@@ -443,7 +442,7 @@ function ansExam(pos, oi) {
     const b = document.getElementById(`eo${pos}${i}`);
     if (!b) continue;
     b.classList.add('disabled');
-    if (i === oi) b.style.borderColor = '#22c55e';
+    if (i === oi) b.style.borderColor = 'var(--accent)';
   }
   document.getElementById('exam-progress-text').textContent =
     `${Object.keys(examAnswers).length} / ${questionOrder.length} נענו`;
@@ -451,6 +450,7 @@ function ansExam(pos, oi) {
 
 /* ---- TIMER ---- */
 function startTimer() {
+  document.getElementById('timer-progress').style.background = 'linear-gradient(90deg,var(--accent),var(--frc-2))';
   updateTimerDisplay();
   timerInterval = setInterval(() => {
     timeLeft--;

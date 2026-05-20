@@ -20,7 +20,7 @@
   ).join('');
 
   const fcSeen  = JSON.parse(localStorage.getItem('frc_fc_seen') || '[]');
-  const fcTotal = 35;
+  const fcTotal = 47;
   const pct     = Math.min(100, Math.round(fcSeen.length / fcTotal * 100));
   const r       = 13;
   const circ    = +(2 * Math.PI * r).toFixed(2);
