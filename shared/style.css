@@ -660,8 +660,9 @@ ul.sl li { margin-bottom: 6px; }
 
 .qopt {
   position: relative;
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.08);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-right: 3px solid transparent;
   border-radius: var(--radius-sm);
   padding: 11px 14px;
@@ -682,7 +683,7 @@ ul.sl li { margin-bottom: 6px; }
   transition: transform .2s;
 }
 .qopt:hover::before { transform: scaleY(1); }
-.qopt:hover { border-color: rgba(99,102,241,.3); background: rgba(99,102,241,.06); }
+.qopt:hover { color: var(--text); border-color: rgba(99,102,241,.5); background: rgba(99,102,241,.08); }
 .qopt.correct {
   background: rgba(16,185,129,.12);
   border-color: var(--success);

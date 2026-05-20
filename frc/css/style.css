@@ -234,6 +234,7 @@
   box-shadow: 0 8px 32px rgba(0,0,0,.3);
 }
 .q-text {
+  color: var(--text);
   font-weight: 600;
   font-size: .95rem;
   margin-bottom: 16px;
@@ -246,8 +247,9 @@
 }
 .qopt {
   position: relative;
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.08);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-right: 3px solid transparent;
   border-radius: var(--radius-sm);
   padding: 11px 14px;
@@ -268,7 +270,7 @@
   transition: transform .2s;
 }
 .qopt:hover::before { transform: scaleY(1); }
-.qopt:hover { border-color: rgba(34,197,94,.3); background: rgba(34,197,94,.06); }
+.qopt:hover { color: var(--text); border-color: rgba(34,197,94,.5); background: rgba(34,197,94,.08); }
 .qopt.correct {
   background: rgba(34,197,94,.12);
   border-color: var(--accent);
