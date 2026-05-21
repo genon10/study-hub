@@ -54,7 +54,7 @@
     <nav class="top-nav">
       <div class="top-nav-inner">
         <a href="../index.html" class="nav-back" style="flex-shrink:0">🏠</a>
-        <a href="index.html" class="nav-brand">💣 MineMaster</a>
+        <a href="index.html" class="nav-brand"><img src="images/page1_img2.png" alt="" style="height:22px;vertical-align:middle;margin-left:6px;border-radius:3px"> MineMaster</a>
         <div class="nav-divider"></div>
         <div class="nav-links" id="nav-links">${linksHTML}</div>
         ${ringHTML}

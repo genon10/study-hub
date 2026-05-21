@@ -12,6 +12,11 @@
 <script src="../shared/utils.js"></script>
 <script src="js/nav.js"></script>
 
+<div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <div class="page-wrap">
 
   <div class="section-header">
@@ -22,6 +27,42 @@
 
   <!-- LANG TOGGLE -->
   <div style="display:flex;justify-content:flex-end;margin-bottom:12px" id="lang-toggle-wrap"></div>
+
+  <!-- DIAGRAMS FROM PROJECT BOOK -->
+  <div class="card card-glass">
+    <div class="card-title">📐 תרשימים מתיק הפרויקט</div>
+    <div class="diagram-grid">
+      <div class="diagram-card full-width">
+        <img src="images/page40_img1.png" alt="מבנה כללי" onclick="openLightbox(this)">
+        <div class="diagram-caption">מבנה כללי של הפרויקט</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page12_img1.png" alt="UML Model" onclick="openLightbox(this)">
+        <div class="diagram-caption">תרשים UML – שכבת ה-Model</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page14_img1.png" alt="UML ViewModel" onclick="openLightbox(this)">
+        <div class="diagram-caption">תרשים UML – שכבת ה-ViewModel</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page17_img1.png" alt="MVVM overview" onclick="openLightbox(this)">
+        <div class="diagram-caption">ארכיטקטורת MVVM – תרשים כללי</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page22_img1.png" alt="DSD" onclick="openLightbox(this)">
+        <div class="diagram-caption">תרשים קשרי גומלין – מסד הנתונים</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page25_img1.png" alt="זרימה" onclick="openLightbox(this)">
+        <div class="diagram-caption">תרשים זרימה</div>
+      </div>
+      <div class="diagram-card">
+        <img src="images/page31_img1.png" alt="מחלקות" onclick="openLightbox(this)">
+        <div class="diagram-caption">תרשים מחלקות</div>
+      </div>
+    </div>
+    <div style="font-size:.72rem;color:var(--muted);margin-top:10px;text-align:center">לחץ על תרשים להגדלה</div>
+  </div>
 
   <!-- MVVM DIAGRAM -->
   <div class="card card-glass">
@@ -484,6 +525,20 @@ function renderAll() {
   document.getElementById('lang-toggle-wrap').innerHTML = langToggleHTML();
 }
 renderAll();
+</script>
+<script>
+function openLightbox(img) {
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLightbox();
+});
 </script>
 </body>
 </html>

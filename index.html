@@ -15,6 +15,25 @@
   padding: 96px 0 72px;
   overflow: hidden;
 }
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('minesweeper/images/page1_img1.png');
+  background-size: cover;
+  background-position: center 30%;
+  z-index: 0;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,15,0.72),
+    rgba(10,10,15,0.97)
+  );
+}
+.hero > *:not(.hero-bg) { position: relative; z-index: 1; }
 .hero-grid {
   position: absolute; inset: 0;
   background-image:
@@ -131,6 +150,7 @@
 
   <!-- HERO -->
   <div class="hero">
+    <div class="hero-bg"></div>
     <div class="hero-grid"></div>
     <div class="particles">
       <div class="particle" style="width:4px;height:4px;background:var(--accent);left:12%;bottom:8%;animation-duration:4.2s;animation-delay:0s"></div>

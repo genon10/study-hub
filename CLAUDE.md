@@ -1,69 +1,98 @@
-# Study Hub — CLAUDE.md
+# Study Hub — Claude Instructions
 
-Static HTML/JS study platform. No build step. No framework. No package.json.
-Open files directly in browser or serve with any static server.
+## Project Overview
+Multi-project study website for bagrut (matriculation) exam preparation.
+Currently contains: MineMaster Android (minesweeper/) and FRC Robotics (frc/).
 
-## Structure
+## Design System
+**ALWAYS read `/mnt/skills/public/frontend-design/SKILL.md` before writing any HTML, CSS, or JS.**
+This is mandatory — do not skip it even for small changes.
 
+The design tokens are:
+- Background: `--bg: #0a0a0f`
+- Surface: `--surface: #111118`
+- Card: `--card: #16161f`
+- MineMaster accent: `--accent: #6366f1` (indigo)
+- FRC accent: `--accent: #22c55e` (green)
+- Fonts: Inter (body) + JetBrains Mono (code blocks)
+- Glass cards: `backdrop-filter: blur`, `rgba` borders
+- Dark theme only
+
+## Project Structure
 ```
-index.html              ← landing page (links to both modules)
-shared/
-  style.css             ← global dark theme variables + base styles
-  utils.js              ← shared JS (accToggle, lang switcher, localStorage)
-minesweeper/            ← Minesweeper FRC robot project (cybersecurity bagrut)
-  js/data.js            ← SINGLE SOURCE OF TRUTH: FLASHCARDS, QUIZ_QUESTIONS,
-                           EXAM_QUESTIONS, EXAM_TOPICS_MAP, TOPICS, SEARCH_INDEX
-  js/nav.js             ← bottom nav bar injection
-  js/search.js          ← search overlay logic
-  css/style.css         ← module-specific styles
-  index.html, topics.html, flashcards.html, quiz.html, exam.html,
-  architecture.html, code.html
-frc/                    ← FRC #5135 robot study (REBUILT 2025 season)
-  js/data.js            ← same structure as minesweeper/js/data.js
-  js/nav.js, js/search.js
-  css/style.css
-  index.html, topics.html, exam.html
+study hub/
+├── CLAUDE.md              ← you are here
+├── index.html             ← homepage with project cards
+├── shared/
+│   ├── style.css          ← global design tokens
+│   └── utils.js           ← getLang(), setLang(), t(), localStorage helpers
+├── minesweeper/           ← COMPLETE — do not modify unless asked
+│   ├── index.html, architecture.html, code.html
+│   ├── topics.html, flashcards.html, quiz.html, exam.html
+│   ├── css/style.css
+│   └── js/data.js, nav.js, search.js, progress.js,
+│       flashcards.js, quiz.js, exam.js
+└── frc/                   ← FRC Robotics section
+    ├── index.html, architecture.html, code.html
+    ├── topics.html, flashcards.html, quiz.html, exam.html
+    ├── css/style.css
+    └── js/data.js, nav.js, search.js, progress.js,
+        flashcards.js, quiz.js, exam.js
 ```
-
-## Data model (both modules share same pattern)
-
-All content lives in `data.js`. Arrays in order:
-
-| Array | Purpose |
-|---|---|
-| `FLASHCARDS` | Flip cards — `{q, a}` both multilingual `{he, en, mix}` |
-| `MATCH_PAIRS` | Term↔definition pairs |
-| `QUIZ_QUESTIONS` | Multiple choice — `{q, o[], c, e}` (Hebrew strings) |
-| `EXAM_QUESTIONS` | Bagrut-style MC — same shape as QUIZ |
-| `EXAM_TOPICS_MAP` | Parallel array, maps each EXAM_QUESTIONS index → topic string |
-| `TOPICS` | Deep-dive content — `{key, icon, title, desc, content}` |
-| `SEARCH_INDEX` | Auto-built from above; add manual entries at bottom |
-
-**EXAM_TOPICS_MAP must stay parallel to EXAM_QUESTIONS.** When adding exam questions, add matching entries to EXAM_TOPICS_MAP at the same index.
-
-## Content language
-
-All UI and content is Hebrew (RTL, `dir="rtl"`). Flashcard content uses three modes:
-- `he` — Hebrew only
-- `en` — English only
-- `mix` — mixed Hebrew/English (technical terms in English)
-
-## Styling conventions
-
-- CSS variables in `shared/style.css` (colors: `--surface`, `--border`, `--danger`, `--accent3`)
-- Green accent: `#22c55e` / `rgba(34,197,94,…)`
-- Accordion: `.acc` > `.acc-h` > `.acc-b` (toggled by `accToggle()` in utils.js)
-- Tables: `.tbl` with `.pro` (green) / `.con` (red) cells
-- Highlight box: `.highlight.green` or inline style `rgba(34,197,94,…)`
-- Bagrut tip box: `.bagrut-tip`
-- Level badges: `.lvl.lvl-1` / `.lvl-2` / `.lvl-3`
-- Code diagrams: `.diagram` (monospace, green, `white-space: pre`)
 
 ## Rules
 
-- No build step — edit files directly, refresh browser to test
-- No node_modules, no npm, no bundler
-- `.claude/` is gitignored — never commit it
-- Personal data (names, IDs) must never appear in any file
-- `shared/utils.js` is loaded before module JS on every page — keep it side-effect free
-- Each module's `data.js` loads before `search.js` and page scripts
+### Never touch minesweeper/ unless explicitly asked
+The minesweeper section is complete and working. Do not modify it.
+
+### Always match the existing section structure
+New pages must mirror the minesweeper/ pattern exactly:
+- Same navbar structure and classes
+- Same accordion pattern (`accToggle()`)
+- Same progress ring
+- Same language toggle (he/en/mix) using shared/utils.js
+
+### localStorage key prefixes
+- MineMaster: `mm_`
+- FRC: `frc_`
+Never mix prefixes between sections.
+
+### Language support
+All user-facing strings must exist in 3 languages in data.js:
+```js
+{ he: "עברית", en: "English", mix: "Mixed" }
+```
+No hardcoded Hebrew or English strings in HTML files.
+
+### GitHub integration (frc/code.html)
+Branch name is `main!` (with exclamation mark).
+All API calls must include `?ref=main!`
+```
+https://api.github.com/repos/KipodHater/RebuiltCode2026/contents/{path}?ref=main!
+```
+Decode with: `atob(response.content.replace(/\n/g,''))`
+
+### Privacy — never include personal data
+Do not include in any file:
+- Real student names
+- ID numbers (ת"ז)
+- Teacher names
+- Windows username or local file paths
+
+### Git workflow
+After any set of changes:
+```bash
+git add .
+git commit -m "description of change"
+git push
+```
+GitHub Pages auto-deploys from main branch.
+Live URL: https://genon10.github.io/study-hub/
+
+## Content Source
+FRC content is based on:
+- Robot book (ספר רובוט) — mechanical specs and systems
+- REBUILT project paper — theory, game rules, subsystems
+- GitHub repo: https://github.com/KipodHater/RebuiltCode2026
+
+Season name is **REBUILD** (not Reefscape, not 2026).

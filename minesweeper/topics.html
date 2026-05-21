@@ -55,11 +55,34 @@
     </div>
   `).join('');
 
+  const TOPIC_IMAGES = {
+    gameengine:    [{ src: 'images/page32_img1.png', caption: 'GameEngine – צילום מסך' }],
+    firebase_deep: [{ src: 'images/page33_img1.png', caption: 'Firebase Sync – צילום מסך' }],
+    advanced: [
+      { src: 'images/page36_img1.png', caption: 'עיצוב ממשק משתמש' },
+      { src: 'images/page42_img1.png', caption: 'NFC – שיתוף אתגרים' },
+      { src: 'images/page43_img1.png', caption: 'Multiplayer – חדרים' },
+    ],
+  };
+
+  function buildTopicImages(key) {
+    const imgs = TOPIC_IMAGES[key];
+    if (!imgs || !imgs.length) return '';
+    const phones = imgs.map(i => `
+      <div>
+        <div class="phone-mockup" style="width:170px;border-radius:28px">
+          <img src="${i.src}" alt="${i.caption}">
+        </div>
+        <div class="app-preview-label">${i.caption}</div>
+      </div>`).join('');
+    return `<div class="app-preview-row" style="margin:14px 0 6px">${phones}</div>`;
+  }
+
   function showTopic(key) {
     const topic = TOPICS.find(x => x.key === key);
     if (!topic) return;
     document.getElementById('topic-content').innerHTML =
-      `<div class="card-title">${topic.icon} ${topic.title}</div>${topic.content}`;
+      `<div class="card-title">${topic.icon} ${topic.title}</div>${buildTopicImages(key)}${topic.content}`;
     grid.style.display    = 'none';
     detail.style.display  = 'block';
     window.location.hash  = key;

@@ -707,10 +707,110 @@
   .fc-card-scene { min-height: 200px; }
 }
 
+/* ---- DIAGRAM CARDS ---- */
+.diagram-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.diagram-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.diagram-card img {
+  max-width: 100%;
+  border-radius: 8px;
+  filter: brightness(0.95);
+  cursor: zoom-in;
+  transition: filter .2s, transform .2s;
+  display: block;
+  margin: 0 auto;
+}
+.diagram-card img:hover { filter: brightness(1.05); transform: scale(1.01); }
+.diagram-caption {
+  font-size: .76rem;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.diagram-card.full-width { grid-column: 1 / -1; }
+
+/* ---- LIGHTBOX ---- */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,.92);
+  cursor: zoom-out;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay.open { display: flex; }
+.lightbox-overlay img {
+  max-width: 92vw;
+  max-height: 92vh;
+  border-radius: 8px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.7);
+  object-fit: contain;
+}
+.lightbox-close {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: rgba(255,255,255,.12);
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+.lightbox-close:hover { background: rgba(255,255,255,.22); }
+
+/* ---- PHONE MOCKUP ---- */
+.phone-mockup {
+  width: 200px;
+  border-radius: 32px;
+  border: 7px solid #1a1a2e;
+  box-shadow: 0 25px 60px rgba(0,0,0,.6),
+              inset 0 0 0 2px rgba(255,255,255,.05);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.phone-mockup img {
+  width: 100%;
+  display: block;
+}
+.app-preview-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+.app-preview-label {
+  font-size: .72rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 8px;
+}
+
 /* ---- RESPONSIVE 600px ---- */
 @media (max-width: 600px) {
   .match-grid { grid-template-columns: 1fr; }
   .quiz-q { padding: 16px; }
   .exam-grade-display { padding: 28px 16px; }
   .grade-circle { width: 110px; height: 110px; font-size: 2.2rem; }
+  .diagram-grid { grid-template-columns: 1fr; }
 }
