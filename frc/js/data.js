@@ -808,20 +808,18 @@ const TOPICS = [
 <div class="acc-b">
 <p>פרופילי אלומיניום <strong>50×25 מ"מ</strong> בתצורה מלבנית. מודולות קדמיות סובבו <strong>90°</strong> לפנות מקום לאינטייק ולקלע.</p>
 <p>מנועים: <strong>Talon FX (Falcon)</strong> — שליטה מדויקת + ניצול אנרגיה חכם. יחס <strong>1:5.9</strong>.</p>
-<img class="img-frc" src="images/image7.png" loading="lazy" alt="">
-<div class="img-cap">גרף מהירות Swerve בתחרות</div>
-</div></div>
 <img class="img-frc tall" src="images/image58.png" loading="lazy" alt="">
 <div class="img-cap">שלדת הרובוט ומודולות הסווארב מלמעלה</div>
+</div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ איך עובדת מודולת Swerve?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>כל מודולה = <strong>2 מנועים עצמאיים</strong>: מנוע כיוון (Steer) + מנוע הנעה (Drive).</p>
 <p>4 מודולות → holonomic motion: נסיעה לצד, תמרון מהיר, סיבוב תוך כדי נסיעה.</p>
+<img class="img-frc" src="images/image73.png" loading="lazy" alt="">
+<div class="img-cap">מודולות הסווארב MK4N</div>
 <img class="img-frc" src="images/image20.png" loading="lazy" alt="">
 <div class="img-cap">וקטורי מהירות מודולות Swerve</div>
 </div></div>
-<img class="img-frc" src="images/image73.png" loading="lazy" alt="">
-<div class="img-cap">מודולות הסווארב MK4N</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📍 Odometry + Vision Fusion</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p><strong>Odometry:</strong> אינטגרציה של מהירות גלגלים + gyro → מיקום בסנטימטרים. חיסרון: drift מצטבר.</p>
@@ -832,8 +830,6 @@ const TOPICS = [
 <div class="acc-b">
 <p><strong>FOC:</strong> "קדימה" = כיוון המגרש, ללא קשר לסיבוב הרובוט. חיסור זווית gyro מוקטור המהירות.</p>
 <p><strong>מגבלות תאוצה:</strong> מונעות wheel slip → נסיעה חלקה + אודומטריה מדויקת.</p>
-<img class="img-frc" src="images/image8.png" loading="lazy" alt="">
-<div class="img-cap">תרשים Field-Oriented Control</div>
 </div></div>`
   },
   {
@@ -844,13 +840,13 @@ const TOPICS = [
     content: `
 <div class="highlight green"><strong>עיקרון:</strong> מנגנון ציר סיבוב שלא נשבר בעת פגיעה — מפחית downtime בתחרות.</div>
 <img class="img-frc tall" src="images/image10.png" loading="lazy" alt="">
-<div class="img-cap">מנגנון האינטייק — מבנה כללי</div>
+<div class="img-cap">מנגנון האיסוף – גלגלים ורולרים</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔗 מנגנון Four-Bar</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>מבוסס <strong>ציר סיבוב</strong>, לא תנועה ליניארית. בעת התנגשות — האינטייק "בורח" כלפי מעלה ולא נשבר, חוזר מיד לפעולה.</p>
 </div></div>
 <img class="img-frc" src="images/image17.png" loading="lazy" alt="">
-<div class="img-cap">אינטייק מקדימה — גלגלות ופוליקרבונט</div>
+<div class="img-cap">מבט קדמי על מערכת האיסוף</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧱 פוליקרבונט + ציר חורו</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p><strong>פוליקרבונט:</strong> מתגמש בספיגת מכה וחוזר לצורתו (≠ אלומיניום). קל יותר → CoG נמוך.</p>
@@ -867,6 +863,8 @@ const TOPICS = [
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📋 4 שלבי ההופר</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>① <strong>איסוף</strong> מהאינטייק → ② <strong>מסוע שיפוע</strong> (קדימה) → ③ <strong>גלגלי מקאנום</strong> (מירכוז) → ④ <strong>הזנה</strong> לקלע.</p>
+<img class="img-frc" src="images/image10.png" loading="lazy" alt="">
+<div class="img-cap">מנגנון ההובלה בהופר</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>↔️ גלגלי מקאנום — כיצד מרכזים?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -885,7 +883,7 @@ const TOPICS = [
     content: `
 <div class="highlight green"><strong>אתגר:</strong> לירות מדויק מכל מרחק, גם בזמן תנועה מלאה.</div>
 <img class="img-frc tall" src="images/image50.png" loading="lazy" alt="">
-<div class="img-cap">קלע REBUILD — מידול תלת-מימדי</div>
+<div class="img-cap">מנגנון הקלע – מידול תלת-מימדי</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ מבנה הקלע</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>גלגלי ירי במהירות גבוהה + חגורות טימינג (העברה) + <strong>Hood</strong> (מסלול עליון מתכוונן).</p>
@@ -895,12 +893,12 @@ const TOPICS = [
 <div class="acc-b">
 <p>מתחשבת ב: <strong>כבידה</strong>, <strong>חיכוך אוויר</strong>, <strong>כוח מגנוס</strong> (כדור מסתובב = הפרש לחץ = עיקול).</p>
 <p>מוצא פתרון "אופטימלי" = עמיד לשגיאות ב-1°. נשמר בקוד, אינטרפולציה כפולה.</p>
-<img class="img-frc" src="images/image1.png" loading="lazy" alt="">
-<div class="img-cap">גרף סימולציה פיזיקלית — מסלול הכדור</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🚗 ירי בתנועה מלאה</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>מפרקים מהירות הרובוט ← כיוון מטרה + מאונך. מחשבים זמן תעופה → סטייה צדדית → מוסיפים לנקודת ירי. חוזרים עד התכנסות.</p>
+<img class="img-frc" src="images/image1.png" loading="lazy" alt="">
+<div class="img-cap">גרף זווית ומהירות ירי</div>
 </div></div>`
   },
   {
@@ -911,13 +909,13 @@ const TOPICS = [
     content: `
 <div class="highlight green"><strong>משימה:</strong> להרים ~50 ק"ג בשניות האחרונות — עם מינימום מאמץ מהנהג.</div>
 <img class="img-frc tall" src="images/image84.png" loading="lazy" alt="">
-<div class="img-cap">מנגנון הטיפוס — מבנה כללי</div>
+<div class="img-cap">מערכת הטיפוס</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🏗️ מבנה המעלית</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>מחליקה על פרופיל <strong>40×40 מ"מ</strong> (פרופיל יחיד — חסכנו 3.5 ק"ג).</p>
 <p><strong>Wear-In:</strong> מיסבי ±0.005 מ"מ שוחקים פרופיל → התאמה מושלמת. המעלית משתפרת עם שימוש!</p>
 <img class="img-frc" src="images/image51.png" loading="lazy" alt="">
-<div class="img-cap">חלק CNC — בלוק מיסבי המעלית</div>
+<div class="img-cap">בלוק מיסבים לאחר כרסום CNC</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ תמסורת 1:64 + ראצ\'ט</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -986,6 +984,24 @@ const TOPICS = [
 <div class="acc-b">
 <p>2 חוטים: CAN-Hi + CAN-Lo. כל רכיב עם ID ייחודי. תקשורת <strong>דו-כיוונית</strong>: ניטור זרם/מתח/טמפ\'.</p>
 <p>PWM = חד-כיווני + חוט נפרד לכל רכיב. CAN = רשת אחת לכולם.</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔄 FOC — בקרה מכוונת שדה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>FOC (Field-Oriented Control)</strong> — "קדימה" = כיוון המגרש, ללא קשר לסיבוב הרובוט. חיסור זווית הג\'יירו מוקטור המהירות.</p>
+<img class="img-frc" src="images/image8.png" loading="lazy" alt="">
+<div class="img-cap">תרשים FOC — בקרה מכוונת שדה</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📐 PID — לולאת בקרה סגורה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>PID:</strong> P=שגיאה נוכחית, I=מצבר שגיאות לאורך זמן, D=שיעור שינוי. ביחד עם Feedforward — שליטה מהירה ומדויקת.</p>
+<img class="img-frc" src="images/image4.png" loading="lazy" alt="">
+<div class="img-cap">תרשים PID — לולאת בקרה סגורה</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔋 סוללה — 12V SLA</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><strong>SLA = Sealed Lead Acid</strong> — 12V, 18Ah. 6 תאים × 2.1V. מחויב לפי תקנות FRC. שיא זרם ~400A לרגע.</p>
+<img class="img-frc" src="images/image9.png" loading="lazy" alt="">
+<div class="img-cap">סוללת SLA 12V — מבנה פנימי</div>
 </div></div>`
   },
   // ================================================================
@@ -1198,8 +1214,6 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <tr><td><strong>D</strong></td><td>"כמה מהר מתקרב?"</td><td>בלם לפני הגעה</td><td>רגיש לרעש</td></tr>
 </table>
 <p><strong>Integral Windup:</strong> כשI מצטבר מאוד → overshoot חזק. פתרון: clamp על ערך I.</p>
-<img class="img-frc" src="images/image4.png" loading="lazy" alt="">
-<div class="img-cap">תרשים PID — לולאת בקרה סגורה</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ Feedforward — חישוב מראש</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1232,8 +1246,6 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <p><strong>SLA = Sealed Lead Acid</strong> — 12V, 18Ah. 6 תאים × ~2.1V.</p>
 <p>לא ניתן לשנות — תקנות FRC. יש לטעון לפני כל משחק. שיא זרם ~400A לרגע.</p>
 <p>מיקום: <strong>תחתית הרובוט</strong> — CoG נמוך + בטיחות.</p>
-<img class="img-frc" src="images/image9.png" loading="lazy" alt="">
-<div class="img-cap">סוללת SLA 12V — מבנה פנימי</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ PDH — Power Distribution Hub</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
