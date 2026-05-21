@@ -18,6 +18,7 @@
     border-bottom:1px solid var(--border);
     position:relative;overflow:hidden;
   }
+  .header-logo{height:56px;width:auto;display:block;margin:0 auto 10px;opacity:.92;}
   header::after{
     content:'';position:absolute;width:500px;height:300px;
     background:radial-gradient(ellipse,rgba(124,111,255,.13) 0%,transparent 70%);
@@ -165,6 +166,13 @@
 <script src="../shared/utils.js"></script>
 <script src="js/nav.js"></script>
 
+<header>
+  <img src="images/image5.png" alt="FIRST Robotics Competition" class="header-logo">
+  <div class="badge">REBUILD 2025 — FRC #5135</div>
+  <h1>🤖 Robot <span>Study Hub</span></h1>
+  <p>כל מה שצריך לדעת על הרובוט — מכניקה, תוכנה ותיאוריה</p>
+</header>
+
 <nav>
   <button class="nb active" onclick="go('overview')">🗺️ סקירת רובוט</button>
   <button class="nb" onclick="go('drivetrain')">🏎️ מרכב</button>
@@ -207,6 +215,22 @@
   │   Swerve MK4N                  מעלית על פרופיל          │
   │   4 מודולות סווארב             יחס 1:64                 │
   └─────────────────────────────────────────────────────────┘</div>
+
+  <!-- HERO GALLERY -->
+  <div class="hero-gallery">
+    <img class="img-frc tall" src="images/image59.png" loading="lazy" alt="">
+    <div class="img-cap">רובוט REBUILD בסדנה</div>
+    <div class="hero-pair">
+      <div>
+        <img class="img-frc tall" src="images/image72.png" loading="lazy" alt="">
+        <div class="img-cap">רובוט REBUILD – מבט צד</div>
+      </div>
+      <div>
+        <img class="img-frc tall" src="images/image60.jpg" loading="lazy" alt="">
+        <div class="img-cap">מידול תלת-מימדי סופי</div>
+      </div>
+    </div>
+  </div>
 
   <div class="grid">
     <div class="card" style="--ca:#7c6fff" onclick="go('drivetrain')">
@@ -286,8 +310,12 @@
         <li><strong>מנועים:</strong> Talon FX (Falcon) – שליטה מדויקת + ניצול אנרגיה חכם.</li>
       </ul>
       <div class="hbox">⚡ יחס ההעברה הוא <strong>1:5.9</strong> – מהיר מספיק לחצות את המגרש בשיא מהירות ולקצר זמני ביצוע.</div>
+      <img class="img-frc tall" src="images/image7.png" loading="lazy" alt="">
+      <div class="img-cap">גרף מהירות הרובוט לפי הספק המנוע</div>
     </div>
   </div>
+  <img class="img-frc tall" src="images/image58.png" loading="lazy" alt="">
+  <div class="img-cap">שלדת הרובוט ומודולות הסווארב מלמעלה</div>
 
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">⚙️ איך עובדת מודולת Swerve? <span class="arr">▼</span></div>
@@ -309,8 +337,12 @@
         <li>תמרון מהיר – התחמקות מהגנה</li>
         <li>נסיעה בכיוון קבוע תוך סיבוב הרובוט (לצורך ירי)</li>
       </ul>
+      <img class="img-frc" src="images/image20.png" loading="lazy" alt="">
+      <div class="img-cap">וקטורי תנועה בסווארב</div>
     </div>
   </div>
+  <img class="img-frc tall" src="images/image73.png" loading="lazy" alt="">
+  <div class="img-cap">4 מודולות סווארב על שולחן העבודה</div>
 
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">📍 ניווט מדויק – Odometry + Vision <span class="arr">▼</span></div>
@@ -343,6 +375,8 @@
         <li>אודומטריה מדויקת יותר (כי לא מניחים החלקה)</li>
         <li>שליטת נהג טובה יותר</li>
       </ul>
+      <img class="img-frc" src="images/image8.png" loading="lazy" alt="">
+      <div class="img-cap">נהיגה מוכוונת שדה לעומת נהיגה מוכוונת רובוט</div>
     </div>
   </div>
 </div>
@@ -351,6 +385,9 @@
 <div class="sec" id="intake">
   <div class="sec-title">מגלול – <span>Four-Bar Mechanism</span></div>
   <div class="sec-sub">מנגנון האיסוף, עקרון הפעולה ועמידות לפגיעות</div>
+
+  <img class="img-frc tall" src="images/image10.png" loading="lazy" alt="">
+  <div class="img-cap">מנגנון האיסוף – גלגלים ורולרים</div>
 
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">🔗 מנגנון Four-Bar – מה זה ולמה? <span class="arr">▼</span></div>
@@ -367,6 +404,8 @@
       <p><strong>למה זה טוב?</strong> בעת התנגשות עם רובוט אחר, האינטייק "בורח" כלפי מעלה/צד ומונע שבר. אחרי ההתנגשות הוא חוזר לעצמו.</p>
     </div>
   </div>
+  <img class="img-frc tall" src="images/image17.png" loading="lazy" alt="">
+  <div class="img-cap">מבט קדמי על מערכת האיסוף</div>
 
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">🧱 חומרים ובנייה – פוליקרבונט וציר חורו <span class="arr">▼</span></div>
@@ -446,6 +485,9 @@
   <div class="sec-title">קלע – <span>מנגנון הירי</span></div>
   <div class="sec-sub">גלגלי ירי, Hood מתכוונן, וירי מדויק בתנועה מלאה</div>
 
+  <img class="img-frc tall" src="images/image50.png" loading="lazy" alt="">
+  <div class="img-cap">מנגנון הקלע – מידול תלת-מימדי</div>
+
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">⚙️ מבנה הקלע – גלגלים, חגורות, Hood <span class="arr">▼</span></div>
     <div class="acc-b">
@@ -504,6 +546,8 @@
   שיגיעו למטרה, ובוחרת את ה-OPTIMAL.</div>
       <p style="margin-top:10px"><strong>מה "אופטימלי"?</strong> הפתרון שבו הכדור עמיד לשגיאות – גם אם הזווית לא מדויקת ב-1°, הכדור עדיין נכנס.</p>
       <p style="margin-top:8px">הפתרונות נשמרים בקוד הרובוט. בזמן ירי, הרובוט עושה <strong>אינטרפולציה כפולה</strong> (ממוצע משוכלל לפי מרחק + מהירות הרובוט).</p>
+      <img class="img-frc" src="images/image1.png" loading="lazy" alt="">
+      <div class="img-cap">גרף זווית ומהירות ירי לפי מרחק ומהירות הרובוט</div>
     </div>
   </div>
 
@@ -537,6 +581,9 @@
   <div class="sec-title">טיפוס – <span>מערכת המעלית</span></div>
   <div class="sec-sub">הרמת הרובוט מהרצפה בסוף המשחק – מערכת נפרדת משאר הרובוט</div>
 
+  <img class="img-frc tall" src="images/image84.png" loading="lazy" alt="">
+  <div class="img-cap">מערכת הטיפוס – וו ומעלית</div>
+
   <div class="acc">
     <div class="acc-h" onclick="tog(this)">🏗️ מבנה המעלית – שני חלקים <span class="arr">▼</span></div>
     <div class="acc-b">
@@ -556,6 +603,8 @@
       </ul>
       <p style="margin-top:10px"><strong>מנגנון Wear-In מיוחד:</strong></p>
       <div class="hbox green">כשהמעלית עולה ויורד, המיסבים שוחקים את הפרופיל במאית המילימטר עד שיתאים. במקום "wear-out" (התדרדרות) יש "wear-in" – המעלית רק משתפרת עם השימוש!</div>
+      <img class="img-frc" src="images/image51.png" loading="lazy" alt="">
+      <div class="img-cap">חלק אלומיניום לאחר כרסום CNC</div>
     </div>
   </div>
 
@@ -636,6 +685,8 @@
         <li><strong>Feedforward:</strong> מחשב ישירות כמה כוח צריך לפי פיזיקה (כוח כבידה, חיכוך) – לא מחכה לשגיאה</li>
       </ul>
       <div class="hbox">💡 Feedforward = "ניחוש מושכל" + PID = "תיקון שגיאות". ביחד = שליטה מהירה ומדויקת</div>
+      <img class="img-frc" src="images/image4.png" loading="lazy" alt="">
+      <div class="img-cap">דיאגרמת בקר PID</div>
     </div>
   </div>
 
@@ -702,6 +753,8 @@
         <li><strong>Commutator:</strong> טבעת פלחים על הציר. מחליף כיוון הזרם בכל חצי סיבוב כדי שהכוח תמיד יהיה באותו כיוון.</li>
         <li><strong>Brushes (מברשות פחם):</strong> מגע סטטי עם הקומוטטור המסתובב. מספקות את הזרם.</li>
       </ul>
+      <img class="img-frc" src="images/image6.png" loading="lazy" alt="">
+      <div class="img-cap">חתך רוחב של מנוע DC עם מברשות</div>
     </div>
   </div>
 

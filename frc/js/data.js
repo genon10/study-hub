@@ -808,12 +808,20 @@ const TOPICS = [
 <div class="acc-b">
 <p>פרופילי אלומיניום <strong>50×25 מ"מ</strong> בתצורה מלבנית. מודולות קדמיות סובבו <strong>90°</strong> לפנות מקום לאינטייק ולקלע.</p>
 <p>מנועים: <strong>Talon FX (Falcon)</strong> — שליטה מדויקת + ניצול אנרגיה חכם. יחס <strong>1:5.9</strong>.</p>
+<img class="img-frc" src="images/image7.png" loading="lazy" alt="">
+<div class="img-cap">גרף מהירות Swerve בתחרות</div>
 </div></div>
+<img class="img-frc tall" src="images/image58.png" loading="lazy" alt="">
+<div class="img-cap">שלדת הרובוט ומודולות הסווארב מלמעלה</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ איך עובדת מודולת Swerve?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>כל מודולה = <strong>2 מנועים עצמאיים</strong>: מנוע כיוון (Steer) + מנוע הנעה (Drive).</p>
 <p>4 מודולות → holonomic motion: נסיעה לצד, תמרון מהיר, סיבוב תוך כדי נסיעה.</p>
+<img class="img-frc" src="images/image20.png" loading="lazy" alt="">
+<div class="img-cap">וקטורי מהירות מודולות Swerve</div>
 </div></div>
+<img class="img-frc" src="images/image73.png" loading="lazy" alt="">
+<div class="img-cap">מודולות הסווארב MK4N</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📍 Odometry + Vision Fusion</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p><strong>Odometry:</strong> אינטגרציה של מהירות גלגלים + gyro → מיקום בסנטימטרים. חיסרון: drift מצטבר.</p>
@@ -824,6 +832,8 @@ const TOPICS = [
 <div class="acc-b">
 <p><strong>FOC:</strong> "קדימה" = כיוון המגרש, ללא קשר לסיבוב הרובוט. חיסור זווית gyro מוקטור המהירות.</p>
 <p><strong>מגבלות תאוצה:</strong> מונעות wheel slip → נסיעה חלקה + אודומטריה מדויקת.</p>
+<img class="img-frc" src="images/image8.png" loading="lazy" alt="">
+<div class="img-cap">תרשים Field-Oriented Control</div>
 </div></div>`
   },
   {
@@ -833,10 +843,14 @@ const TOPICS = [
     desc: 'Four-bar linkage, פוליקרבונט, ציר חורו, מיסבים',
     content: `
 <div class="highlight green"><strong>עיקרון:</strong> מנגנון ציר סיבוב שלא נשבר בעת פגיעה — מפחית downtime בתחרות.</div>
+<img class="img-frc tall" src="images/image10.png" loading="lazy" alt="">
+<div class="img-cap">מנגנון האינטייק — מבנה כללי</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔗 מנגנון Four-Bar</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>מבוסס <strong>ציר סיבוב</strong>, לא תנועה ליניארית. בעת התנגשות — האינטייק "בורח" כלפי מעלה ולא נשבר, חוזר מיד לפעולה.</p>
 </div></div>
+<img class="img-frc" src="images/image17.png" loading="lazy" alt="">
+<div class="img-cap">אינטייק מקדימה — גלגלות ופוליקרבונט</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧱 פוליקרבונט + ציר חורו</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p><strong>פוליקרבונט:</strong> מתגמש בספיגת מכה וחוזר לצורתו (≠ אלומיניום). קל יותר → CoG נמוך.</p>
@@ -870,6 +884,8 @@ const TOPICS = [
     desc: 'גלגלי ירי, Hood, ירי בתנועה, סימולציה פיזיקלית',
     content: `
 <div class="highlight green"><strong>אתגר:</strong> לירות מדויק מכל מרחק, גם בזמן תנועה מלאה.</div>
+<img class="img-frc tall" src="images/image50.png" loading="lazy" alt="">
+<div class="img-cap">קלע REBUILD — מידול תלת-מימדי</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ מבנה הקלע</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>גלגלי ירי במהירות גבוהה + חגורות טימינג (העברה) + <strong>Hood</strong> (מסלול עליון מתכוונן).</p>
@@ -879,6 +895,8 @@ const TOPICS = [
 <div class="acc-b">
 <p>מתחשבת ב: <strong>כבידה</strong>, <strong>חיכוך אוויר</strong>, <strong>כוח מגנוס</strong> (כדור מסתובב = הפרש לחץ = עיקול).</p>
 <p>מוצא פתרון "אופטימלי" = עמיד לשגיאות ב-1°. נשמר בקוד, אינטרפולציה כפולה.</p>
+<img class="img-frc" src="images/image1.png" loading="lazy" alt="">
+<div class="img-cap">גרף סימולציה פיזיקלית — מסלול הכדור</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🚗 ירי בתנועה מלאה</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -892,10 +910,14 @@ const TOPICS = [
     desc: 'מעלית 1:64, ראצ\'ט, פרופיל יחיד, Wear-In',
     content: `
 <div class="highlight green"><strong>משימה:</strong> להרים ~50 ק"ג בשניות האחרונות — עם מינימום מאמץ מהנהג.</div>
+<img class="img-frc tall" src="images/image84.png" loading="lazy" alt="">
+<div class="img-cap">מנגנון הטיפוס — מבנה כללי</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🏗️ מבנה המעלית</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>מחליקה על פרופיל <strong>40×40 מ"מ</strong> (פרופיל יחיד — חסכנו 3.5 ק"ג).</p>
 <p><strong>Wear-In:</strong> מיסבי ±0.005 מ"מ שוחקים פרופיל → התאמה מושלמת. המעלית משתפרת עם שימוש!</p>
+<img class="img-frc" src="images/image51.png" loading="lazy" alt="">
+<div class="img-cap">חלק CNC — בלוק מיסבי המעלית</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ תמסורת 1:64 + ראצ\'ט</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -941,6 +963,8 @@ const TOPICS = [
 <div class="acc-b">
 <p><strong>Brushed:</strong> קומוטטור + מברשות פחם מחליפים זרם. יעיל ~75–80%. מברשות מתבלות.</p>
 <p><strong>Brushless:</strong> קומוטציה אלקטרונית (Hall Effect). יעיל ~90–95%. תחזוקה מינימלית. כוח/משקל גבוה.</p>
+<img class="img-frc" src="images/image6.png" loading="lazy" alt="">
+<div class="img-cap">חתך רוחב של מנוע DC עם מברשות</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📡 PWM — Pulse Width Modulation</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1174,6 +1198,8 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <tr><td><strong>D</strong></td><td>"כמה מהר מתקרב?"</td><td>בלם לפני הגעה</td><td>רגיש לרעש</td></tr>
 </table>
 <p><strong>Integral Windup:</strong> כשI מצטבר מאוד → overshoot חזק. פתרון: clamp על ערך I.</p>
+<img class="img-frc" src="images/image4.png" loading="lazy" alt="">
+<div class="img-cap">תרשים PID — לולאת בקרה סגורה</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ Feedforward — חישוב מראש</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1206,6 +1232,8 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <p><strong>SLA = Sealed Lead Acid</strong> — 12V, 18Ah. 6 תאים × ~2.1V.</p>
 <p>לא ניתן לשנות — תקנות FRC. יש לטעון לפני כל משחק. שיא זרם ~400A לרגע.</p>
 <p>מיקום: <strong>תחתית הרובוט</strong> — CoG נמוך + בטיחות.</p>
+<img class="img-frc" src="images/image9.png" loading="lazy" alt="">
+<div class="img-cap">סוללת SLA 12V — מבנה פנימי</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ PDH — Power Distribution Hub</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1245,6 +1273,8 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
     desc: 'REBUILT 2025 — ממדי שדה, HUB, BUMP, TRENCH, TOWER, FUEL',
     content: `
 <div class="highlight green"><strong>עונת REBUILT 2025:</strong> שדה סימטרי, שתי ברית (3 רובוטים כל אחת), אוסף ויריית FUEL לתוך HUB.</div>
+<img class="img-frc" src="images/image3.png" loading="lazy" alt="">
+<div class="img-cap">תרשים שדה REBUILT 2025</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📐 ממדי שדה</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <p>גודל שדה: <strong>807 × 1645 ס"מ</strong>. מחולק ע"י Neutral Zone.</p>
@@ -1263,6 +1293,8 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <tr><td>L2</td><td>114.3 ס"מ</td><td>20 נק'</td></tr>
 <tr><td>L3</td><td>160 ס"מ</td><td>30 נק'</td></tr>
 </table>
+<img class="img-frc" src="images/image70.png" loading="lazy" alt="">
+<div class="img-cap">תחנות נהגים — Driver Stations</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚽ FUEL + עונשים</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">

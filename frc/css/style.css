@@ -682,6 +682,31 @@
   flex-shrink: 0;
 }
 
+/* ---- ROBOT IMAGES ---- */
+.img-frc {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  margin-top: 12px;
+}
+.img-frc.tall { max-height: 500px; }
+.img-cap {
+  font-size: .76rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+.hero-gallery { margin-bottom: 24px; }
+.hero-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
 /* ---- RESPONSIVE 480px ---- */
 @media (max-width: 480px) {
   .topic-grid    { grid-template-columns: 1fr 1fr; }
@@ -697,6 +722,7 @@
 
 /* ---- RESPONSIVE 600px ---- */
 @media (max-width: 600px) {
+  .hero-pair { grid-template-columns: 1fr; }
   .match-grid { grid-template-columns: 1fr; }
   .quiz-q { padding: 16px; }
   .exam-grade-display { padding: 28px 16px; }
