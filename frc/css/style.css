@@ -699,6 +699,26 @@
   margin-top: 6px;
   margin-bottom: 4px;
 }
+
+/* ---- FIGURE / FIGCAPTION ---- */
+figure {
+  margin: 16px 0;
+  text-align: center;
+}
+figure img {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  max-width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  width: 100%;
+  display: block;
+}
+figcaption {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
 .hero-gallery { margin-bottom: 24px; }
 .hero-pair {
   display: grid;
