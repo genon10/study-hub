@@ -287,6 +287,39 @@ const FLASHCARDS = [
   {
     q: { he: 'מה הכימיה של סוללת ה-FRC?', en: 'What is the chemistry of the FRC battery?', mix: 'FRC battery chemistry?' },
     a: { he: 'SLA = Sealed Lead Acid. אנודה: Pb. קתודה: PbO₂. אלקטרוליט: H₂SO₄ (חומצה גופרתית). 6 תאים × 2.1V = 12.6V. FRC חייב SLA — לפי תקנות.', en: 'SLA = Sealed Lead Acid. Anode: Pb. Cathode: PbO₂. Electrolyte: H₂SO₄ (sulfuric acid). 6 cells × 2.1V = 12.6V. FRC mandates SLA — rules.', mix: 'Pb + PbO₂ + H₂SO₄. 6 cells × 2.1V = 12.6V. FRC = SLA mandatory.' }
+  },
+  // ---- תיאוריה כללית לבגרות ----
+  {
+    q: { he: 'מה 3 רמות שאלות הבוחן?', en: 'What are the 3 exam question levels?', mix: '3 רמות בוחן?' },
+    a: { he: 'רמה 1 ידע: "מה זה?" — הגדרה. רמה 2 הבנה: "מה עושה / איך עובד?" — הסבר. רמה 3 ניתוח: "למה? מה יקרה אם X?" — חשיבה ביקורתית.', en: 'Level 1 Knowledge: "What is it?" — define. Level 2 Understanding: "What does it do?" — explain. Level 3 Analysis: "Why? What if X?" — critical thinking.', mix: 'L1=הגדרה, L2=הסבר, L3=ניתוח סיבתי.' }
+  },
+  {
+    q: { he: 'מה Duty Cycle ב-PWM?', en: 'What is Duty Cycle in PWM?', mix: 'PWM Duty Cycle — מה זה?' },
+    a: { he: 'זמן ON / זמן כולל × 100%. מתח ממוצע = מתח סוללה × DC. 75% DC על 12V = 9V ממוצע.', en: 'Time ON / total time × 100%. Average voltage = battery × DC. 75% DC on 12V = 9V average.', mix: 'DC = זמן ON / כולל × 100%. 75% × 12V = 9V.' }
+  },
+  {
+    q: { he: 'מה H-Bridge וכיצד הופך כיוון המנוע?', en: 'What is H-Bridge and how does it reverse the motor?', mix: 'H-Bridge — איך הופך כיוון?' },
+    a: { he: '4 מפסקים: S1+S4 = קדימה, S2+S3 = אחורה, כולם פתוחים = עצירה. שליטה בכיוון הזרם = שליטה בכיוון הסיבוב.', en: '4 switches: S1+S4 = forward, S2+S3 = reverse, all open = stop. Current direction = rotation direction.', mix: 'S1+S4=קדימה, S2+S3=אחורה. 4 מפסקים = שליטה מלאה.' }
+  },
+  {
+    q: { he: 'מה ההבדל בין חוג פתוח לחוג סגור?', en: 'Open-loop vs closed-loop control?', mix: 'Open vs closed loop?' },
+    a: { he: 'חוג פתוח: פקודה → פעולה, ללא משוב. חוג סגור: פקודה → פעולה → מדידה → תיקון. PID = חוג סגור.', en: 'Open loop: command → action, no feedback. Closed loop: command → action → measure → correct. PID = closed loop.', mix: 'Open = no feedback. Closed = מדד + תקן. PID = closed.' }
+  },
+  {
+    q: { he: 'מה מומנט כוח וקשרו ליציבות הרובוט?', en: 'What is moment of force and robot stability?', mix: 'מומנט — קשר ליציבות?' },
+    a: { he: 'מומנט = מרחק × כוח. CoG גבוה → מרחק גדול מציר → מומנט גדול → קל להפיל. CoG נמוך = יציב.', en: 'Moment = distance × force. High CoG → large moment → easy to tip. Low CoG = stable.', mix: 'Moment = distance × force. CoG גבוה → מומנט גדול → קל להפיל.' }
+  },
+  {
+    q: { he: 'מה ההבדל בין גלגל רגיל, אומני ומקאנום?', en: 'Regular vs omni vs mecanum wheels?', mix: 'Regular / Omni / Mecanum?' },
+    a: { he: 'רגיל: קדימה/אחורה בלבד. אומני: רולים ציר אנכי = תנועה צדית. מקאנום: רולים 45° = holonomic (כל כיוון).', en: 'Regular: forward/back only. Omni: perpendicular rollers = lateral motion. Mecanum: 45° rollers = holonomic.', mix: 'Regular=קדימה/אחורה. Omni=צדי. Mecanum=45°=holonomic.' }
+  },
+  {
+    q: { he: 'מה US אולטרסוני ואיך מחשב מרחק?', en: 'Ultrasonic sensor — how does it measure distance?', mix: 'US sensor — איך מודד?' },
+    a: { he: 'שולח גלי קול 40kHz, מודד זמן t עד חזרה. S = V × t = 330 m/s × t. טווח: 3–300 ס"מ.', en: 'Sends 40kHz sound, measures return time t. S = V × t = 330 m/s × t. Range 3–300 cm.', mix: 'S = 330 × t. 40kHz, טווח 3–300 ס"מ.' }
+  },
+  {
+    q: { he: 'למה חיישן IR שגוי מתחת ל-10 ס"מ?', en: 'Why is IR sensor wrong under 10 cm?', mix: 'IR error < 10 cm — למה?' },
+    a: { he: 'שיטת הטריאנגולציה דורשת מרחק מינימלי. מתחת ל-10 ס"מ הזווית קטנה מדי לזיהוי — קריאת שגיאה.', en: 'Triangulation needs minimum distance. Under 10 cm angle too small to detect — erroneous reading.', mix: 'Triangulation needs min distance. < 10 cm = angle too small = error.' }
   }
 ];
 
@@ -743,6 +776,43 @@ const EXAM_QUESTIONS = [
     o: ['הרובוט מאבד קשר WiFi', 'גלגלים מחליקים בפניות חדות → חוסר יציבות, אודומטריה שגויה ועד להיפוך', 'המנועים מתחממים יותר', 'הגיירו מדווח קריאות שגויות'],
     c: 1,
     e: 'CoG גבוה = מומנט עצום בפנייה. גלגלים מאבדים אחיזה → wheel slip → אודומטריה שגויה → בעיות שליטה ועד להיפוך.'
+  },
+  // --- תיאוריה כללית לבגרות ---
+  {
+    q: 'מה Duty Cycle ב-PWM?',
+    o: ['אחוז זמן שהאות במצב ON', 'מספר הפולסים בשנייה', 'עוצמת הזרם במנוע', 'מתח הסוללה'],
+    c: 0,
+    e: 'Duty Cycle = זמן_ON / זמן_כולל × 100%. קובע את המתח הממוצע ולכן את מהירות המנוע.'
+  },
+  {
+    q: 'מה ההבדל בין חוג פתוח לחוג סגור?',
+    o: ['חוג פתוח מהיר יותר תמיד', 'חוג פתוח = ללא משוב; חוג סגור = מדידה + תיקון רציף', 'חוג סגור = PID בלבד', 'אין הבדל משמעותי'],
+    c: 1,
+    e: 'חוג פתוח שולח פקודה ולא יודע מה קרה. חוג סגור מודד, משווה ליעד ומתקן — מדויק יותר.'
+  },
+  {
+    q: 'מה S1+S4 ב-H-Bridge?',
+    o: ['עצירת המנוע', 'סיבוב אחורה', 'סיבוב קדימה', 'מעבר בין מצבים'],
+    c: 2,
+    e: 'S1+S4 סגורים: זרם זורם קדימה דרך המנוע → סיבוב קדימה. S2+S3 סגורים = אחורה.'
+  },
+  {
+    q: 'אם Duty Cycle = 50% ומתח סוללה = 12V, מה המתח הממוצע?',
+    o: ['12V', '3V', '6V', '9V'],
+    c: 2,
+    e: 'מתח ממוצע = מתח סוללה × Duty Cycle = 12 × 0.50 = 6V. עיקרון PWM.'
+  },
+  {
+    q: 'מדוע חיישן IR מדויק רק מעל 10 ס"מ?',
+    o: ['כי הגלים מתפזרים', 'כי שיטת הטריאנגולציה דורשת מרחק מינימלי לזיהוי הזווית', 'כי המתח יורד לאפס', 'כי הקרן חלשה מדי'],
+    c: 1,
+    e: 'IR מודד מרחק לפי זווית הקרן החוזרת (טריאנגולציה). מתחת ל-10 ס"מ הזווית קטנה מדי לזיהוי מדויק.'
+  },
+  {
+    q: 'מה יקרה אם נגדיל את kc (קבוע התיקון) מעבר לאופטימלי?',
+    o: ['הרובוט יגיע מהר יותר לדיוק', 'הרובוט יתנדנד (אוסצילציה) סביב היעד', 'תיקון איטי יותר', 'אין השפעה על הביצועים'],
+    c: 1,
+    e: 'kc גדול מדי → כל שגיאה קטנה מייצרת תיקון גדול → תנועות חריפות → אוסצילציה ואי-יציבות.'
   }
 ];
 
@@ -791,12 +861,221 @@ const EXAM_TOPICS_MAP = [
   'מרכב',       // 40 — swerve module 90° rotation
   'מרכב',       // 41 — mecanum vs swerve
   'מרכב',       // 42 — high CoM consequences
+  'תיאוריה',    // 43 — PWM duty cycle definition
+  'תיאוריה',    // 44 — open vs closed loop
+  'תיאוריה',    // 45 — H-Bridge S1+S4
+  'תיאוריה',    // 46 — PWM calculation 50%
+  'תיאוריה',    // 47 — IR min distance
+  'תיאוריה',    // 48 — kc too large → oscillation
 ];
 
 // ----------------------------------------------------------------
 // TOPICS (for topics.html deep-dive content)
 // ----------------------------------------------------------------
 const TOPICS = [
+  {
+    key: 'bagrut_theory',
+    icon: '📝',
+    title: 'תיאוריה כללית — הכנה לבגרות',
+    desc: 'חומר תיאורתי לפי רמות הבוחן: ידע · הבנה · ניתוח',
+    content: `
+<div class="highlight" style="background:rgba(99,102,241,.07);border-color:rgba(99,102,241,.3)">
+<strong>📝 תיאוריה כללית לבגרות</strong> — חומר זה חל על <em>כל הרובוטים</em>, לא FRC בלבד. שאלות הבוחן מסודרות לפי 3 רמות: <span class="lvl lvl-1">ידע</span> <span class="lvl lvl-2">הבנה</span> <span class="lvl lvl-3">ניתוח</span>
+</div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📊 רמות שאלות הבוחן</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<table class="tbl">
+<tr><th>רמה</th><th>שאלה אופיינית</th><th>מה נדרש</th></tr>
+<tr><td><span class="lvl lvl-1">1 ידע</span></td><td>"מה זה?"</td><td>הגדרת מושג — עובדה ישירה</td></tr>
+<tr><td><span class="lvl lvl-2">2 הבנה</span></td><td>"מה זה עושה / איך עובד?"</td><td>הסבר תפקיד, קשר בין מרכיבים</td></tr>
+<tr><td><span class="lvl lvl-3">3 ניתוח</span></td><td>"למה? מה יקרה אם נשנה X?"</td><td>חשיבה ביקורתית, הסבר תוצאה</td></tr>
+</table>
+<p style="margin-top:10px;font-size:.82rem;color:var(--muted)">💡 ברמה 3 — הסבירו את השרשרת הסיבתית: X → Y → Z. אל תסתפקו ב"כן/לא".</p>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🤖 מבנה הרובוט ומערכת הנעה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>מידות ויציבות:</strong> נקודות משען רחוקות = יציבות↑ תמרון↓</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>סוגי גלגלים:</strong></p>
+<ul style="margin:6px 0 10px 0;padding-right:18px">
+<li><strong>רגיל:</strong> היקף הגלגל קובע מהירות (v = ω × r) — תנועה קדימה/אחורה בלבד</li>
+<li><strong>אומני:</strong> רולים על ציר אנכי — תנועה צדית חופשית</li>
+<li><strong>מקאנום:</strong> רולים בזווית 45° — כוח צדי + קדמי → holonomic</li>
+</ul>
+<p><span class="lvl lvl-2">הבנה</span> <strong>שיטות ניהוג:</strong></p>
+<table class="tbl">
+<tr><th>שיטה</th><th>עיקרון</th><th>יתרון</th></tr>
+<tr><td>סינכרוני</td><td>כל הגלגלים אותו כיוון ומהירות</td><td>פשוט, תנועה ישרה מדויקת</td></tr>
+<tr><td>דיפרנציאלי</td><td>הפרש מהירויות בין צדדים = סיבוב</td><td>פשוט, אמין, כוח דחיפה</td></tr>
+<tr><td>סוורב (Swerve)</td><td>2 מנועים למודולה = כיוון + הנעה</td><td>חופש תנועה מלא (holonomic)</td></tr>
+</table>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"מה יקרה אם נגדיל את רוחב הרובוט?"<br>
+→ ציר המשען מתרחק → <strong>יציבות עולה</strong> → קשה יותר להפיל<br>
+→ אך: רדיוס הפנייה גדל → <strong>תמרון יורד</strong><br>
+→ trade-off: אי אפשר לקבל יציבות מקסימלית + תמרון מקסימלי בו-זמנית
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚖️ מרכז כובד</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>הגדרה:</strong> נקודה שבה מרוכזת כל מסת הגוף תיאורטית.</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>2 תנאים לרובוט יציב:</strong></p>
+<ol style="padding-right:18px">
+<li>מרכז הכובד נמוך ככל האפשר מהרצפה</li>
+<li>מרכז הכובד קרוב לאמצע הסימטריה של נקודות המשען</li>
+</ol>
+<p><span class="lvl lvl-2">הבנה</span> <strong>מומנט = מרחק × כוח</strong></p>
+<p>CoG גבוה → מרחק גדול מציר → מומנט גדול → קל יותר להפיל</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>שינוי מיקום מסות = שינוי מרכז כובד:</strong> מסה כבדה גבוה → CoG עולה. מסה כבדה נמוך → CoG יורד.</p>
+<div class="diagram">נקודת משען
+     |
+     |  ← מרחק (arm)
+     ●  ← מרכז כובד
+     |
+  ══════  ← רצפה</div>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"אם נעביר סוללה מלמטה למעלה — מה יקרה?"<br>
+→ מסת הסוללה (הרכיב הכבד ביותר) עוברת לגבוה<br>
+→ מרכז הכובד עולה → מרחק מציר המשען גדל<br>
+→ מומנט גדל → <strong>יציבות יורדת</strong> — קל יותר להפיל את הרובוט
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ מנועים חשמליים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>DC vs AC:</strong> DC = סוללה (ברובוט). AC = חשמל ביתי (אין ברובוט) → לא משתמשים.</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>מבנה מנוע DC:</strong></p>
+<ul style="padding-right:18px">
+<li><strong>סטטור:</strong> החלק הקבוע — מגנטים קבועים</li>
+<li><strong>רוטור:</strong> החלק המסתובב — אלקטרומגנט שמופעל ע"י זרם</li>
+</ul>
+<p><span class="lvl lvl-2">הבנה</span> <strong>Brushed vs Brushless:</strong></p>
+<table class="tbl">
+<tr><th>סוג</th><th>קומוטציה</th><th>יעילות</th><th>תחזוקה</th><th>מחיר</th></tr>
+<tr><td>Brushed</td><td>מכנית (קומוטטור + מברשות)</td><td class="con">75–80%</td><td class="con">מברשות מתבלות</td><td class="pro">זול</td></tr>
+<tr><td>Brushless</td><td>אלקטרונית (Hall Effect)</td><td class="pro">90–95%</td><td class="pro">מינימלית</td><td class="con">יקר</td></tr>
+<tr><td>Servo רגיל</td><td>אלקטרונית</td><td>80–85%</td><td>נמוכה</td><td>בינוני</td></tr>
+</table>
+<p><span class="lvl lvl-2">הבנה</span> <strong>סרוו:</strong></p>
+<ul style="padding-right:18px">
+<li><strong>Servo רגיל:</strong> זווית קבועה בלבד (0–180°) — לא מסתובב ברציפות</li>
+<li><strong>Servo 360 (VEX):</strong> ללא הגבלת זווית — מסתובב ברציפות כמו מנוע</li>
+</ul>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"למה לא משתמשים במנוע AC ברובוט?"<br>
+→ הסוללה מייצרת DC בלבד<br>
+→ מנוע AC דורש מתח AC (חשמל ביתי / אינוורטר)<br>
+→ הוספת אינוורטר = משקל + מורכבות + הפסדי אנרגיה נוספים<br>
+→ לכן: <strong>רק מנועי DC</strong> ברובוטים הפועלים על סוללה
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📡 PWM ו-H-Bridge</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>PWM (Pulse Width Modulation):</strong> ממתג ON-OFF בתדר גבוה. הממוצע = מתח יעיל = מהירות מנוע.</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>Duty Cycle = זמן ON / זמן כולל × 100%</strong></p>
+<p>מתח ממוצע = מתח סוללה × Duty Cycle</p>
+<div class="diagram">Duty Cycle 0%:   ▁▁▁▁▁▁▁▁▁▁▁▁  → 0V   (כבוי)
+Duty Cycle 25%:  ███▁▁▁▁▁▁▁▁▁  → 3V   (רבע כוח)
+Duty Cycle 50%:  ██████▁▁▁▁▁▁  → 6V   (חצי כוח)
+Duty Cycle 75%:  █████████▁▁▁  → 9V   (שלושה רבעים)
+Duty Cycle 100%: ████████████  → 12V  (כוח מלא)</div>
+<p><span class="lvl lvl-2">הבנה</span> <strong>למה לא רזיסטור?</strong> רזיסטור מוריד מתח ע"י בזבוז אנרגיה כחום. PWM לא מאבד אנרגיה — יעיל.</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>H-Bridge — 4 מפסקים לשליטה בכיוון הזרם:</strong></p>
+<div class="diagram">         +12V
+          │
+    S1────┤────S3
+    │     │     │
+MOTOR+   [M]  MOTOR-
+    │     │     │
+    S2────┤────S4
+          │
+         GND
+
+S1+S4 סגורים → זרם קדימה  → מנוע קדימה
+S2+S3 סגורים → זרם אחורה → מנוע אחורה
+כולם פתוחים  → אין זרם   → עצירה חופשית</div>
+<p><span class="lvl lvl-1">ידע</span> <strong>Kill-Power (NC):</strong> מפסק חרום נורמלי-סגור — חיתוך מיידי. <strong>Start button (NO):</strong> מפעיל רובוט.</p>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"אם Duty Cycle = 75% ומתח סוללה = 12V, מה המתח הממוצע?"<br>
+→ מתח ממוצע = 12 × 0.75 = <strong>9V</strong><br>
+"מה יקרה אם נשתמש ב-Duty Cycle = 0% לעצירה?"<br>
+→ מתח ממוצע = 0V → מנוע עוצר — אך ללא בלימה פעילה (STOP() מוסיף בלימה)
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>👁️ חיישנים ואותות</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>דיגיטלי:</strong> 2 ערכים בלבד — 0V (LOW) או 5V (HIGH). דוגמאות: UV sensor, לחצן, מיקרופון.</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>אנלוגי:</strong> ערכים רציפים בטווח (0–5V). דוגמאות: IR, עקיבת קו.</p>
+<table class="tbl">
+<tr><th>חיישן</th><th>סוג אות</th><th>טווח</th><th>עיקרון</th></tr>
+<tr><td>US אולטרסוני</td><td>דיגיטלי/אנלוגי</td><td>3–300 ס"מ</td><td>S = V × t, V = 330 m/s, 40kHz</td></tr>
+<tr><td>IR GP2D12</td><td>אנלוגי</td><td>10–80 ס"מ</td><td>טריאנגולציה — זווית קרן חוזרת</td></tr>
+<tr><td>UV (אש)</td><td>דיגיטלי</td><td>185–260 nm</td><td>קרינת UV מלהבה</td></tr>
+</table>
+<p><span class="lvl lvl-2">הבנה</span> <strong>הערות חשובות:</strong></p>
+<ul style="padding-right:18px">
+<li><strong>US:</strong> S = V × t (t = זמן הלוך-חזור). V = 330 m/s, תדר 40kHz</li>
+<li><strong>IR מתחת 10 ס"מ:</strong> קריאה שגויה — טריאנגולציה דורשת מרחק מינימלי</li>
+<li><strong>IR:</strong> מרחק עולה → מתח יורד (קשר הפוך)</li>
+</ul>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"מדוע חיישן IR שגוי מתחת ל-10 ס"מ?"<br>
+→ שיטת הטריאנגולציה מחשבת מרחק לפי זווית הקרן החוזרת<br>
+→ מתחת ל-10 ס"מ הזווית קטנה מדי לזיהוי מדויק<br>
+→ הקרן החוזרת עלולה ליפול מחוץ לטווח החיישן → קריאת שגיאה
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 אלגוריתם ובקרה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>חוג פתוח (Open Loop):</strong> פקודה → פעולה, ללא משוב. לא יודע מה קרה → לא מדויק.</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>חוג סגור (Closed Loop):</strong> פקודה → פעולה → מדידה → תיקון → לולאה חוזרת.</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>משתני בקרה:</strong></p>
+<table class="tbl">
+<tr><th>משתנה</th><th>משמעות</th></tr>
+<tr><td>Xr</td><td>מרחק רצוי (Reference)</td></tr>
+<tr><td>Xir</td><td>מרחק נמדד (Measured)</td></tr>
+<tr><td>error = Xr − Xir</td><td>הפרש: מה חסר לנו</td></tr>
+<tr><td>mor / mol</td><td>מהירות בסיס ימין / שמאל</td></tr>
+<tr><td>mr / ml</td><td>מהירות מתוקנת ימין / שמאל</td></tr>
+<tr><td>kc</td><td>קבוע תיקון (gain)</td></tr>
+</table>
+<p><span class="lvl lvl-2">הבנה</span> <strong>אלגוריתם תיקון:</strong></p>
+<div class="diagram">error = Xr - Xir
+mr = mor + (kc × error)   // ימין: מוסיף תיקון
+ml = mol - (kc × error)   // שמאל: מחסיר תיקון</div>
+<p><span class="lvl lvl-2">הבנה</span> <strong>פקודות קוד אופייניות:</strong></p>
+<div class="diagram">front = get analog input(4);       // קריאת IR
+UV    = get digital input(2);       // קריאת UV
+set motor(2, -80);                  // פורט 2, 80%, שמאל
+set digital output(9, 1);          // LED פורט 9
+STOP();                             // עצירה עם בלימה — מונע drift</div>
+<p><span class="lvl lvl-2">הבנה</span> <strong>PID — 3 רכיבים:</strong></p>
+<ul style="padding-right:18px">
+<li><strong>P (Proportional):</strong> יחסי לשגיאה הנוכחית — תיקון מהיר</li>
+<li><strong>I (Integral):</strong> מצטבר שגיאות — מתקן שגיאה קבועה (steady-state error)</li>
+<li><strong>D (Derivative):</strong> נגזרת שינוי השגיאה — מונע overshoot</li>
+</ul>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+"מה יקרה אם kc גדול מדי?"<br>
+→ כל שגיאה קטנה מייצרת תיקון גדול<br>
+→ תנועות חדות וחריפות<br>
+→ <strong>אוסצילציה</strong> — הרובוט מתנדנד סביב היעד ולא מייצב
+</div>
+</div></div>
+
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — הגדרת PWM, H-Bridge, מרכז כובד, חוג פתוח/סגור. רמה 2 — Duty Cycle שולט במהירות, H-Bridge הופך כיוון, PID מתקן שגיאה. רמה 3 — מה אם Duty Cycle = 75%? מה אם kc גדול? מה אם CoG גבוה?</div>`
+  },
   {
     key: 'drivetrain',
     icon: '🏎️',
