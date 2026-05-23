@@ -930,12 +930,32 @@ const TOPICS = [
 <p><span class="lvl lvl-2">הבנה</span> <strong>מומנט = מרחק × כוח</strong></p>
 <p>CoG גבוה → מרחק גדול מציר → מומנט גדול → קל יותר להפיל</p>
 <p><span class="lvl lvl-2">הבנה</span> <strong>שינוי מיקום מסות = שינוי מרכז כובד:</strong> מסה כבדה גבוה → CoG עולה. מסה כבדה נמוך → CoG יורד.</p>
-<div class="diagram">נקודת משען
-     |
-     |  ← מרחק (arm)
-     ●  ← מרכז כובד
-     |
-  ══════  ← רצפה</div>
+<svg viewBox="0 0 400 220" style="max-width:100%;display:block;margin:10px 0" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left: High CoG -->
+  <rect x="30" y="80" width="100" height="80" rx="6" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <circle cx="80" cy="50" r="10" fill="#ef4444" stroke="none"/>
+  <text x="80" y="46" text-anchor="middle" fill="#f1f5f9" font-size="9" font-family="inherit">CoG</text>
+  <line x1="80" y1="60" x2="80" y2="80" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="30" y1="165" x2="130" y2="165" stroke="#ef4444" stroke-width="2"/>
+  <text x="80" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">ציר (pivot)</text>
+  <line x1="80" y1="50" x2="30" y2="165" stroke="rgba(239,68,68,.3)" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="40" y="108" fill="#ef4444" font-size="10" font-family="inherit" transform="rotate(-55,40,108)">מרחק</text>
+  <text x="80" y="30" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="600" font-family="inherit">CoG גבוה</text>
+  <text x="80" y="200" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">מומנט גדול ← קל להפיל</text>
+  <!-- Right: Low CoG -->
+  <rect x="270" y="80" width="100" height="80" rx="6" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <circle cx="320" cy="120" r="10" fill="#22c55e" stroke="none"/>
+  <text x="320" y="116" text-anchor="middle" fill="#16161f" font-size="9" font-weight="700" font-family="inherit">CoG</text>
+  <line x1="270" y1="165" x2="370" y2="165" stroke="#22c55e" stroke-width="2"/>
+  <text x="320" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">ציר (pivot)</text>
+  <line x1="320" y1="120" x2="270" y2="165" stroke="rgba(34,197,94,.3)" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="280" y="145" fill="#22c55e" font-size="10" font-family="inherit" transform="rotate(-50,280,145)">מרחק</text>
+  <text x="320" y="30" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="600" font-family="inherit">CoG נמוך</text>
+  <text x="320" y="200" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">מומנט קטן ← יציב</text>
+  <!-- Center arrow -->
+  <text x="200" y="115" text-anchor="middle" fill="#64748b" font-size="22" font-family="inherit">↔</text>
+  <text x="200" y="135" text-anchor="middle" fill="#64748b" font-size="9" font-family="inherit">מומנט = מרחק × כוח</text>
+</svg>
 <div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
 <strong>🔴 שאלת ניתוח — רמה 3</strong><br>
 "אם נעביר סוללה מלמטה למעלה — מה יקרה?"<br>
@@ -980,26 +1000,86 @@ const TOPICS = [
 <p><span class="lvl lvl-1">ידע</span> <strong>PWM (Pulse Width Modulation):</strong> ממתג ON-OFF בתדר גבוה. הממוצע = מתח יעיל = מהירות מנוע.</p>
 <p><span class="lvl lvl-2">הבנה</span> <strong>Duty Cycle = זמן ON / זמן כולל × 100%</strong></p>
 <p>מתח ממוצע = מתח סוללה × Duty Cycle</p>
-<div class="diagram">Duty Cycle 0%:   ▁▁▁▁▁▁▁▁▁▁▁▁  → 0V   (כבוי)
-Duty Cycle 25%:  ███▁▁▁▁▁▁▁▁▁  → 3V   (רבע כוח)
-Duty Cycle 50%:  ██████▁▁▁▁▁▁  → 6V   (חצי כוח)
-Duty Cycle 75%:  █████████▁▁▁  → 9V   (שלושה רבעים)
-Duty Cycle 100%: ████████████  → 12V  (כוח מלא)</div>
+<svg viewBox="0 0 500 275" style="max-width:100%;display:block;margin:10px 0" xmlns="http://www.w3.org/2000/svg">
+  <text x="308" y="31" fill="#64748b" font-size="11" font-family="inherit">0% — מתח ממוצע: 0.0V (כבוי)</text>
+  <rect x="0" y="18" width="300" height="22" rx="3" fill="rgba(255,255,255,.05)"/>
+  <text x="308" y="81" fill="#64748b" font-size="11" font-family="inherit">25% — מתח ממוצע: 3.0V</text>
+  <rect x="0" y="68" width="75" height="22" rx="3" fill="#22c55e" opacity=".8"/>
+  <rect x="75" y="68" width="225" height="22" rx="3" fill="rgba(255,255,255,.05)"/>
+  <text x="308" y="131" fill="#64748b" font-size="11" font-family="inherit">50% — מתח ממוצע: 6.0V</text>
+  <rect x="0" y="118" width="150" height="22" rx="3" fill="#22c55e" opacity=".8"/>
+  <rect x="150" y="118" width="150" height="22" rx="3" fill="rgba(255,255,255,.05)"/>
+  <text x="308" y="181" fill="#64748b" font-size="11" font-family="inherit">75% — מתח ממוצע: 9.0V</text>
+  <rect x="0" y="168" width="225" height="22" rx="3" fill="#22c55e" opacity=".8"/>
+  <rect x="225" y="168" width="75" height="22" rx="3" fill="rgba(255,255,255,.05)"/>
+  <text x="308" y="231" fill="#64748b" font-size="11" font-family="inherit">100% — מתח ממוצע: 12.0V (כוח מלא)</text>
+  <rect x="0" y="218" width="300" height="22" rx="3" fill="#22c55e" opacity=".8"/>
+  <line x1="0" y1="252" x2="300" y2="252" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+  <text x="150" y="267" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">זמן (period) ←</text>
+  <rect x="0" y="252" width="12" height="10" rx="1" fill="#22c55e" opacity=".8"/><text x="16" y="261" fill="#64748b" font-size="10" font-family="inherit">HIGH</text>
+  <rect x="55" y="252" width="12" height="10" rx="1" fill="rgba(255,255,255,.07)"/><text x="71" y="261" fill="#64748b" font-size="10" font-family="inherit">LOW</text>
+</svg>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:8px 0">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span style="font-size:.78rem;color:var(--muted)">Duty Cycle:</span>
+    <input type="range" min="0" max="100" value="50" id="pwmSlider" oninput="pwmUpdate(this.value)" style="flex:1;min-width:100px;accent-color:#22c55e">
+    <span id="pwmPct" style="font-weight:700;color:#22c55e;font-size:.85rem;min-width:36px">50%</span>
+  </div>
+  <div id="pwmDisplay" style="font-size:.78rem;color:var(--muted);margin-top:4px">מתח ממוצע: 6.0V = 12V × 0.50</div>
+  <svg id="pwmLive" viewBox="0 0 300 28" style="max-width:100%;display:block;margin-top:6px" xmlns="http://www.w3.org/2000/svg">
+    <rect id="pwmHigh" x="0" y="2" width="150" height="22" rx="3" fill="#22c55e" opacity=".85"/>
+    <rect id="pwmLow" x="150" y="2" width="150" height="22" rx="3" fill="rgba(255,255,255,.05)"/>
+  </svg>
+</div>
 <p><span class="lvl lvl-2">הבנה</span> <strong>למה לא רזיסטור?</strong> רזיסטור מוריד מתח ע"י בזבוז אנרגיה כחום. PWM לא מאבד אנרגיה — יעיל.</p>
 <p><span class="lvl lvl-2">הבנה</span> <strong>H-Bridge — 4 מפסקים לשליטה בכיוון הזרם:</strong></p>
-<div class="diagram">         +12V
-          │
-    S1────┤────S3
-    │     │     │
-MOTOR+   [M]  MOTOR-
-    │     │     │
-    S2────┤────S4
-          │
-         GND
-
-S1+S4 סגורים → זרם קדימה  → מנוע קדימה
-S2+S3 סגורים → זרם אחורה → מנוע אחורה
-כולם פתוחים  → אין זרם   → עצירה חופשית</div>
+<div style="margin:12px 0">
+<svg id="hbSvg" viewBox="0 0 400 290" style="max-width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+  <text x="200" y="14" text-anchor="middle" fill="#f1f5f9" font-size="13" font-family="inherit">+12V</text>
+  <text x="200" y="285" text-anchor="middle" fill="#64748b" font-size="13" font-family="inherit">GND</text>
+  <line x1="85" y1="28" x2="315" y2="28" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="85" y1="258" x2="315" y2="258" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="85" y1="62" x2="85" y2="222" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="315" y1="62" x2="315" y2="222" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="200" y1="16" x2="200" y2="28" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="200" y1="258" x2="200" y2="272" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="85" y1="144" x2="158" y2="144" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="242" y1="144" x2="315" y2="144" stroke="#64748b" stroke-width="1.5"/>
+  <rect id="hb-s1" x="55" y="28" width="60" height="34" rx="6" fill="rgba(255,255,255,.08)" style="cursor:pointer;transition:fill .3s ease"/>
+  <text x="85" y="50" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600" font-family="inherit" style="pointer-events:none">S1</text>
+  <rect id="hb-s3" x="285" y="28" width="60" height="34" rx="6" fill="rgba(255,255,255,.08)" style="cursor:pointer;transition:fill .3s ease"/>
+  <text x="315" y="50" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600" font-family="inherit" style="pointer-events:none">S3</text>
+  <rect id="hb-s2" x="55" y="222" width="60" height="34" rx="6" fill="rgba(255,255,255,.08)" style="cursor:pointer;transition:fill .3s ease"/>
+  <text x="85" y="244" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600" font-family="inherit" style="pointer-events:none">S2</text>
+  <rect id="hb-s4" x="285" y="222" width="60" height="34" rx="6" fill="rgba(255,255,255,.08)" style="cursor:pointer;transition:fill .3s ease"/>
+  <text x="315" y="244" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="600" font-family="inherit" style="pointer-events:none">S4</text>
+  <circle cx="200" cy="144" r="40" fill="#16161f" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <text x="200" y="139" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700" font-family="inherit">M</text>
+  <text x="200" y="157" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">מנוע</text>
+  <g id="hb-fwd" style="display:none">
+    <path d="M200,22 L200,28 L85,28 L85,144 L158,144" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-dasharray="8,5" stroke-linecap="round">
+      <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M242,144 L315,144 L315,258 L200,258 L200,272" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-dasharray="8,5" stroke-linecap="round">
+      <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <g id="hb-rev" style="display:none">
+    <path d="M200,272 L200,258 L85,258 L85,144 L158,144" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-dasharray="8,5" stroke-linecap="round">
+      <animate attributeName="stroke-dashoffset" from="0" to="100" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M242,144 L315,144 L315,28 L200,28 L200,18" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-dasharray="8,5" stroke-linecap="round">
+      <animate attributeName="stroke-dashoffset" from="0" to="100" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+  <button onclick="hbridge('forward')" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .3s">קדימה ▶</button>
+  <button onclick="hbridge('reverse')" style="background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.3);color:#ffd166;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .3s">◀ אחורה</button>
+  <button onclick="hbridge('stop')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#64748b;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .3s">עצירה ■</button>
+</div>
+<div id="hb-lbl" style="text-align:center;font-size:.78rem;color:#64748b;margin-top:6px">לחץ כפתור לראות זרם</div>
+</div>
 <p><span class="lvl lvl-1">ידע</span> <strong>Kill-Power (NC):</strong> מפסק חרום נורמלי-סגור — חיתוך מיידי. <strong>Start button (NO):</strong> מפעיל רובוט.</p>
 <div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
 <strong>🔴 שאלת ניתוח — רמה 3</strong><br>
@@ -1020,6 +1100,50 @@ S2+S3 סגורים → זרם אחורה → מנוע אחורה
 <tr><td>IR GP2D12</td><td>אנלוגי</td><td>10–80 ס"מ</td><td>טריאנגולציה — זווית קרן חוזרת</td></tr>
 <tr><td>UV (אש)</td><td>דיגיטלי</td><td>185–260 nm</td><td>קרינת UV מלהבה</td></tr>
 </table>
+<svg viewBox="0 0 550 180" style="max-width:100%;display:block;margin:12px 0" xmlns="http://www.w3.org/2000/svg">
+  <!-- Robot icon left -->
+  <rect x="8" y="55" width="36" height="28" rx="4" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <circle cx="14" cy="88" r="5" fill="#16161f" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+  <circle cx="38" cy="88" r="5" fill="#16161f" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+  <text x="26" y="73" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">רובוט</text>
+  <!-- Wall icon right -->
+  <line x1="530" y1="45" x2="530" y2="140" stroke="rgba(255,255,255,.15)" stroke-width="3"/>
+  <text x="535" y="100" fill="#64748b" font-size="8" font-family="inherit">קיר</text>
+  <!-- Scale: x=50 → 0cm, x=530 → 300cm, scale=1.6px/cm -->
+  <!-- X axis -->
+  <line x1="50" y1="140" x2="530" y2="140" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+  <!-- Tick marks and labels at 0, 50, 100, 150, 200, 250, 300 cm -->
+  <line x1="50" y1="140" x2="50" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="50" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">0</text>
+  <line x1="130" y1="140" x2="130" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="130" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">50</text>
+  <line x1="210" y1="140" x2="210" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="210" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">100</text>
+  <line x1="290" y1="140" x2="290" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="290" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">150</text>
+  <line x1="370" y1="140" x2="370" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="370" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">200</text>
+  <line x1="450" y1="140" x2="450" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="450" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">250</text>
+  <line x1="530" y1="140" x2="530" y2="147" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+  <text x="530" y="157" text-anchor="middle" fill="#64748b" font-size="8" font-family="inherit">300 ס"מ</text>
+  <!-- US bar: 3–300 cm = x=54.8 to x=530 -->
+  <rect x="55" y="60" width="474" height="22" rx="3" fill="rgba(34,197,94,.65)" style="cursor:default">
+    <title>US אולטרסוני — טווח 3–300 ס"מ</title>
+  </rect>
+  <text x="60" y="75" fill="#16161f" font-size="9" font-weight="600" font-family="inherit">US אולטרסוני — 3 עד 300 ס"מ</text>
+  <!-- IR bar: 10–80 cm = x=66 to x=178 -->
+  <rect x="66" y="88" width="112" height="22" rx="3" fill="rgba(255,209,102,.7)" style="cursor:default">
+    <title>IR GP2D12 — טווח 10–80 ס"מ</title>
+  </rect>
+  <text x="70" y="103" fill="#16161f" font-size="9" font-weight="600" font-family="inherit">IR GP2D12 — 10–80 ס"מ</text>
+  <!-- IR dead zone: 0–10 cm = x=50 to x=66 -->
+  <rect x="50" y="88" width="16" height="22" rx="2" fill="rgba(239,68,68,.7)" style="cursor:default">
+    <title>IR — טווח שגוי מתחת ל-10 ס"מ</title>
+  </rect>
+  <text x="50" y="127" fill="#ef4444" font-size="8" font-family="inherit">⚠ טווח שגוי</text>
+  <line x1="58" y1="124" x2="58" y2="112" stroke="#ef4444" stroke-width="1"/>
+</svg>
 <p><span class="lvl lvl-2">הבנה</span> <strong>הערות חשובות:</strong></p>
 <ul style="padding-right:18px">
 <li><strong>US:</strong> S = V × t (t = זמן הלוך-חזור). V = 330 m/s, תדר 40kHz</li>
@@ -1299,8 +1423,56 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p><strong>PID:</strong> P=שגיאה נוכחית, I=מצבר שגיאות לאורך זמן, D=שיעור שינוי. ביחד עם Feedforward — שליטה מהירה ומדויקת.</p>
 <figure>
 <img src="images/image4.png" loading="lazy" alt="PID">
-<figcaption>דיאגרמת בקר PID</figcaption>
+<figcaption>דיאגרמת PID מלוח המורה</figcaption>
 </figure>
+<svg viewBox="0 0 600 200" style="max-width:100%;display:block;margin:14px 0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="pid-arr" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#64748b"/>
+    </marker>
+    <marker id="pid-arr-g" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#22c55e"/>
+    </marker>
+  </defs>
+  <!-- Boxes: קלט רצוי, ∑, PID, מנוע, פלט -->
+  <!-- קלט רצוי x=10 -->
+  <rect x="10" y="70" width="90" height="40" rx="6" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <text x="55" y="88" text-anchor="middle" fill="#f1f5f9" font-size="11" font-family="inherit">קלט</text>
+  <text x="55" y="102" text-anchor="middle" fill="#f1f5f9" font-size="11" font-family="inherit">רצוי</text>
+  <title>הערך שאנחנו רוצים להגיע אליו</title>
+  <!-- ∑ x=130 -->
+  <circle cx="155" cy="90" r="20" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <text x="155" y="96" text-anchor="middle" fill="#f1f5f9" font-size="18" font-family="inherit">∑</text>
+  <title>מחשב שגיאה: error = רצוי − נמדד</title>
+  <!-- PID x=210 -->
+  <rect x="210" y="66" width="100" height="48" rx="6" fill="rgba(34,197,94,.1)" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="260" y="85" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="700" font-family="inherit">PID</text>
+  <text x="260" y="101" text-anchor="middle" fill="#22c55e" font-size="9" font-family="inherit">P + I + D</text>
+  <title>output = Kp×e + Ki×∫e + Kd×(de/dt)</title>
+  <!-- מנוע x=340 -->
+  <rect x="340" y="70" width="80" height="40" rx="6" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <text x="380" y="95" text-anchor="middle" fill="#f1f5f9" font-size="11" font-family="inherit">מנוע</text>
+  <title>מבצע את הפקודה</title>
+  <!-- פלט x=450 -->
+  <rect x="450" y="70" width="80" height="40" rx="6" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <text x="490" y="95" text-anchor="middle" fill="#f1f5f9" font-size="11" font-family="inherit">פלט</text>
+  <title>המצב האמיתי הנמדד</title>
+  <!-- Arrows forward -->
+  <line x1="100" y1="90" x2="133" y2="90" stroke="#64748b" stroke-width="1.5" marker-end="url(#pid-arr)"/>
+  <line x1="175" y1="90" x2="208" y2="90" stroke="#64748b" stroke-width="1.5" marker-end="url(#pid-arr)"/>
+  <line x1="310" y1="90" x2="338" y2="90" stroke="#64748b" stroke-width="1.5" marker-end="url(#pid-arr)"/>
+  <line x1="420" y1="90" x2="448" y2="90" stroke="#64748b" stroke-width="1.5" marker-end="url(#pid-arr)"/>
+  <!-- Feedback arrow: from פלט bottom → down → left → up → to ∑ bottom -->
+  <path d="M490,110 L490,155 L155,155 L155,112" stroke="#22c55e" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#pid-arr-g)"/>
+  <text x="322" y="170" text-anchor="middle" fill="#22c55e" font-size="10" font-family="inherit">משוב (feedback)</text>
+  <!-- Animated signal dot -->
+  <circle r="5" fill="#22c55e" opacity=".85">
+    <animateMotion dur="3s" repeatCount="indefinite" calcMode="linear">
+      <mpath href="#pid-signal-path"/>
+    </animateMotion>
+  </circle>
+  <path id="pid-signal-path" d="M55,90 L133,90 L175,90 L210,90 L310,90 L380,90 L450,90 L490,90 L490,155 L155,155 L155,110" fill="none" stroke="none"/>
+</svg>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔋 סוללה — 12V SLA</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1332,10 +1504,42 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p><strong>מומנט כוח = מרחק מציר × כוח.</strong></p>
 <p>כשרובוט נוטה להתהפך, ציר הסיבוב = גלגל הקצה. CoG גבוה → מרחק גדול → מומנט גדול → כוח קטן מספיק להפיל.</p>
 <p>CoG נמוך → מרחק קטן → מומנט קטן → צריך כוח גדול יותר להפיל.</p>
-<div class="diagram">גבוה:  ⬆ CoG       נמוך:  CoG ⬇
-│ מרחק גדול │      │ מרחק קטן │
-[pivot]────┘      [pivot]──┘
-→ מומנט גדול      → מומנט קטן</div>
+<div style="margin:12px 0">
+<svg id="cogSvg" viewBox="0 0 400 350" style="max-width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+  <!-- Robot body -->
+  <rect id="cog-robot" x="100" y="80" width="200" height="150" rx="8" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width="2" style="transition:stroke .3s"/>
+  <!-- 4 wheels -->
+  <circle cx="108" cy="88" r="12" fill="#16161f" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <circle cx="292" cy="88" r="12" fill="#16161f" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <circle cx="108" cy="222" r="12" fill="#16161f" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <circle cx="292" cy="222" r="12" fill="#16161f" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <!-- Stability zone -->
+  <rect x="112" y="92" width="176" height="146" rx="4" fill="none" stroke="rgba(100,116,139,.4)" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Floor -->
+  <line x1="60" y1="240" x2="340" y2="240" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+  <!-- Pivot markers -->
+  <text x="108" y="258" text-anchor="middle" fill="#64748b" font-size="9" font-family="inherit">▲</text>
+  <text x="292" y="258" text-anchor="middle" fill="#64748b" font-size="9" font-family="inherit">▲</text>
+  <!-- Moment arrow (hidden when stable) -->
+  <line id="cog-moment" x1="200" y1="155" x2="108" y2="230" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3" style="display:none"/>
+  <!-- CoG dot — starts at center height -->
+  <circle id="cog-dot" cx="200" cy="155" r="11" fill="#22c55e" stroke="#16161f" stroke-width="2" style="cursor:grab;transition:cy .15s,fill .3s"/>
+  <text x="200" y="151" text-anchor="middle" fill="#16161f" font-size="8" font-weight="700" font-family="inherit" id="cog-dot-lbl" style="pointer-events:none">CoG</text>
+  <!-- Stable/unstable text -->
+  <text id="cog-stable" x="200" y="290" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="700" font-family="inherit">יציב ✓</text>
+  <text x="200" y="310" text-anchor="middle" fill="#64748b" font-size="10" font-family="inherit">הזזת CoG מחוץ לאזור היציבות = הפלה</text>
+  <!-- Axis label -->
+  <text x="62" y="155" fill="#64748b" font-size="9" font-family="inherit">↑</text>
+  <text x="55" y="165" fill="#64748b" font-size="9" font-family="inherit">גובה</text>
+</svg>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:8px">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span style="font-size:.78rem;color:var(--muted)">גובה CoG:</span>
+    <input type="range" min="0" max="200" value="75" id="cogSliderInput" oninput="cogSlider(this.value)" style="flex:1;min-width:100px;accent-color:#22c55e">
+  </div>
+  <div id="cog-lbl" style="font-size:.78rem;color:var(--muted);margin-top:4px">גובה מרכז כובד: 60 ס"מ</div>
+</div>
+</div>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔬 רמה 3 — ניתוח: מה קורה אם מעלים את הסוללה?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1534,8 +1738,53 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📈 Motion Profiles: Trapezoidal vs S-Curve</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-<p><strong>Trapezoidal:</strong> תאוצה קבועה → מהירות קבועה → עצירה. שינוי חד בתאוצה → רעידות.</p>
+<p><strong>Trapezoidal:</strong> תאוצה קבועה → מהירות קבועה → עצירה. שינוי חד בתאוצה → רעידות (jerk).</p>
 <p><strong>S-Curve:</strong> תאוצה עולה בהדרגה → smooth. שימושי ל-Swerve לאודומטריה מדויקת.</p>
+<div style="margin:14px 0">
+<svg viewBox="0 0 500 300" style="max-width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+  <!-- Grid -->
+  <line x1="50" y1="50" x2="50" y2="260" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+  <line x1="50" y1="260" x2="420" y2="260" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+  <line x1="50" y1="185" x2="420" y2="185" stroke="rgba(255,255,255,.04)" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="50" y1="122" x2="420" y2="122" stroke="rgba(255,255,255,.04)" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="50" y1="260" x2="420" y2="260" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+  <!-- Axes -->
+  <text x="430" y="264" fill="#64748b" font-size="11" font-family="inherit">זמן →</text>
+  <text x="44" y="46" text-anchor="end" fill="#64748b" font-size="11" font-family="inherit">↑</text>
+  <text x="44" y="56" text-anchor="end" fill="#64748b" font-size="11" font-family="inherit" writing-mode="lr">מהירות</text>
+  <!-- Y axis labels -->
+  <text x="44" y="264" text-anchor="end" fill="#64748b" font-size="9" font-family="inherit">0</text>
+  <text x="44" y="126" text-anchor="end" fill="#64748b" font-size="9" font-family="inherit">50%</text>
+  <text x="44" y="89" text-anchor="end" fill="#64748b" font-size="9" font-family="inherit">100%</text>
+  <!-- Trapezoidal group -->
+  <g id="mp-trap">
+    <polygon points="50,260 130,88 280,88 360,260" fill="rgba(34,197,94,.08)" stroke="none"/>
+    <polyline points="50,260 130,88 280,88 360,260" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="205" y="80" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="600" font-family="inherit">Trapezoidal</text>
+    <!-- Annotations -->
+    <line x1="90" y1="172" x2="90" y2="145" stroke="#22c55e" stroke-width="1" marker-end="url(#arr)"/>
+    <text x="94" y="169" fill="#22c55e" font-size="9" font-family="inherit">תאוצה קבועה</text>
+    <line x1="205" y1="105" x2="205" y2="130" stroke="rgba(34,197,94,.6)" stroke-width="1"/>
+    <text x="205" y="143" text-anchor="middle" fill="#64748b" font-size="9" font-family="inherit">מהירות קבועה</text>
+    <line x1="315" y1="172" x2="325" y2="148" stroke="#22c55e" stroke-width="1"/>
+    <text x="332" y="148" fill="#22c55e" font-size="9" font-family="inherit">עצירה</text>
+  </g>
+  <!-- S-Curve group -->
+  <g id="mp-scurve" style="display:none">
+    <path d="M50,260 C90,260 80,88 160,88 L250,88 C330,88 320,260 360,260" fill="rgba(255,209,102,.08)" stroke="none"/>
+    <path d="M50,260 C90,260 80,88 160,88 L250,88 C330,88 320,260 360,260" stroke="#ffd166" stroke-width="2.5" fill="none"/>
+    <text x="205" y="80" text-anchor="middle" fill="#ffd166" font-size="11" font-weight="600" font-family="inherit">S-Curve</text>
+    <line x1="88" y1="200" x2="95" y2="172" stroke="#ffd166" stroke-width="1"/>
+    <text x="98" y="200" fill="#ffd166" font-size="9" font-family="inherit">תאוצה משתנה</text>
+    <text x="205" y="143" text-anchor="middle" fill="#64748b" font-size="9" font-family="inherit">smooth — ללא jerk</text>
+  </g>
+  <defs><marker id="arr" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22c55e"/></marker></defs>
+</svg>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap">
+  <button id="mp-btn-trap" onclick="toggleCurve('trap')" style="background:rgba(34,197,94,.12);border:1px solid #22c55e;color:#22c55e;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .3s">Trapezoidal</button>
+  <button id="mp-btn-sc" onclick="toggleCurve('scurve')" style="background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.3);color:#ffd166;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .3s">S-Curve</button>
+</div>
+</div>
 </div></div>
 <div class="highlight" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);margin-top:14px">
 <strong>💡 בגרות:</strong> רמה 1 — מה כל אות PID? רמה 2 — הסבר Integral Windup. רמה 3 — מה קורה אם Kp גדול מדי?
@@ -1681,6 +1930,55 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <div class="acc-b">
 <p><strong>סינכרוני:</strong> כל הגלגלים כיוון + מהירות זהים → תנועה ישרה מדויקת.</p>
 <p><strong>דיפרנציאלי:</strong> הפרש מהירות בין צדדים → פנייה. Swerve משתמש בשניהם בו-זמנית.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;justify-content:center">
+  <div style="flex:1;min-width:180px;max-width:220px;text-align:center">
+    <svg viewBox="0 0 200 220" style="max-width:100%;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Robot body -->
+      <rect x="50" y="50" width="100" height="100" rx="6" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+      <!-- Left wheels (fast) -->
+      <rect x="30" y="58" width="20" height="30" rx="3" fill="#22c55e" opacity=".7"/>
+      <rect x="30" y="112" width="20" height="30" rx="3" fill="#22c55e" opacity=".7"/>
+      <!-- Right wheels (slow) -->
+      <rect x="150" y="62" width="20" height="22" rx="3" fill="rgba(34,197,94,.35)"/>
+      <rect x="150" y="116" width="20" height="22" rx="3" fill="rgba(34,197,94,.35)"/>
+      <!-- Left fast arrows -->
+      <line x1="26" y1="73" x2="10" y2="53" stroke="#22c55e" stroke-width="1.5" marker-end="url(#steer-arr)"/>
+      <line x1="26" y1="127" x2="10" y2="107" stroke="#22c55e" stroke-width="1.5" marker-end="url(#steer-arr)"/>
+      <!-- Right slow arrows (shorter) -->
+      <line x1="174" y1="73" x2="186" y2="63" stroke="rgba(34,197,94,.5)" stroke-width="1.5" marker-end="url(#steer-arr-d)"/>
+      <line x1="174" y1="127" x2="186" y2="117" stroke="rgba(34,197,94,.5)" stroke-width="1.5" marker-end="url(#steer-arr-d)"/>
+      <!-- Curved turn arrow -->
+      <path d="M100,170 Q160,200 170,150" stroke="#22c55e" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#steer-arr)"/>
+      <!-- Labels -->
+      <text x="36" y="53" fill="#22c55e" font-size="9" font-family="inherit">מהיר</text>
+      <text x="150" y="58" fill="#64748b" font-size="9" font-family="inherit">איטי</text>
+      <defs>
+        <marker id="steer-arr" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22c55e"/></marker>
+        <marker id="steer-arr-d" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(34,197,94,.5)"/></marker>
+      </defs>
+    </svg>
+    <p style="font-size:.85rem;font-weight:600;color:#22c55e;margin:4px 0">דיפרנציאלי</p>
+    <p style="font-size:.75rem;color:var(--muted)">הפרש מהירויות = פנייה</p>
+  </div>
+  <div style="flex:1;min-width:180px;max-width:220px;text-align:center">
+    <svg viewBox="0 0 200 220" style="max-width:100%;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Robot body -->
+      <rect x="50" y="50" width="100" height="100" rx="6" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+      <!-- 4 wheels all angled 45° -->
+      <g transform="rotate(45,40,73)"><rect x="30" y="62" width="20" height="28" rx="3" fill="#22c55e" opacity=".7"/></g>
+      <g transform="rotate(45,160,73)"><rect x="150" y="62" width="20" height="28" rx="3" fill="#22c55e" opacity=".7"/></g>
+      <g transform="rotate(45,40,127)"><rect x="30" y="116" width="20" height="28" rx="3" fill="#22c55e" opacity=".7"/></g>
+      <g transform="rotate(45,160,127)"><rect x="150" y="116" width="20" height="28" rx="3" fill="#22c55e" opacity=".7"/></g>
+      <!-- Straight diagonal movement arrow -->
+      <line x1="100" y1="155" x2="155" y2="100" stroke="#22c55e" stroke-width="2.5" marker-end="url(#steer-arr2)"/>
+      <defs>
+        <marker id="steer-arr2" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22c55e"/></marker>
+      </defs>
+    </svg>
+    <p style="font-size:.85rem;font-weight:600;color:#22c55e;margin:4px 0">סינכרוני</p>
+    <p style="font-size:.75rem;color:var(--muted)">כל הגלגלים — אותו כיוון</p>
+  </div>
+</div>
 <p><strong>סימטרי:</strong> שני הצדדים זהים — הפרש מהירות = פנייה.</p>
 <p><strong>א-סימטרי:</strong> סוגי גלגלים/עמדות שונות → תנועות ייחודיות.</p>
 </div></div>
@@ -1827,6 +2125,97 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 <div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה Duty Cycle? רמה 2 — איך H-Bridge הופך כיוון מנוע? רמה 3 — מה יתרון CAN על PWM בניטור?</div>`
   }
 ];
+
+// ----------------------------------------------------------------
+// INTERACTIVE SVG DIAGRAM FUNCTIONS
+// Called by inline event handlers in TOPICS content (innerHTML strips <script> tags)
+// ----------------------------------------------------------------
+
+function hbridge(mode) {
+  var s1 = document.getElementById('hb-s1');
+  var s2 = document.getElementById('hb-s2');
+  var s3 = document.getElementById('hb-s3');
+  var s4 = document.getElementById('hb-s4');
+  var ff = document.getElementById('hb-fwd');
+  var fr = document.getElementById('hb-rev');
+  var lbl = document.getElementById('hb-lbl');
+  if (!s1) return;
+  var act = '#22c55e', actR = '#ffd166', off = 'rgba(255,255,255,.08)';
+  if (mode === 'forward') {
+    s1.setAttribute('fill', act); s4.setAttribute('fill', act);
+    s2.setAttribute('fill', off); s3.setAttribute('fill', off);
+    ff.style.display = ''; fr.style.display = 'none';
+    lbl.textContent = 'S1+S4 סגורים — זרם קדימה — מנוע סובב קדימה';
+    lbl.style.color = '#22c55e';
+  } else if (mode === 'reverse') {
+    s2.setAttribute('fill', actR); s3.setAttribute('fill', actR);
+    s1.setAttribute('fill', off); s4.setAttribute('fill', off);
+    fr.style.display = ''; ff.style.display = 'none';
+    lbl.textContent = 'S2+S3 סגורים — זרם אחורה — מנוע סובב אחורה';
+    lbl.style.color = '#ffd166';
+  } else {
+    [s1, s2, s3, s4].forEach(function(s) { s.setAttribute('fill', off); });
+    ff.style.display = 'none'; fr.style.display = 'none';
+    lbl.textContent = 'כל המפסקים פתוחים — אין זרם — עצירה';
+    lbl.style.color = '#64748b';
+  }
+}
+
+function pwmUpdate(v) {
+  v = parseInt(v);
+  var hi = document.getElementById('pwmHigh');
+  var lo = document.getElementById('pwmLow');
+  var pct = document.getElementById('pwmPct');
+  var disp = document.getElementById('pwmDisplay');
+  if (!hi) return;
+  var hw = Math.round(3 * v);
+  hi.setAttribute('width', hw);
+  lo.setAttribute('x', hw);
+  lo.setAttribute('width', 300 - hw);
+  pct.textContent = v + '%';
+  disp.textContent = 'מתח ממוצע: ' + (12 * v / 100).toFixed(1) + 'V = 12V × ' + (v / 100).toFixed(2);
+}
+
+function toggleCurve(name) {
+  var trap = document.getElementById('mp-trap');
+  var sc = document.getElementById('mp-scurve');
+  var btTrap = document.getElementById('mp-btn-trap');
+  var btSc = document.getElementById('mp-btn-sc');
+  if (!trap) return;
+  if (name === 'trap') {
+    trap.style.display = ''; sc.style.display = 'none';
+    btTrap.style.borderColor = '#22c55e'; btTrap.style.color = '#22c55e';
+    btSc.style.borderColor = 'rgba(255,209,102,.3)'; btSc.style.color = '#ffd166';
+  } else {
+    sc.style.display = ''; trap.style.display = 'none';
+    btSc.style.borderColor = '#ffd166'; btSc.style.color = '#ffd166';
+    btTrap.style.borderColor = 'rgba(34,197,94,.3)'; btTrap.style.color = '#22c55e';
+  }
+}
+
+function cogSlider(v) {
+  v = parseInt(v);
+  var dot = document.getElementById('cog-dot');
+  var lbl = document.getElementById('cog-lbl');
+  var rb = document.getElementById('cog-robot');
+  var stb = document.getElementById('cog-stable');
+  var mom = document.getElementById('cog-moment');
+  if (!dot) return;
+  var baseY = 210, topY = 70;
+  var cy = Math.round(baseY - (v / 200) * (baseY - topY));
+  dot.setAttribute('cy', cy);
+  document.getElementById('cog-dot-lbl').setAttribute('y', cy - 4);
+  lbl.textContent = 'גובה מרכז כובד: ' + Math.round(v * 0.8) + ' סםמ';
+  var stable = cy > 130;
+  if (rb) rb.setAttribute('stroke', stable ? '#22c55e' : '#ef4444');
+  if (stb) { stb.textContent = stable ? 'יציב ✓' : 'לא יציב! ✗'; stb.style.fill = stable ? '#22c55e' : '#ef4444'; }
+  if (mom) {
+    mom.setAttribute('x1', 200); mom.setAttribute('y1', cy);
+    mom.setAttribute('x2', 108); mom.setAttribute('y2', 230);
+    mom.style.display = stable ? 'none' : '';
+  }
+  if (dot) dot.setAttribute('fill', stable ? '#22c55e' : '#ef4444');
+}
 
 // ----------------------------------------------------------------
 // SEARCH INDEX
