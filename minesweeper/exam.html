@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="../shared/style.css">
 <link rel="stylesheet" href="css/style.css">
 <script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
 </head>
 <body>
-<script src="../shared/utils.js"></script>
 
 <!-- TIMER BAR (shown during exam) -->
 <div class="exam-timer-bar" id="timer-bar" style="display:none">
@@ -26,15 +26,17 @@
   <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
 </div>
 
-<div class="page-wrap">
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">MineMaster · בחינה</span>
+    <h1 class="page-title">בחינה מדומה</h1>
+    <p class="page-subtitle">20 שאלות · 45 דקות · ציון 55–100</p>
+  </div>
+</div>
+<main class="page-main">
 
   <!-- ===== START SCREEN ===== -->
   <div id="screen-start">
-    <div class="section-header">
-      <span class="section-icon">🎓</span>
-      <h1>מבחן בגרות</h1>
-      <p>20 שאלות · 45 דקות · ציון 55–100</p>
-    </div>
 
     <div class="card card-glass">
       <div class="card-title">📋 הנחיות המבחן</div>
@@ -73,9 +75,9 @@
   <!-- ===== RESULTS SCREEN ===== -->
   <div id="screen-results" style="display:none">
 
-    <div class="section-header" style="padding-top:16px">
-      <span class="section-icon" id="result-icon">🎓</span>
-      <h1 id="result-title">תוצאות המבחן</h1>
+    <div style="text-align:center;padding:24px 0 16px">
+      <span id="result-icon" style="font-size:2rem;display:block;margin-bottom:8px">🎓</span>
+      <h1 id="result-title" style="color:var(--text)">תוצאות המבחן</h1>
     </div>
 
     <div class="exam-grade-display">
@@ -116,7 +118,7 @@
     </div>
   </div>
 
-</div><!-- /page-wrap -->
+</main>
 
 <!-- Timer warning toast -->
 <div id="exam-toast" style="
