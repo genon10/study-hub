@@ -13,10 +13,10 @@
 }
 
 /* FRC nav active item uses green accent via var(--accent) */
-.nav-item.active {
-  color: var(--frc-accent);
-  border-bottom-color: var(--frc-accent);
-  background: var(--frc-accent-dim);
+.nav-item.active, .nav-link.active {
+  color: var(--frc-accent) !important;
+  border-bottom-color: var(--frc-accent) !important;
+  background: var(--frc-dim);
 }
 
 /* BTN primary — green gradient */
