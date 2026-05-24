@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC #5135 – חידון | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FRC · חידון</span>
+    <h1 class="page-title">חידון</h1>
+    <p class="page-subtitle">10 שאלות — ענה וקבל משוב מיידי</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <!-- SCORE BAR -->
+  <div class="score-screen" id="score-screen" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--radius-md);margin-bottom:18px;text-align:right">
+    <div>
+      <div style="font-size:1.9rem;font-weight:900;color:var(--frc-accent)" id="qs">0</div>
+      <div style="font-size:.75rem;color:var(--muted)">נכון</div>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:.85rem;font-weight:600">ציון: <span id="qp">—</span></div>
+      <div style="font-size:.73rem;color:var(--muted)" id="qpr">ענה שאלה ראשונה</div>
+    </div>
+    <div>
+      <button class="btn-primary" onclick="resetQ()" style="font-size:.78rem;padding:6px 12px">🔄 אפס</button>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="qc"></div>
+
+  <!-- FINISHED BANNER -->
+  <div id="quiz-done" style="display:none">
+    <div class="score-screen show">
+      <div style="font-size:2.5rem;margin-bottom:10px" id="done-emoji"></div>
+      <div style="font-size:1.3rem;font-weight:700;margin-bottom:6px" id="done-title"></div>
+      <div class="score-msg" id="done-sub"></div>
+      <button class="btn-primary" onclick="resetQ()">🔄 נסה שוב</button>
+      <a href="exam.html" class="btn-primary" style="margin-right:8px;background:var(--surface);color:var(--text);border:1px solid var(--border)">🎓 מבחן בגרות</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script>
+const Qs = typeof QUIZ_QUESTIONS !== 'undefined' ? QUIZ_QUESTIONS : [];
+let score = 0, answered = 0;
+
+function buildQ() {
+  const container = document.getElementById('qc');
+  score = 0; answered = 0;
+  document.getElementById('qs').textContent = '0';
+  document.getElementById('qp').textContent = '—';
+  document.getElementById('qpr').textContent = 'ענה שאלה ראשונה';
+  document.getElementById('quiz-done').style.display = 'none';
+
+  if (!Qs.length) {
+    container.innerHTML = '<div class="hbox yellow">שאלות חידון יתווספו בקרוב.</div>';
+    return;
+  }
+
+  container.innerHTML = Qs.map((q, i) => `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-num">שאלה ${i + 1} מתוך ${Qs.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">
+        ${q.o.map((o, j) => `<div class="q-opt" onclick="ans(${i},${j})">${o}</div>`).join('')}
+      </div>
+      <div class="q-feedback" id="fb-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function ans(qi, oi) {
+  const q = Qs[qi];
+  const card = document.getElementById('qcard-' + qi);
+  if (card.dataset.answered) return;
+  card.dataset.answered = '1';
+  answered++;
+
+  card.querySelectorAll('.q-opt').forEach((el, i) => {
+    el.classList.add('locked');
+    if (i === q.c) el.classList.add('correct');
+    else if (i === oi) el.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb-' + qi);
+  if (oi === q.c) {
+    score++;
+    fb.textContent = '✓ נכון! ' + (q.e || '');
+    fb.className = 'q-feedback show correct';
+  } else {
+    fb.textContent = '✗ לא נכון. ' + (q.e || '');
+    fb.className = 'q-feedback show wrong';
+  }
+
+  document.getElementById('qs').textContent = score;
+  const pct = Math.round(score / answered * 100);
+  document.getElementById('qp').textContent = pct + '%';
+  document.getElementById('qpr').textContent = `${answered} מתוך ${Qs.length} נענו`;
+
+  if (answered === Qs.length) {
+    setTimeout(() => {
+      const p = Math.round(score / Qs.length * 100);
+      document.getElementById('done-emoji').textContent = p >= 85 ? '🎉' : p >= 65 ? '👍' : '📚';
+      document.getElementById('done-title').textContent = `${score}/${Qs.length}`;
+      document.getElementById('done-sub').textContent = p >= 85 ? 'מעולה! אתה מוכן לבגרות' : p >= 65 ? 'טוב, כדאי לחזור על מה שטעית' : 'לחזור על החומר שוב';
+      document.getElementById('quiz-done').style.display = 'block';
+    }, 400);
+  }
+}
+
+function resetQ() { buildQ(); }
+
+buildQ();
+</script>
+</body>
+</html>

@@ -22,12 +22,12 @@
 <main class="page-main">
 
   <!-- MODE TABS -->
-  <div class="mode-tabs" id="mode-tabs">
-    <button class="mode-tab active" data-i18n="mode.flip"  onclick="setMode('flip',this)">🔄 הפוך</button>
-    <button class="mode-tab"        data-i18n="mode.learn" onclick="setMode('learn',this)">📖 למד</button>
-    <button class="mode-tab"        data-i18n="mode.match" onclick="setMode('match',this)">🎯 התאם</button>
-    <button class="mode-tab"        data-i18n="mode.tf"    onclick="setMode('tf',this)">✅ נכון/שגוי</button>
-    <button class="mode-tab"        data-i18n="mode.write" onclick="setMode('write',this)">✍️ כתיבה</button>
+  <div class="mode-buttons" id="mode-tabs">
+    <button class="mode-btn active" data-i18n="mode.flip"  onclick="setMode('flip',this)">🔄 הפוך</button>
+    <button class="mode-btn"        data-i18n="mode.learn" onclick="setMode('learn',this)">📖 למד</button>
+    <button class="mode-btn"        data-i18n="mode.match" onclick="setMode('match',this)">🎯 התאם</button>
+    <button class="mode-btn"        data-i18n="mode.tf"    onclick="setMode('tf',this)">✅ נכון/שגוי</button>
+    <button class="mode-btn"        data-i18n="mode.write" onclick="setMode('write',this)">✍️ כתיבה</button>
   </div>
 
   <!-- LANG TOGGLE -->
@@ -38,15 +38,17 @@
     <div class="fc-stats" id="flip-stats"></div>
     <div class="progress-dots" id="flip-dots"></div>
     <div class="fc-swipe-hint" data-i18n="fc.swipe-hint">← החלק ימינה לכרטיס הבא | שמאלה לקודם →</div>
-    <div class="fc-outer" id="flip-outer">
+    <div class="fc-wrap" id="flip-outer">
       <div class="fc-card-scene">
-        <div class="flashcard" id="flip-card" onclick="flipCard()">
+        <div class="fc" id="flip-card" onclick="flipCard()">
           <div class="fc-front">
-            <div class="fc-q" id="flip-q"></div>
+            <span class="fc-label">מונח</span>
+            <div class="fc-content" id="flip-q"></div>
             <span class="flip-hint" data-i18n="fc.flip-hint">לחץ להפוך</span>
           </div>
           <div class="fc-back">
-            <div class="fc-a" id="flip-a"></div>
+            <span class="fc-label">הגדרה</span>
+            <div class="fc-content" id="flip-a"></div>
           </div>
         </div>
       </div>
@@ -118,8 +120,8 @@
       <span class="fc-count" id="tf-count">1 / 15</span>
       <span id="tf-score" style="font-size:.82rem;color:var(--muted)">0 נכון</span>
     </div>
-    <div class="progress-bar-wrap" style="margin-bottom:14px">
-      <div class="progress-bar-fill" id="tf-prog" style="width:0%"></div>
+    <div class="prog-wrap" style="margin-bottom:14px">
+      <div class="prog-bar" id="tf-prog" style="width:0%"></div>
     </div>
     <div class="tf-statement" id="tf-statement"></div>
     <div class="tf-btns" id="tf-btns">
@@ -146,8 +148,8 @@
       <span class="fc-count" id="write-count">1 / 15</span>
       <span id="write-score" style="font-size:.82rem;color:var(--muted)">0 נכון</span>
     </div>
-    <div class="progress-bar-wrap" style="margin-bottom:14px">
-      <div class="progress-bar-fill" id="write-prog" style="width:0%"></div>
+    <div class="prog-wrap" style="margin-bottom:14px">
+      <div class="prog-bar" id="write-prog" style="width:0%"></div>
     </div>
     <div class="write-prompt" id="write-prompt"></div>
     <div class="write-input-row">
@@ -196,9 +198,9 @@ function setMode(mode, btn) {
   MODE_ORDER.forEach(m => {
     document.getElementById('mode-' + m).style.display = m === mode ? 'block' : 'none';
   });
-  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   // Activate the correct tab even when called without a button reference
-  const activeBtn = btn || document.querySelectorAll('.mode-tab')[MODE_ORDER.indexOf(mode)];
+  const activeBtn = btn || document.querySelectorAll('.mode-btn')[MODE_ORDER.indexOf(mode)];
   if (activeBtn) activeBtn.classList.add('active');
   document.getElementById('mode-desc').textContent = modeDescs[mode] || '';
 
@@ -670,13 +672,13 @@ function finishWrite() {
    INIT — restore saved mode
    ================================================================ */
 (function init() {
-  const tabs = document.querySelectorAll('.mode-tab');
+  const tabs = document.querySelectorAll('.mode-btn');
   const modes = ['flip','learn','match','tf','write'];
   tabs.forEach((btn, i) => {
     if (modes[i] === currentMode) btn.classList.add('active');
     else btn.classList.remove('active');
   });
-  setMode(currentMode, document.querySelector(`.mode-tab.active`));
+  setMode(currentMode, document.querySelector(`.mode-btn.active`));
 })();
 </script>
 </body>

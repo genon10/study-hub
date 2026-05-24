@@ -101,6 +101,12 @@
 
   // Topics content is Hebrew-only — lang toggle saves preference for other pages
   function onLangChange() {}  // no-op: TOPICS data has no multilang structure
+
+  function tog(h) {
+    h.classList.toggle('open');
+    h.nextElementSibling.classList.toggle('open');
+  }
+  var accToggle = tog;
 </script>
 </body>
 </html>

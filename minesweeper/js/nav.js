@@ -1,15 +1,14 @@
 'use strict';
-/* Inject top nav with brand, progress ring, and hamburger for mobile */
 
 (function () {
   const pages = [
-    { file: 'index.html',        label: 'סקירה' },
-    { file: 'architecture.html', label: 'ארכיטקטורה' },
-    { file: 'code.html',         label: 'קוד' },
-    { file: 'topics.html',       label: 'נושאים' },
-    { file: 'flashcards.html',   label: 'כרטיסיות' },
-    { file: 'quiz.html',         label: 'חידון' },
-    { file: 'exam.html',         label: 'מבחן' },
+    { file: 'index.html',        label: '🏠 סקירה' },
+    { file: 'architecture.html', label: '🏗️ ארכיטקטורה' },
+    { file: 'code.html',         label: '💻 קוד' },
+    { file: 'topics.html',       label: '📖 נושאים' },
+    { file: 'flashcards.html',   label: '🃏 כרטיסיות' },
+    { file: 'quiz.html',         label: '❓ חידון' },
+    { file: 'exam.html',         label: '📝 מבחן' },
   ];
 
   const current = window.location.pathname.split('/').pop() || 'index.html';
@@ -20,10 +19,9 @@
   } catch (_) {}
 
   const linksHTML = pages.map(p =>
-    `<a href="${p.file}" class="nav-link${current === p.file ? ' active' : ''}">${p.label}</a>`
+    `<a href="${p.file}" class="nav-item${current === p.file ? ' active' : ''}">${p.label}</a>`
   ).join('');
 
-  // Progress ring — reads FC_SEEN from localStorage
   const fcSeen  = JSON.parse(localStorage.getItem('mm_fc_seen') || '[]');
   const fcTotal = 20;
   const pct     = Math.min(100, Math.round(fcSeen.length / fcTotal * 100));
@@ -42,7 +40,6 @@
     </div>
   `;
 
-  // Lang toggle — utils.js is loaded before nav.js
   const curLang = (typeof getLang === 'function') ? getLang() : 'mix';
   const navLangHTML = `<div class="lang-toggle" style="flex-shrink:0">
     <button class="lang-btn${curLang==='he'?' active':''}" data-lang="he" onclick="setLang('he')">עב</button>
@@ -51,12 +48,12 @@
   </div>`;
 
   const navHTML = `
-    <nav class="top-nav">
-      <div class="top-nav-inner">
-        <a href="../index.html" class="nav-back" style="flex-shrink:0">🏠</a>
-        <a href="index.html" class="nav-brand"><img src="images/page1_img2.png" alt="" style="height:22px;vertical-align:middle;margin-left:6px;border-radius:3px"> MineMaster</a>
-        <div class="nav-divider"></div>
-        <div class="nav-links" id="nav-links">${linksHTML}</div>
+    <nav class="section-nav">
+      <a href="../index.html" class="home-btn">← Study Hub</a>
+      <span class="nav-brand-section" style="flex-shrink:0">💣 MineMaster</span>
+      <div class="nav-divider"></div>
+      <div class="nav-pages" id="nav-pages">${linksHTML}</div>
+      <div class="nav-controls">
         ${ringHTML}
         ${navLangHTML}
         <button class="nav-hamburger" id="nav-hamburger" aria-label="תפריט">
@@ -68,19 +65,20 @@
 
   document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-  const ham   = document.getElementById('nav-hamburger');
-  const links = document.getElementById('nav-links');
+  const ham    = document.getElementById('nav-hamburger');
+  const pages2 = document.getElementById('nav-pages');
 
-  ham.addEventListener('click', function () {
-    links.classList.toggle('open');
-    ham.classList.toggle('open');
-  });
-
-  document.addEventListener('click', function (e) {
-    if (links.classList.contains('open') &&
-        !ham.contains(e.target) && !links.contains(e.target)) {
-      links.classList.remove('open');
-      ham.classList.remove('open');
-    }
-  });
+  if (ham && pages2) {
+    ham.addEventListener('click', function () {
+      pages2.classList.toggle('open');
+      ham.classList.toggle('open');
+    });
+    document.addEventListener('click', function (e) {
+      if (pages2.classList.contains('open') &&
+          !ham.contains(e.target) && !pages2.contains(e.target)) {
+        pages2.classList.remove('open');
+        ham.classList.remove('open');
+      }
+    });
+  }
 })();

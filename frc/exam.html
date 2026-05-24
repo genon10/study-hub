@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="../shared/style.css">
 <link rel="stylesheet" href="css/style.css">
 <script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
 </head>
 <body>
-<script src="../shared/utils.js"></script>
 
 <!-- TIMER BAR -->
 <div class="exam-timer-bar" id="timer-bar" style="display:none">
@@ -26,15 +26,18 @@
   <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
 </div>
 
-<div class="page-wrap">
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FRC · בחינה</span>
+    <h1 class="page-title">בחינה מדומה</h1>
+    <p class="page-subtitle">25 שאלות בסגנון בגרות עם טיימר</p>
+  </div>
+</div>
+
+<main class="page-main">
 
   <!-- START SCREEN -->
   <div id="screen-start">
-    <div class="section-header">
-      <span class="section-icon">🤖</span>
-      <h1>מבחן FRC Robotics</h1>
-      <p>20 שאלות · 30 דקות · נושאי ליבה</p>
-    </div>
 
     <div class="card card-glass">
       <div class="card-title">📋 הנחיות</div>
@@ -75,9 +78,9 @@
   <!-- RESULTS SCREEN -->
   <div id="screen-results" style="display:none">
 
-    <div class="section-header" style="padding-top:16px">
-      <span class="section-icon" id="result-icon">🤖</span>
-      <h1 id="result-title">תוצאות המבחן</h1>
+    <div style="text-align:center;padding:24px 0 16px">
+      <span id="result-icon" style="font-size:2rem;display:block;margin-bottom:8px">🤖</span>
+      <h1 id="result-title" style="color:var(--text)">תוצאות המבחן</h1>
     </div>
 
     <div class="exam-grade-display">
@@ -132,7 +135,7 @@
     </div>
   </div>
 
-</div><!-- /page-wrap -->
+</main>
 
 <div id="exam-toast" style="
   display:none; position:fixed; top:70px; left:50%; transform:translateX(-50%);
@@ -420,11 +423,12 @@ function renderExamQuestions() {
   document.getElementById('exam-questions').innerHTML = questionOrder.map((qi, pos) => {
     const q = EXAM_QUESTIONS[qi];
     return `
-      <div class="quiz-q" id="eq${pos}">
-        <div class="q-text">${pos + 1}. ${esc(q.q)}</div>
-        <div class="quiz-opts">
+      <div class="q-card" id="eq${pos}">
+        <div class="q-num">שאלה ${pos + 1} מתוך ${questionOrder.length}</div>
+        <div class="q-text">${esc(q.q)}</div>
+        <div class="q-opts">
           ${q.o.map((o, oi) =>
-            `<button class="qopt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</button>`
+            `<div class="q-opt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</div>`
           ).join('')}
         </div>
       </div>
@@ -433,13 +437,13 @@ function renderExamQuestions() {
 }
 
 function ansExam(pos, oi) {
-  if (document.getElementById(`eo${pos}0`)?.classList.contains('disabled')) return;
+  if (document.getElementById(`eo${pos}0`)?.classList.contains('locked')) return;
   examAnswers[pos] = oi;
   const q = EXAM_QUESTIONS[questionOrder[pos]];
   for (let i = 0; i < q.o.length; i++) {
     const b = document.getElementById(`eo${pos}${i}`);
     if (!b) continue;
-    b.classList.add('disabled');
+    b.classList.add('locked');
     if (i === oi) b.style.borderColor = 'var(--accent)';
   }
   document.getElementById('exam-progress-text').textContent =

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC #5135 – ארכיטקטורה | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FRC · ארכיטקטורה</span>
+    <h1 class="page-title">ארכיטקטורת הרובוט</h1>
+    <p class="page-subtitle">שכבות המערכת — מכניקה · חשמל · תוכנה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🏗️ שכבות המערכת <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table class="data-table">
+        <thead><tr><th>שכבה</th><th>רכיבים</th><th>תפקיד</th></tr></thead>
+        <tbody>
+          <tr><td>מכניקה</td><td>Swerve MK4N · אינטייק · הופר · קלע · טיפוס</td><td>תנועה, איסוף, ירי</td></tr>
+          <tr><td>חשמל</td><td>RoboRIO · PDP · VRM · Talons · CANbus</td><td>שליטה וחיווט</td></tr>
+          <tr><td>תוכנה</td><td>WPILib · Command-Based · AdvantageKit · Limelight</td><td>לוגיקה ואוטונומי</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">💻 ארכיטקטורת התוכנה <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="code-block">Robot
+├── RobotContainer      ← binding commands + subsystems
+├── subsystems/
+│   ├── Drivetrain      ← Swerve + Odometry + Vision
+│   ├── Intake          ← Four-bar mechanism
+│   ├── Hopper          ← Belt conveyor + Mecanum
+│   ├── Shooter         ← Flywheel + Hood
+│   └── Climber         ← Elevator
+├── commands/
+│   ├── TeleopDrive     ← FOC field-oriented control
+│   ├── AutoShoot       ← Moving-while-shooting
+│   └── AutoRoutines    ← PathPlanner trajectories
+└── util/
+    ├── PhysicsSimulator ← ballistic trajectory
+    └── VisionProcessor  ← SolvePnP + Kalman</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">🔄 זרימת נתונים — ירי בתנועה <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="code-block">Limelight → SolvePnP → robotPose
+Encoders → Odometry → robotPose
+Kalman Filter ← (both) → estimatedPose
+
+estimatedPose + robotVelocity
+  → PhysicsSimulator
+  → optimalAngle, optimalSpeed
+
+Hood.setAngle(optimalAngle)
+Flywheel.setRPM(optimalSpeed)
+Drivetrain.aimAt(target)</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)">⚙️ FSM — מכונת מצבים לקלע <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="code-block">IDLE
+  → [SPINNING_UP]    (כפתור ירי לחוץ)
+      → [READY]       (גלגלים הגיעו למהירות)
+          → [FIRING]  (כדור בדרך)
+              → IDLE  (חיישן זיהה יציאה)</div>
+      <p>כל מעבר בין מצבים מוגדר בקוד כ-Command. הרובוט תמיד במצב מוגדר אחד — לא יכול להיות מצב לא ידוע.</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function tog(h) {
+  h.classList.toggle('open');
+  h.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>

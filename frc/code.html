@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC #5135 – קוד | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FRC · קוד</span>
+    <h1 class="page-title">קוד מ-GitHub</h1>
+    <p class="page-subtitle">קבצים אמיתיים מ-RebuiltCode2026 — לחץ על קובץ לטעינה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="hbox yellow" style="margin-bottom:16px">
+    ⚠️ <strong>לבגרות:</strong> לדעת להסביר כל קטע קוד — למה נכתב כך, מה הבעיה שהוא פותר.
+  </div>
+
+  <!-- FILE BROWSER + CODE VIEWER -->
+  <div class="card" style="display:grid;grid-template-columns:220px 1fr;gap:0;padding:0;overflow:hidden;margin-bottom:16px">
+    <div style="border-left:1px solid var(--border);overflow-y:auto;max-height:480px">
+      <div class="file-tree-folder">📁 RebuiltCode2026</div>
+      <div id="file-tree"></div>
+    </div>
+    <div id="code-display" style="min-height:300px;overflow:auto">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--muted)">
+        <span style="font-size:2rem;margin-bottom:12px">📂</span>
+        <span style="font-size:.875rem">בחר קובץ מהרשימה</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATIC CODE EXAMPLES -->
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)"><span>🤖 Command-Based — מבנה בסיסי</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hbox green" style="margin-bottom:12px">
+        WPILib Command-Based: כל Subsystem = אובייקט, כל פעולה = Command. Scheduler מנהל ה-mutex.
+      </div>
+      <div class="hljs-wrap"><pre><code class="language-java">// RobotContainer.java — binding buttons to commands
+public class RobotContainer {
+    private final DriveSubsystem drive = new DriveSubsystem();
+    private final XboxController controller = new XboxController(0);
+
+    public RobotContainer() {
+        drive.setDefaultCommand(new TeleopDrive(
+            drive,
+            () -> -controller.getLeftY(),
+            () -> -controller.getLeftX(),
+            () -> -controller.getRightX()
+        ));
+        new JoystickButton(controller, XboxController.Button.kA.value)
+            .whileTrue(new AutoShoot(drive, shooter));
+    }
+}</code></pre></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)"><span>⚙️ Swerve — Field-Relative Drive</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    SwerveModuleState[] states = kinematics.toSwerveModuleStates(
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot)
+    );
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_SPEED);
+    for (int i = 0; i &lt; 4; i++) modules[i].setState(states[i]);
+}</code></pre></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)"><span>🎯 ירי בתנועה — PhysicsSimulator</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">public ShooterState calculate(Pose2d robotPose, ChassisSpeeds velocity) {
+    Translation2d target = SPEAKER_POSE;
+    double dist = robotPose.getTranslation().getDistance(target);
+
+    // Lead the target based on robot velocity
+    double tof = dist / BALL_SPEED;
+    Translation2d futureTarget = target.minus(new Translation2d(
+        velocity.vxMetersPerSecond * tof,
+        velocity.vyMetersPerSecond * tof));
+
+    double angle = Math.atan2(
+        futureTarget.getY() - robotPose.getY(),
+        futureTarget.getX() - robotPose.getX());
+    double speed = speedTable.get(dist); // interpolated from data
+    return new ShooterState(angle, speed);
+}</code></pre></div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="tog(this)"><span>🧮 Kalman Filter — Pose Estimation</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="hljs-wrap"><pre><code class="language-java">// SwerveDrivePoseEstimator fuses odometry + vision
+SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+    kinematics, gyro.getRotation2d(), getModulePositions(), new Pose2d(),
+    VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),   // odometry std devs
+    VecBuilder.fill(0.5,  0.5,  Units.degreesToRadians(30))); // vision std devs
+
+// In periodic():
+poseEstimator.update(gyro.getRotation2d(), getModulePositions());
+if (limelight.hasTarget()) {
+    poseEstimator.addVisionMeasurement(
+        limelight.getRobotPose(), limelight.getTimestamp());
+}</code></pre></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function tog(h) {
+  h.classList.toggle('open');
+  h.nextElementSibling.classList.toggle('open');
+}
+var accToggle = tog;
+
+/* ---- GITHUB FILE BROWSER ---- */
+const REPO_API  = 'https://api.github.com/repos/KipodHater/RebuiltCode2026/contents/';
+const BRANCH    = 'main!';
+
+const FILES = [
+  { label: '🤖 RobotContainer.java',    path: 'src/main/java/frc/robot/RobotContainer.java' },
+  { label: '🚗 DriveSubsystem.java',    path: 'src/main/java/frc/robot/subsystems/DriveSubsystem.java' },
+  { label: '🎮 TeleopDrive.java',       path: 'src/main/java/frc/robot/commands/TeleopDrive.java' },
+  { label: '🔫 ShooterSubsystem.java',  path: 'src/main/java/frc/robot/subsystems/ShooterSubsystem.java' },
+  { label: '🧮 PhysicsSimulator.java',  path: 'src/main/java/frc/robot/util/PhysicsSimulator.java' },
+  { label: '👁️ VisionProcessor.java',   path: 'src/main/java/frc/robot/util/VisionProcessor.java' },
+  { label: '📦 SwerveModule.java',      path: 'src/main/java/frc/robot/subsystems/SwerveModule.java' },
+  { label: '🎯 AutoShoot.java',         path: 'src/main/java/frc/robot/commands/AutoShoot.java' },
+];
+
+let activeFileIdx = null;
+
+document.getElementById('file-tree').innerHTML = FILES.map((f, i) => `
+  <div class="file-tree-item" id="fti-${i}" onclick="loadFile(${i})">${f.label}</div>
+`).join('');
+
+function showLoading() {
+  document.getElementById('code-display').innerHTML = `
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>טוען קוד מ-GitHub...</p>
+    </div>`;
+}
+
+function showError() {
+  document.getElementById('code-display').innerHTML = `
+    <div class="error-state hbox red" style="margin:16px">
+      ⚠️ לא ניתן לטעון מ-GitHub. בדוק חיבור אינטרנט או נסה שוב.
+      <button class="btn-primary" onclick="retryFetch()" style="margin-right:8px">נסה שוב</button>
+    </div>`;
+}
+
+function retryFetch() {
+  if (activeFileIdx !== null) loadFile(activeFileIdx);
+}
+
+function loadFile(i) {
+  activeFileIdx = i;
+  document.querySelectorAll('.file-tree-item').forEach((el, j) =>
+    el.classList.toggle('active', j === i));
+  showLoading();
+  fetch(`${REPO_API}${FILES[i].path}?ref=${encodeURIComponent(BRANCH)}`)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => {
+      const code = atob(data.content.replace(/\n/g, ''));
+      const fname = FILES[i].path.split('/').pop();
+      document.getElementById('code-display').innerHTML = `
+        <div style="padding:10px 16px;border-bottom:1px solid var(--border);
+          display:flex;align-items:center;justify-content:space-between;
+          font-size:.8rem;color:var(--muted)">
+          <span style="font-family:var(--font-mono)">${fname}</span>
+          <a href="https://github.com/KipodHater/RebuiltCode2026/blob/main!/${FILES[i].path}"
+             target="_blank" class="commit-badge">GitHub ↗</a>
+        </div>
+        <div class="hljs-wrap" style="margin:0;border-radius:0">
+          <pre><code class="language-java">${esc(code)}</code></pre>
+        </div>`;
+      document.querySelectorAll('#code-display pre code').forEach(b => hljs.highlightElement(b));
+    })
+    .catch(() => showError());
+}
+
+/* ---- HIGHLIGHT STATIC BLOCKS ON ACCORDION OPEN ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.acc-h').forEach(h => {
+    h.addEventListener('click', () => {
+      setTimeout(() => {
+        h.nextElementSibling.querySelectorAll('pre code').forEach(b => {
+          if (!b.dataset.highlighted) hljs.highlightElement(b);
+        });
+      }, 50);
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -21,9 +21,9 @@
 <main class="page-main">
 
   <!-- SCORE BAR -->
-  <div class="score-bar">
+  <div class="score-screen" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--radius-md);margin-bottom:18px;text-align:right">
     <div>
-      <div class="score-num" id="qs">0</div>
+      <div style="font-size:1.9rem;font-weight:900;color:var(--accent)" id="qs">0</div>
       <div style="font-size:.75rem;color:var(--muted)">נכון</div>
     </div>
     <div style="flex:1">
@@ -31,7 +31,7 @@
       <div style="font-size:.73rem;color:var(--muted)" id="qpr">ענה שאלה ראשונה</div>
     </div>
     <div>
-      <button class="btn btn-secondary" onclick="resetQ()" style="font-size:.78rem;padding:6px 12px">🔄 אפס</button>
+      <button class="btn-primary" onclick="resetQ()" style="font-size:.78rem;padding:6px 12px">🔄 אפס</button>
     </div>
   </div>
 
@@ -48,12 +48,12 @@
 
   <!-- FINISHED BANNER -->
   <div id="quiz-done" style="display:none">
-    <div class="card card-glass" style="text-align:center;padding:28px">
+    <div class="score-screen show">
       <div style="font-size:2.5rem;margin-bottom:10px" id="done-emoji"></div>
-      <div style="font-size:1.3rem;font-weight:700;margin-bottom:6px" id="done-title"></div>
-      <div style="color:var(--muted);font-size:.84rem;margin-bottom:18px" id="done-sub"></div>
-      <button class="btn btn-primary" onclick="resetQ()">🔄 נסה שוב</button>
-      <a href="exam.html" class="btn btn-secondary" style="text-decoration:none;margin-right:8px">🎓 מבחן בגרות</a>
+      <div class="score-big" id="done-title"></div>
+      <div class="score-msg" id="done-sub"></div>
+      <button class="btn-primary" onclick="resetQ()">🔄 נסה שוב</button>
+      <a href="exam.html" class="btn-primary" style="margin-right:8px;background:var(--surface);color:var(--text);border:1px solid var(--border)">🎓 מבחן בגרות</a>
     </div>
   </div>
 
@@ -65,14 +65,15 @@
 
   function renderQ() {
     document.getElementById('qc').innerHTML = QUIZ_QUESTIONS.map((q, qi) => `
-      <div class="quiz-q" id="qq${qi}">
-        <div class="q-text">${qi + 1}. ${esc(q.q)}</div>
-        <div class="quiz-opts">
+      <div class="q-card" id="qq${qi}">
+        <div class="q-num">שאלה ${qi + 1} מתוך ${QUIZ_QUESTIONS.length}</div>
+        <div class="q-text">${esc(q.q)}</div>
+        <div class="q-opts">
           ${q.o.map((o, oi) =>
-            `<button class="qopt" id="qo${qi}${oi}" onclick="ansQ(${qi},${oi})">${esc(o)}</button>`
+            `<div class="q-opt" id="qo${qi}${oi}" onclick="ansQ(${qi},${oi})">${esc(o)}</div>`
           ).join('')}
         </div>
-        <div class="q-explain" id="qe${qi}">💡 ${esc(q.e)}</div>
+        <div class="q-feedback" id="qe${qi}">💡 ${esc(q.e)}</div>
       </div>
     `).join('');
 
@@ -89,7 +90,7 @@
     for (let i = 0; i < q.o.length; i++) {
       const b = document.getElementById(`qo${qi}${i}`);
       if (!b) continue;
-      b.classList.add('disabled');
+      b.classList.add('locked');
       if (i === q.c)                   b.classList.add('correct');
       else if (i === oi && oi !== q.c) b.classList.add('wrong');
     }
@@ -102,7 +103,7 @@
 
   function ansQ(qi, oi) {
     const b0 = document.getElementById(`qo${qi}0`);
-    if (b0 && b0.classList.contains('disabled')) return;
+    if (b0 && b0.classList.contains('locked')) return;
     qAns++;
     if (oi === QUIZ_QUESTIONS[qi].c) qScore++;
     applyAnswer(qi, oi);
@@ -127,8 +128,8 @@
     const banner = document.getElementById('quiz-done');
     banner.style.display = 'block';
     document.getElementById('done-emoji').textContent  = pct >= 80 ? '🎉' : pct >= 55 ? '👍' : '📚';
-    document.getElementById('done-title').textContent  = pct >= 80 ? 'כל הכבוד!' : pct >= 55 ? 'לא רע!' : 'צריך לחזור על החומר';
-    document.getElementById('done-sub').textContent    = `${qScore}/${QUIZ_QUESTIONS.length} נכון (${pct}%)`;
+    document.getElementById('done-title').textContent  = `${qScore}/${QUIZ_QUESTIONS.length}`;
+    document.getElementById('done-sub').textContent    = pct >= 80 ? 'מעולה! מוכן לבגרות' : pct >= 55 ? 'טוב, כדאי לחזור על מה שטעית' : `${pct}% — לחזור על החומר שוב`;
     banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
     renderHistory();
   }

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../shared/style.css">
 <link rel="stylesheet" href="css/style.css">
 <script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
 <style>
   /* ---- topic content extras ---- */
   .diagram {
@@ -79,15 +80,16 @@
 </style>
 </head>
 <body>
-<script src="../shared/utils.js"></script>
 
-<div class="page-wrap">
-
-  <div class="section-header">
-    <span class="section-icon">📚</span>
-    <h1>נושאים</h1>
-    <p>לחץ על נושא לצלילה מעמיקה | <span class="lvl lvl-1">ידע</span><span class="lvl lvl-2">הבנה</span><span class="lvl lvl-3">ניתוח</span></p>
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FRC · נושאים</span>
+    <h1 class="page-title">נושאי לימוד</h1>
+    <p class="page-subtitle">מכניקה · תוכנה · תיאוריה · אלקטרוניקה · הכנה לבגרות</p>
   </div>
+</div>
+
+<main class="page-main">
 
   <!-- SEARCH -->
   <div class="search-wrap">
@@ -113,7 +115,7 @@
     <div id="topic-content"></div>
   </div>
 
-</div><!-- /page-wrap -->
+</main>
 
 <script src="js/data.js"></script>
 <script src="js/search.js"></script>
@@ -153,6 +155,12 @@
   if (hash) showTopic(hash);
 
   function onLangChange() {}
+
+  function tog(h) {
+    h.classList.toggle('open');
+    h.nextElementSibling.classList.toggle('open');
+  }
+  var accToggle = tog;
 </script>
 </body>
 </html>

@@ -168,11 +168,12 @@
         qDisplay = esc(q.q);
       }
       return `
-        <div class="quiz-q" id="eq${pos}">
-          <div class="q-text">${pos + 1}. ${qDisplay}</div>
-          <div class="quiz-opts">
+        <div class="q-card" id="eq${pos}">
+          <div class="q-num">שאלה ${pos + 1} מתוך ${questionOrder.length}</div>
+          <div class="q-text">${qDisplay}</div>
+          <div class="q-opts">
             ${q.o.map((o, oi) =>
-              `<button class="qopt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</button>`
+              `<div class="q-opt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</div>`
             ).join('')}
           </div>
         </div>
@@ -182,7 +183,7 @@
 
   function ansExam(pos, oi) {
     const b0 = document.getElementById(`eo${pos}0`);
-    if (b0 && b0.classList.contains('disabled')) return;
+    if (b0 && b0.classList.contains('locked')) return;
 
     examAnswers[pos] = oi;
 
@@ -191,7 +192,7 @@
     for (let i = 0; i < q.o.length; i++) {
       const b = document.getElementById(`eo${pos}${i}`);
       if (!b) continue;
-      b.classList.add('disabled');
+      b.classList.add('locked');
       if (i === oi) b.style.borderColor = 'var(--accent)';
     }
 
