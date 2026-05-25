@@ -8,6 +8,30 @@
 <link rel="stylesheet" href="css/style.css">
 <script src="../shared/navbar.js" defer></script>
 <script src="../shared/utils.js"></script>
+<style>
+.mode-buttons { display:flex; gap:10px; justify-content:center; }
+.mode-btn {
+  padding:10px 26px;
+  border:1px solid rgba(34,197,94,.3);
+  background:transparent;
+  color:var(--muted);
+  border-radius:var(--radius-sm);
+  cursor:pointer;
+  font-size:.9rem;
+  font-family:var(--font);
+  transition:all .2s;
+}
+.mode-btn.active {
+  background:rgba(34,197,94,.12);
+  border-color:#22c55e;
+  color:#22c55e;
+  font-weight:700;
+}
+.mode-btn:hover:not(.active) {
+  border-color:rgba(34,197,94,.5);
+  color:var(--text);
+}
+</style>
 </head>
 <body>
 
@@ -35,6 +59,13 @@
 </div>
 
 <main class="page-main">
+
+  <div class="mode-buttons" style="margin-bottom:24px">
+    <button class="mode-btn active" id="btn-standard" onclick="setExamMode('standard')">📝 בחינה מדומה</button>
+    <button class="mode-btn" id="btn-project" onclick="setExamMode('project')">🎤 בחינה פרויקטלית</button>
+  </div>
+
+  <div id="standard-exam">
 
   <!-- START SCREEN -->
   <div id="screen-start">
@@ -135,6 +166,37 @@
     </div>
   </div>
 
+  </div><!-- /standard-exam -->
+
+  <!-- PROJECT EXAM -->
+  <div id="project-exam" style="display:none">
+    <div class="card card-glass" id="proj-card">
+      <div id="proj-section-lbl" style="font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:12px;letter-spacing:.03em"></div>
+      <div class="progress-bar-wrap" style="margin-bottom:6px">
+        <div class="progress-bar-fill" id="proj-bar" style="width:0%;background:var(--accent)"></div>
+      </div>
+      <div id="proj-progress-txt" style="text-align:center;font-size:.76rem;color:var(--muted);margin-bottom:20px"></div>
+      <div id="proj-question" style="font-size:1.1rem;font-weight:600;line-height:1.9;text-align:center;padding:10px 0 22px;min-height:80px"></div>
+      <textarea id="proj-answer"
+        style="width:100%;box-sizing:border-box;min-height:110px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:12px 14px;font-family:var(--font);font-size:.88rem;resize:vertical;direction:rtl;line-height:1.7"
+        placeholder="כתוב תשובתך כאן (אופציונלי)..."></textarea>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+        <button class="btn btn-secondary" id="proj-prev-btn" onclick="projPrev()">← שאלה קודמת</button>
+        <button class="btn btn-primary"   id="proj-next-btn" onclick="projNext()">שאלה הבאה →</button>
+      </div>
+    </div>
+    <div id="proj-review" style="display:none">
+      <div class="card card-glass">
+        <div class="card-title">📋 סיכום — כל השאלות והתשובות</div>
+        <div id="proj-review-list"></div>
+      </div>
+      <div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="initProjectExam()">🔄 התחל מחדש</button>
+        <a href="topics.html" class="btn btn-secondary" style="text-decoration:none">📚 נושאים</a>
+      </div>
+    </div>
+  </div><!-- /project-exam -->
+
 </main>
 
 <div id="exam-toast" style="
@@ -145,6 +207,46 @@
 "></div>
 
 <script>
+/* ---- PROJECT EXAM DATA ---- */
+const PROJECT_EXAM_QUESTIONS = [
+  { section:'פרויקט כללי', q:'מהו תפקידך בפרויקט? מה הייתה האחריות העיקרית שלך?' },
+  { section:'פרויקט כללי', q:'כיצד התכוננת לקראת הפרויקט? אילו מקורות השתמשת?' },
+  { section:'פרויקט כללי', q:'מה היו השיקולים המנחים בבחירת מבנה הרובוט?' },
+  { section:'מבנה והנעה', q:'מה ההבדל בין הנעה דיפרנציאלית לסינכרונית? מתי תבחר כל אחת? מה ההבדל בין הנעה להיגוי?' },
+  { section:'מבנה והנעה', q:'מהי מערכת התמסורת? מה ההבדל בין סוגי התמסורות וחסרונות כל אחד?' },
+  { section:'מבנה והנעה', q:'מה השיקולים בבחירת מערכת ההנעה שלכם (Swerve)?' },
+  { section:'מבנה והנעה', q:'מהי החשיבות של מרכז הכובד? היכן נמצא מרכז הכובד ברובוט שלכם ולמה?' },
+  { section:'מבנה והנעה', q:'איך אורך ורוחב הרובוט משפיעים על יציבות ותמרון? מה הבחירה שלכם ולמה?' },
+  { section:'מבנה והנעה', q:'מה ההבדל בין גלגל רגיל לגלגל אומני? מתי משתמשים בכל אחד?' },
+  { section:'מנועים', q:'מה ההבדל בין מנוע DC (זרם ישר) למנוע AC (זרם חילופין)? למה לא משתמשים ב-AC ברובוט?' },
+  { section:'מנועים', q:'הסבר את עקרון פעולת מנוע זרם ישר. מה תפקיד הקומוטטור? מהי צריכת הזרם?' },
+  { section:'מנועים', q:'מה זה PWM? מדוע הבקר הוא דיגיטלי (0/1) והמנוע אנלוגי? כיצד PWM מדמה אנלוגי דרך ממוצע?' },
+  { section:'מנועים', q:'מה זה H-Bridge? כיצד שולטים על כיוון הסיבוב? למה צריך את זה?' },
+  { section:'מנועים', q:'מדוע נחוץ דריייבר/בקר למנועים? מה היה קורה בלעדיו?' },
+  { section:'מנועים', q:'מה ההבדל בין מנוע Brushed ל-Brushless? הסבר את מבנה ה-Brushless — סטטור, רוטור, ללא קומוטטור.' },
+  { section:'מנועים', q:'מה זה מנוע סרוו? מה ההבדל בין סרוו רגיל ל-360?' },
+  { section:'מנועים', q:'כיצד בוחרים מנוע לצורך מסוים? אילו פרמטרים חשובים (טורק, מהירות, זרם)?' },
+  { section:'חיישנים', q:'מה ההבדל בין אות אנלוגי לדיגיטלי? תן דוגמאות מהפרויקט.' },
+  { section:'חיישנים', q:'מה זה דיוק של חיישן? מה זה אמינות? איך הם משפיעים על הפרויקט?' },
+  { section:'חיישנים', q:'הסבר את עקרון פעולת חיישן מרחק IR — שיטת טריאנגולציה, טווח, שטח מת ולמה קיים.' },
+  { section:'חיישנים', q:'הסבר את חיישן הפס הלבן — תפקיד, תדרי אור, זווית ראיה, אורכי גל.' },
+  { section:'בקרה', q:'מהי בקרה? הגדר: מנהל, מבוקר, שגיאה, תיקון, מטרה. מה ההבדל בין חוג פתוח לסגור?' },
+  { section:'בקרה', q:'מה זה בקרה פרופורציונלית? הסבר את הנוסחה: error=Xr-Xir, mr=mor±kc×error' },
+  { section:'בקרה', q:'מה זה PID? מה תפקיד כל רכיב — P (יחסי), I (אינטגרל), D (נגזרת)?' },
+  { section:'מעבד וחשמל', q:'מה תפקיד המעבד/בקר ברובוט? מה ההבדל בין כניסה אנלוגית לדיגיטלית?' },
+  { section:'מעבד וחשמל', q:'הסבר את מערכת החשמל: סוללה (מה זה mAh? מה זה V?), מייצבי מתח, VRM, PDH.' },
+  { section:'מעבד וחשמל', q:'מה ההבדל בין ברייקרים לפיוזים? מה תפקיד כל אחד? מה זה Mini PDB ומפצל (Hub)?' },
+  { section:'מעבד וחשמל', q:'מה זה CANbus? מה ההבדל בין CAN ל-PWM? מה היתרונות?' },
+  { section:'תוכנה', q:'תאר את תרשים הזרימה של תוכנת הרובוט. מה השיקולים? האם היו אפשרויות נוספות?' },
+  { section:'תוכנה', q:'הסבר קטע קוד שבחרת מהפרויקט. מה הוא עושה? למה כך מומש?' },
+  { section:'תוכנה', q:'כיצד מוודאים שהתוכנה מבוצעת כראוי? מה חשיבות אמינות התוכנה?' },
+  { section:'תוכנה', q:'מה זה FSM (Finite State Machine)? כיצד השתמשתם בזה ברובוט?' },
+  { section:'תוכנה', q:'מה זה IO Pattern? מה היתרון שלו — איך הוא מאפשר סימולציה על מחשב?' },
+  { section:'מסקנות', q:'מה עבד טוב בפרויקט? מה לא עבד? כיצד ניתן לשפר בעתיד?' },
+  { section:'מסקנות', q:'האם היום הייתם פועלים באופן שונה? מה הייתם משנים?' },
+  { section:'מסקנות', q:'מה תעשו בשנה הבאה? מה תרצו ללמוד ולעשות בתחום?' }
+];
+
 /* ---- DATA ---- */
 const EXAM_QUESTIONS = [
   {
@@ -631,6 +733,91 @@ function restartExam() {
   document.getElementById('screen-results').style.display = 'none';
   document.getElementById('screen-start').style.display   = 'block';
   renderExamHistory();
+}
+
+/* ---- MODE TOGGLE ---- */
+function setExamMode(mode) {
+  document.getElementById('btn-standard').classList.toggle('active', mode === 'standard');
+  document.getElementById('btn-project').classList.toggle('active', mode === 'project');
+  document.getElementById('standard-exam').style.display = mode === 'standard' ? 'block' : 'none';
+  document.getElementById('project-exam').style.display  = mode === 'project'  ? 'block' : 'none';
+  if (mode === 'project') {
+    document.getElementById('timer-bar').style.display = 'none';
+    clearInterval(timerInterval);
+    initProjectExam();
+  }
+}
+
+/* ---- PROJECT EXAM ---- */
+var projIndex   = 0;
+var projAnswers = [];
+
+function initProjectExam() {
+  projIndex   = 0;
+  projAnswers = new Array(PROJECT_EXAM_QUESTIONS.length).fill('');
+  document.getElementById('proj-card').style.display   = 'block';
+  document.getElementById('proj-review').style.display = 'none';
+  renderProjQuestion();
+}
+
+function renderProjQuestion() {
+  var total   = PROJECT_EXAM_QUESTIONS.length;
+  var q       = PROJECT_EXAM_QUESTIONS[projIndex];
+  var section = q.section;
+  var secQs   = PROJECT_EXAM_QUESTIONS.filter(function(x) { return x.section === section; });
+  var secPos  = PROJECT_EXAM_QUESTIONS.slice(0, projIndex).filter(function(x) { return x.section === section; }).length + 1;
+
+  document.getElementById('proj-section-lbl').textContent  = section + ' — שאלה ' + secPos + ' מתוך ' + secQs.length;
+  document.getElementById('proj-bar').style.width          = Math.round(projIndex / total * 100) + '%';
+  document.getElementById('proj-progress-txt').textContent = 'שאלה ' + (projIndex + 1) + ' מתוך ' + total;
+  document.getElementById('proj-question').textContent     = q.q;
+  document.getElementById('proj-answer').value             = projAnswers[projIndex] || '';
+  document.getElementById('proj-prev-btn').disabled        = projIndex === 0;
+  document.getElementById('proj-next-btn').textContent     = projIndex === total - 1
+    ? '✅ סיים וצפה בסיכום'
+    : 'שאלה הבאה →';
+}
+
+function projSaveAnswer() {
+  projAnswers[projIndex] = document.getElementById('proj-answer').value;
+}
+
+function projPrev() {
+  projSaveAnswer();
+  if (projIndex > 0) { projIndex--; renderProjQuestion(); }
+}
+
+function projNext() {
+  projSaveAnswer();
+  if (projIndex < PROJECT_EXAM_QUESTIONS.length - 1) {
+    projIndex++;
+    renderProjQuestion();
+  } else {
+    showProjReview();
+  }
+}
+
+function showProjReview() {
+  document.getElementById('proj-card').style.display   = 'none';
+  document.getElementById('proj-review').style.display = 'block';
+  var currentSection = '';
+  var html = PROJECT_EXAM_QUESTIONS.map(function(q, i) {
+    var header = '';
+    if (q.section !== currentSection) {
+      currentSection = q.section;
+      header = '<div style="font-weight:700;color:var(--accent);margin:20px 0 8px;font-size:.88rem;border-bottom:1px solid var(--border);padding-bottom:6px">' + esc(q.section) + '</div>';
+    }
+    var ans = projAnswers[i];
+    return header +
+      '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)">' +
+        '<div style="font-weight:600;font-size:.86rem;margin-bottom:6px">' + (i+1) + '. ' + esc(q.q) + '</div>' +
+        (ans
+          ? '<div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:6px;padding:8px 12px;font-size:.83rem;color:var(--text);white-space:pre-wrap">' + esc(ans) + '</div>'
+          : '<div style="font-size:.78rem;color:var(--muted);font-style:italic">לא נכתבה תשובה</div>') +
+      '</div>';
+  }).join('');
+  document.getElementById('proj-review-list').innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 renderExamHistory();

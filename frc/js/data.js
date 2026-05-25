@@ -320,6 +320,31 @@ const FLASHCARDS = [
   {
     q: { he: 'למה חיישן IR שגוי מתחת ל-10 ס"מ?', en: 'Why is IR sensor wrong under 10 cm?', mix: 'IR error < 10 cm — למה?' },
     a: { he: 'שיטת הטריאנגולציה דורשת מרחק מינימלי. מתחת ל-10 ס"מ הזווית קטנה מדי לזיהוי — קריאת שגיאה.', en: 'Triangulation needs minimum distance. Under 10 cm angle too small to detect — erroneous reading.', mix: 'Triangulation needs min distance. < 10 cm = angle too small = error.' }
+  },
+  // ---- מסקנות מהמתכונת ----
+  {
+    q: { he: 'מה זה mAh בסוללה? מה ההבדל בין V ל-mAh?', en: 'What is mAh in a battery? V vs mAh?', mix: 'V vs mAh בסוללה?' },
+    a: { he: 'V (וולט) = לחץ חשמלי — כוח האלקטרונים. mAh = קיבולת: 18Ah = 18A במשך שעה. הספק P = V × I (וואט). אנרגיה = P × זמן (Wh). סוללה 12V×18Ah = 216Wh.', en: 'V = electrical pressure. mAh = capacity: 18Ah = 18A for 1h. Power P = V × I (Watts). Energy = P × time (Wh). 12V×18Ah = 216Wh.', mix: 'V=לחץ. mAh=קיבולת. P=V×I. 12V×18Ah=216Wh.' }
+  },
+  {
+    q: { he: 'הבקר דיגיטלי אבל המנוע אנלוגי — כיצד PWM מגשר?', en: 'Digital controller but analog motor — how does PWM bridge?', mix: 'דיגיטלי → PWM → אנלוגי?' },
+    a: { he: 'הבקר מוציא 0V/5V בלבד. המנוע צריך מתח רציף. PWM ממתג ON/OFF מהר — הממוצע מדמה ערך אנלוגי. DC 25%=3V, 75%=9V. המנוע "מרגיש" רק את הממוצע.', en: 'Controller outputs 0V/5V only. Motor needs continuous voltage. PWM switches ON/OFF fast — average = analog value. DC 25%=3V, 75%=9V.', mix: 'בקר: 0/5V. PWM: ממוצע מדמה אנלוגי. DC 75%=9V.' }
+  },
+  {
+    q: { he: 'מבנה מנוע Brushless — סטטור, רוטור, קומוטציה?', en: 'Brushless motor structure — stator, rotor, commutation?', mix: 'Brushless: סטטור+רוטור+קומוטציה?' },
+    a: { he: 'סטטור: 3 סלילים חשמליים קבועים (120° ביניהם) → שדה מגנטי. רוטור: מגנטים קבועים מסתובבים. קומוטציה אלקטרונית: בקר קורא Hall/encoder → מחליף זרם בסלילים → שדה "רץ" → רוטור רודף.', en: 'Stator: 3 fixed coils (120° apart) → magnetic field. Rotor: permanent magnets rotate. Electronic commutation: controller reads Hall/encoder → switches coil current → field "runs" → rotor follows.', mix: 'סטטור=3 סלילים. רוטור=מגנטים. Hall+encoder=קומוטציה אלקטרונית.' }
+  },
+  {
+    q: { he: 'מה הגדרת בקרה? מנהל, מבוקר, שגיאה — הגדר. חוג פתוח vs סגור?', en: 'Define control: controller, plant, error. Open vs closed loop?', mix: 'בקרה: מנהל, מבוקר, שגיאה?' },
+    a: { he: 'מנהל=מחשב פקודה. מבוקר=מערכת נשלטת. חיישן=מודד מצב. שגיאה=Xr−Xir. חוג פתוח: פקודה→פעולה, ללא משוב. חוג סגור: מדידה→השוואה→תיקון→לולאה. PID=חוג סגור.', en: 'Controller=computes command. Plant=controlled system. Sensor=measures. Error=Xr−Xir. Open: command→action, no feedback. Closed: measure→compare→correct→loop. PID=closed.', mix: 'מנהל=פקודה. מבוקר=מערכת. שגיאה=Xr−Xir. סגור=מדוד+תקן.' }
+  },
+  {
+    q: { he: 'הנעה דיפרנציאלית — מה ההבדל בין הנעה להיגוי?', en: 'Differential drive — drive vs steering difference?', mix: 'הנעה vs היגוי — דיפרנציאלי?' },
+    a: { he: 'הנעה: כוח קדימה/אחורה — מנועים מסובבים גלגלים. היגוי: כיוון — שמאל מהיר מימין = פנייה ימינה. רדיוס פנייה = פונקציה של הפרש המהירות. בסוורב: הנעה+היגוי נפרדים לחלוטין (2 מנועים/מודולה).', en: 'Drive: forward/backward force. Steering: direction via speed difference — left faster = right turn. Turn radius = function of speed difference. Swerve: drive+steer fully separate.', mix: 'הנעה=כוח קדימה. היגוי=הפרש מהירויות. בסוורב=נפרדים לחלוטין.' }
+  },
+  {
+    q: { he: 'ברייקרים, פיוזים, Mini PDB ומפצל — תפקיד כל אחד?', en: 'Breakers, fuses, Mini PDB, hub — role of each?', mix: 'פיוז vs ברייקר vs Mini PDB?' },
+    a: { he: 'פיוז: חד-פעמי, נשרף בעומס יתר → חייב להחליף. ברייקר: ניתן לאיפוס ידני. Main Breaker: מנתק הכל. Mini PDB: מחלק מתח ממקור לכמה מוצאים. מפצל (Hub): חיבור פיזי בלבד, לא מגן.', en: 'Fuse: one-time, burns on overload → must replace. Breaker: manually resettable. Main Breaker: cuts all power. Mini PDB: distributes voltage to multiple outputs. Hub: physical only, no protection.', mix: 'פיוז=חד-פעמי. ברייקר=ניתן לאיפוס. Main=מנתק הכל. Mini PDB=מחלק. Hub=פיזי.' }
   }
 ];
 
@@ -813,6 +838,55 @@ const EXAM_QUESTIONS = [
     o: ['הרובוט יגיע מהר יותר לדיוק', 'הרובוט יתנדנד (אוסצילציה) סביב היעד', 'תיקון איטי יותר', 'אין השפעה על הביצועים'],
     c: 1,
     e: 'kc גדול מדי → כל שגיאה קטנה מייצרת תיקון גדול → תנועות חריפות → אוסצילציה ואי-יציבות.'
+  },
+  // --- 8 שאלות מסקנות מהמתכונת ---
+  {
+    q: 'מה זה mAh בסוללה? סוללת 12V 18Ah — כמה אנרגיה יש בה בוואט-שעה?',
+    o: ['12 × 18 = 216 Wh', '12 + 18 = 30 Wh', '18 Ah בלבד, ללא קשר למתח', '12V × 18Ah = 216A'],
+    c: 0,
+    e: 'אנרגיה (Wh) = מתח × קיבולת = 12V × 18Ah = 216 Wh. הספק P = V × I. אנרגיה = הספק × זמן.'
+  },
+  {
+    q: 'מדוע הבקר הוא דיגיטלי אבל המנוע אנלוגי? כיצד PWM פותר את הפער?',
+    o: ['הבקר מוציא +5V/−5V, המנוע צריך DC. PWM ממיר מתח.', 'הבקר מוציא 0V/5V בלבד. PWM ממתג מהר — הממוצע מדמה ערך אנלוגי.', 'הבקר ממיר AC ל-DC. PWM מסנן רעשים.', 'אין הבדל — PWM רק חוסך חיווט.'],
+    c: 1,
+    e: 'הבקר (RoboRIO) = דיגיטלי: 0V או 5V בלבד. המנוע צריך מתח רציף. PWM ממתג ON/OFF מהר → ממוצע = ערך אנלוגי.'
+  },
+  {
+    q: 'מה ההבדל בין סטטור לרוטור במנוע Brushless?',
+    o: ['סטטור=מסתובב, רוטור=קבוע', 'סטטור=סלילים חשמליים קבועים, רוטור=מגנטים קבועים מסתובבים', 'שניהם מסתובבים יחד', 'סטטור=מגנטים קבועים, רוטור=סלילים מסתובבים'],
+    c: 1,
+    e: 'סטטור (קבוע): 3 סלילים חשמליים (120° ביניהם) — יוצרים שדה מגנטי מתחלף. רוטור (מסתובב): מגנטים קבועים על הציר שרודפים אחרי השדה.'
+  },
+  {
+    q: 'איך בקר Brushless יודע מתי להחליף זרם בסלילים?',
+    o: ['לפי טמפרטורת המנוע', 'לפי חיישן Hall Effect / encoder המודד מיקום הרוטור', 'לפי מהירות הסיבוב בלבד', 'לפי זרם הצריכה'],
+    c: 1,
+    e: 'הבקר (TalonFX/SparkMax) קורא Hall Effect או encoder → יודע מיקום הרוטור → מחליף זרם בסלילים בזמן הנכון → שדה "רץ" → רוטור רודף.'
+  },
+  {
+    q: 'הגדר: מנהל, מבוקר, שגיאה בהקשר של מערכת בקרה.',
+    o: ['מנהל=מנוע, מבוקר=בקר, שגיאה=טמפרטורה', 'מנהל=מחשב הפקודה, מבוקר=המערכת הנשלטת, שגיאה=Xr−Xir', 'מנהל=PID, מבוקר=PWM, שגיאה=Duty Cycle', 'מנהל=חיישן, מבוקר=מנוע, שגיאה=מהירות'],
+    c: 1,
+    e: 'מנהל (Controller): מחשב את הפקודה. מבוקר (Plant): המערכת הנשלטת. שגיאה: Xr − Xir = הפרש בין המצב הרצוי לנמדד.'
+  },
+  {
+    q: 'מה ההבדל בין הנעה להיגוי בהנעה דיפרנציאלית?',
+    o: ['הנעה=ימין/שמאל, היגוי=קדימה/אחורה', 'הנעה=כוח קדימה/אחורה, היגוי=כיוון ע"י הפרש מהירויות בין הגלגלים', 'אין הבדל — אותו מנוע', 'הנעה=מנוע קדמי, היגוי=מנוע אחורי'],
+    c: 1,
+    e: 'הנעה: מנועים מסובבים גלגלים קדימה/אחורה. היגוי: הפרש מהירויות = פנייה. גלגל שמאל מהיר מימין → פנייה ימינה. רדיוס פנייה = פונקציה של ההפרש.'
+  },
+  {
+    q: 'מה ההבדל בין פיוז לברייקר? מה תפקיד ה-Main Breaker?',
+    o: ['פיוז=ניתן לאיפוס, ברייקר=חד-פעמי', 'פיוז=חד-פעמי (נשרף), ברייקר=ניתן לאיפוס ידני. Main Breaker=מנתק הכל.', 'שניהם זהים, רק גדלים שונים', 'פיוז=דיגיטלי, ברייקר=אנלוגי'],
+    c: 1,
+    e: 'פיוז: חד-פעמי — נשרף בעומס יתר → חייבים להחליף. ברייקר: ניתן לאיפוס — לוחצים שוב. Main Breaker: מנתק את כל חשמל הרובוט.'
+  },
+  {
+    q: 'מנוע צורך 40A ב-12V. כמה זמן תחזיק סוללת 18Ah?',
+    o: ['18/40 = 0.45 שעה ≈ 27 דקות', '40/18 ≈ 2.2 שעות', '12 × 40 = 480 דקות', '18 + 40 = 58 דקות'],
+    c: 0,
+    e: 'זמן = קיבולת / זרם = 18Ah ÷ 40A = 0.45h ≈ 27 דקות. הספק = 12 × 40 = 480W. אנרגיה = 480W × 0.45h = 216Wh = קיבולת הסוללה.'
   }
 ];
 
@@ -867,6 +941,14 @@ const EXAM_TOPICS_MAP = [
   'תיאוריה',    // 46 — PWM calculation 50%
   'תיאוריה',    // 47 — IR min distance
   'תיאוריה',    // 48 — kc too large → oscillation
+  'אלקטרוניקה', // 49 — mAh ואנרגיה
+  'תיאוריה',    // 50 — PWM דיגיטלי/אנלוגי
+  'מנועים',     // 51 — Brushless סטטור/רוטור
+  'מנועים',     // 52 — Brushless קומוטציה
+  'תיאוריה',    // 53 — מערכת בקרה
+  'מרכב',       // 54 — הנעה דיפרנציאלית
+  'אלקטרוניקה', // 55 — פיוז vs ברייקר
+  'אלקטרוניקה', // 56 — חישוב סוללה
 ];
 
 // ----------------------------------------------------------------
@@ -2123,6 +2205,128 @@ Closed: [Setpoint] → [Controller] → [Robot] → [Sensor] → ↩ חזרה ל
 </table>
 </div></div>
 <div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — מה Duty Cycle? רמה 2 — איך H-Bridge הופך כיוון מנוע? רמה 3 — מה יתרון CAN על PWM בניטור?</div>`
+  },
+  {
+    key: 'mock_exam_lessons',
+    icon: '💡',
+    title: 'מסקנות מהמתכונת',
+    desc: 'דברים שלא ידעתי — לחזור לפני הבגרות',
+    content: `
+<div class="highlight" style="background:rgba(99,102,241,.07);border-color:rgba(99,102,241,.3)">
+<strong>💡 מסקנות מהמתכונת</strong> — נושאים שעלו במתכונת ולא ידעתי להסביר. לחזור עליהם לפני הבגרות!
+</div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔋 סוללה — mAh, V, הספק</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>מה זה Voltage (V):</strong> הלחץ החשמלי — כמה "כוח" יש לאלקטרונים לנוע</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>מה זה mAh (מיליאמפר לשעה):</strong> כמות האנרגיה האגורה בסוללה</p>
+<ul style="padding-right:18px;margin:6px 0">
+<li>סוללת 18Ah = יכולה לספק 18A במשך שעה אחת, או 1A במשך 18 שעות</li>
+</ul>
+<p><span class="lvl lvl-2">הבנה</span> <strong>מה זה הספק:</strong> P = V × I (וואט = וולט × אמפר)</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>הספק ≠ אנרגיה:</strong> אנרגיה = הספק × זמן (Wh)</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>דוגמה מהרובוט:</strong> סוללה 12V × 18Ah = 216Wh של אנרגיה זמינה</p>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+אם מנוע צורך 40A ב-12V — מה ההספק? מה יקרה לסוללה תוך 30 דקות?<br>
+→ P = 12×40 = 480W. אנרגיה = 480W × 0.5h = 240Wh &gt; קיבולת הסוללה (216Wh) → יידלדל לפני 30 דקות
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📡 PWM — בקר דיגיטלי, מנוע אנלוגי</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>הבקר (RoboRIO) הוא דיגיטלי:</strong> מוציא רק 0V או 5V — אין ערכים בינייים</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>המנוע הוא אנלוגי:</strong> צריך מתח רציף בין 0V ל-12V לשליטה במהירות</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>הפתרון — PWM:</strong> ממתג 0/1 מהר מאוד → הממוצע מדמה ערך אנלוגי</p>
+<ul style="padding-right:18px;margin:6px 0">
+<li>Duty Cycle 25% → ממוצע 3V → מנוע 25% מהירות</li>
+<li>Duty Cycle 75% → ממוצע 9V → מנוע 75% מהירות</li>
+</ul>
+<p>המנוע לא "יודע" שקיבל אות דיגיטלי — הוא חש רק את הממוצע</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>הכלל:</strong> דיגיטלי → PWM → מדמה אנלוגי → מנוע מגיב כאנלוגי</p>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+למה לא פשוט להוריד מתח עם נגד?<br>
+→ נגד מוריד מתח ע"י בזבוז אנרגיה כחום. PWM לא מאבד אנרגיה — יעיל בהרבה.
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔌 מנוע Brushless — מבנה מלא</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>ב-Brushless אין קומוטטור ואין מברשות</strong></p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>סטטור (קבוע):</strong> 3 סלילים חשמליים בפנים הגוף — יוצרים שדה מגנטי מתחלף</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>רוטור (מסתובב):</strong> מגנטים קבועים על הציר — מגיבים לשדה ומסתובבים</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>קומוטציה אלקטרונית</strong> על ידי הבקר (TalonFX / SparkMax)</p>
+<p>הבקר יודע מיקום הרוטור דרך חיישן Hall Effect או encoder</p>
+<p>לפי המיקום — מחליף כיוון הזרם בסלילים → שדה מגנטי "רץ" → הרוטור רודף אחריו</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>יתרון:</strong> ללא שחיקה מכנית, 90–95% יעיל, ללא ניצוצות</p>
+<div class="diagram">סטטור: [סליל A] [סליל B] [סליל C] (120° ביניהם)
+רוטור:  [N] <--מגנט--> [S] מסתובב בתוך
+בקר:    קורא encoder --> מחליף זרם בסלילים בזמן נכון</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧠 מהי בקרה</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>הגדרה:</strong> שליטה בתהליך מסוים כדי להגיע למצב רצוי</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>רכיבי מערכת בקרה:</strong></p>
+<table class="tbl">
+<tr><th>רכיב</th><th>תפקיד</th></tr>
+<tr><td>מנהל (Controller)</td><td>מחשב את הפקודה הדרושה</td></tr>
+<tr><td>מבוקר (Plant)</td><td>המערכת שנשלטת (מנוע, רובוט)</td></tr>
+<tr><td>חיישן (Sensor)</td><td>מודד את המצב הנוכחי</td></tr>
+<tr><td>שגיאה (Error)</td><td>הפרש בין רצוי לנמדד = Xr − Xir</td></tr>
+<tr><td>תיקון (Correction)</td><td>הפקודה שהמנהל שולח לסגירת הפער</td></tr>
+</table>
+<p style="margin-top:12px"><span class="lvl lvl-2">הבנה</span> <strong>חוג פתוח:</strong> פקודה → מבוקר. אין משוב. פשוט, לא מדויק.</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>חוג סגור:</strong> פקודה → מבוקר → חיישן → השוואה → תיקון → חזרה. מדויק.</p>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+מה יקרה אם החיישן שגוי בחוג סגור?<br>
+→ התיקון יהיה שגוי — הרובוט "מתקן" לפי מדידה שגויה → מתנהג לא נכון
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🚗 הנעה דיפרנציאלית — הבדל בין הנעה להיגוי</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>הנעה (Drive):</strong> כוח המניע את הרובוט קדימה/אחורה — המנועים מסובבים גלגלים</p>
+<p><span class="lvl lvl-1">ידע</span> <strong>היגוי (Steering):</strong> כיוון התנועה — שליטה על לאן הרובוט פונה</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>דיפרנציאלי:</strong> לכל גלגל מהירות נפרדת. ההבדל בין הצדדים = פנייה.</p>
+<ul style="padding-right:18px;margin:6px 0">
+<li>שמאל מהיר מימין = פנייה ימינה</li>
+<li>רדיוס הסיבוב תלוי בהפרש המהירות</li>
+</ul>
+<p><span class="lvl lvl-2">הבנה</span> <strong>בסוורב:</strong> הנעה והיגוי נפרדים לחלוטין לכל מודולה</p>
+<ul style="padding-right:18px;margin:6px 0">
+<li>מנוע 1: מניע (מהירות) | מנוע 2: מכוון (זווית)</li>
+</ul>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+מה יקרה אם גלגל ימין מהר מאוד וגלגל שמאל עצר לגמרי?<br>
+→ רדיוס סיבוב מינימלי — הרובוט יסתובב סביב הגלגל העצור
+</div>
+</div></div>
+
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ ברייקרים, פיוזים, Mini PDB ומפצל</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<p><span class="lvl lvl-1">ידע</span> <strong>פיוז (Fuse):</strong> רכיב חד-פעמי שנשרף כשהזרם עולה מדי → מנתק את המעגל</p>
+<ul style="padding-right:18px;margin:4px 0 10px">
+<li>ברובוט: PDH מכיל פיוזים 15A / 30A / 40A לכל ערוץ</li>
+<li>אחרי שנשרף → חייבים להחליף</li>
+</ul>
+<p><span class="lvl lvl-1">ידע</span> <strong>ברייקר (Circuit Breaker):</strong> ניתן לאיפוס → מנתק בעומס יתר, ניתן ללחוץ שוב</p>
+<ul style="padding-right:18px;margin:4px 0 10px">
+<li>Main Breaker: הברייקר הראשי של הרובוט — מנתק הכל</li>
+</ul>
+<p><span class="lvl lvl-2">הבנה</span> <strong>Mini PDB (Power Distribution Board):</strong> לוח חלוקת חשמל קטן — מחלק מתח ממקור אחד לכמה מוצאים קטנים (5V, 12V logic)</p>
+<p><span class="lvl lvl-2">הבנה</span> <strong>מפצל (Hub):</strong> חיבור מכני בלבד — מאפשר לחבר כמה כבלים לנקודה אחת. לא מגן, לא מווסת.</p>
+<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:.83rem;line-height:1.7">
+<strong>🔴 שאלת ניתוח — רמה 3</strong><br>
+למה חשוב שלכל מנוע יהיה פיוז נפרד?<br>
+→ אם מנוע אחד נתקע (stall) וצורך זרם גבוה → הפיוז שלו נשרף בלבד, לא כל הרובוט
+</div>
+</div></div>
+
+<div class="bagrut-tip"><strong>💡 בגרות:</strong> רמה 1 — Voltage vs mAh, סטטור vs רוטור, פיוז vs ברייקר. רמה 2 — P=V×I, PWM ממוצע, Hall Effect בBrushless, error=Xr−Xir, דיפרנציאל הפרש. רמה 3 — חשב אנרגיה, למה PWM עדיף על נגד, מה קורה לחוג סגור אם חיישן שגוי.</div>`
   }
 ];
 
