@@ -1,0 +1,5 @@
+:root { --accent: var(--drone-accent); --accent-dim: var(--drone-dim); }
+
+/* Drone section overrides (kept minimal) */
+.page-header .page-eyebrow { color: var(--drone-accent); }
+.proj-progress-bar { background: var(--drone-accent); }

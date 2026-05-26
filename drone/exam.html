@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>רישיון מטיסן – מבחן | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רישיון מטיסן · בחינה</span>
+    <h1 class="page-title">בחינה מדומה</h1>
+    <p class="page-subtitle">18 שאלות בסגנון בחינה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div id="screen-start">
+    <div class="card card-glass">
+      <div class="card-title">📋 הנחיות</div>
+      <ul>
+        <li>18 שאלות רב-ברירה</li>
+        <li>זמן מומלץ: 30 דקות</li>
+        <li>ציון עובר: 60 ומעלה</li>
+      </ul>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="startExam()" style="padding:12px 28px">התחל מבחן</button>
+    </div>
+  </div>
+
+  <div id="screen-exam" style="display:none">
+    <div id="exam-questions"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="submitExam()">✅ הגש מבחן</button>
+    </div>
+  </div>
+
+  <div id="screen-results" style="display:none">
+    <div class="card card-glass">
+      <div class="card-title">תוצאות</div>
+      <div style="text-align:center">
+        <div id="result-score" style="font-size:2rem;font-weight:800"></div>
+        <div id="result-msg" style="margin-top:8px;color:var(--muted)"></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;text-align:center">
+      <button class="btn btn-primary" onclick="restartExam()">🔄 נסה שוב</button>
+      <a href="topics.html" class="btn btn-secondary">📚 נושאים</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script>
+const EXAMS = typeof EXAM_QUESTIONS !== 'undefined' ? EXAM_QUESTIONS : [];
+let examAnswers = [], examStart = null;
+
+function startExam() {
+  if (!EXAMS.length) return alert('שאלות עדיין לא הוטענו');
+  examAnswers = Array(EXAMS.length).fill(null);
+  examStart = Date.now();
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-exam').style.display = 'block';
+  buildExam();
+}
+
+function buildExam() {
+  const container = document.getElementById('exam-questions');
+  container.innerHTML = EXAMS.map((q,i)=>`
+    <div class="q-card" id="ex-q-${i}">
+      <div class="q-num">שאלה ${i+1} מתוך ${EXAMS.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.o.map((o,j)=>`<div class="q-opt" onclick="selectAns(${i},${j})">${o}</div>`).join('')}</div>
+      <div class="q-feedback" id="ex-fb-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function selectAns(qi,oi) {
+  const q = EXAMS[qi];
+  examAnswers[qi] = oi;
+  const card = document.getElementById('ex-q-'+qi);
+  card.querySelectorAll('.q-opt').forEach((el,idx)=>{
+    el.classList.remove('correct','wrong');
+    if (idx === q.c) el.classList.add('correct');
+    if (idx === oi && idx !== q.c) el.classList.add('wrong');
+  });
+}
+
+function submitExam() {
+  // Calculate score
+  let correct = 0;
+  EXAMS.forEach((q,i)=>{ if (examAnswers[i] === q.c) correct++; });
+  const pct = Math.round(correct / EXAMS.length * 100);
+  document.getElementById('result-score').textContent = `${correct} / ${EXAMS.length} — ${pct}%`;
+  document.getElementById('result-msg').textContent = pct>=60? 'עברת!' : 'לא עבר';
+  document.getElementById('screen-exam').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+}
+
+function restartExam() {
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-start').style.display = 'block';
+}
+</script>
+</body>
+</html>

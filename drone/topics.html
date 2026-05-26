@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון מטיסן – נושאים | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רישיון מטיסן · נושאים</span>
+    <h1 class="page-title">נושאי לימוד</h1>
+    <p class="page-subtitle">חוקה · ידע טכני · מטאורולוגיה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="חפש נושא, מושג, מונח..." autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+
+  <div class="topic-grid" id="topic-grid"></div>
+
+  <div class="card card-glass" id="topic-detail" style="display:none">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <button id="topic-back" class="btn btn-secondary" style="font-size:.8rem">← חזור לנושאים</button>
+    </div>
+    <div id="topic-content"></div>
+  </div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script>
+  const grid   = document.getElementById('topic-grid');
+  const detail = document.getElementById('topic-detail');
+  const back   = document.getElementById('topic-back');
+
+  grid.innerHTML = TOPICS.map(topic => `
+    <div class="topic-card" onclick="showTopic('${topic.key}')">
+      <div class="tc-icon">${topic.icon}</div>
+      <div class="tc-title">${topic.title}</div>
+      <div class="tc-desc">${topic.subtitle || ''}</div>
+    </div>
+  `).join('');
+
+  function showTopic(key) {
+    const topic = TOPICS.find(x => x.key === key);
+    if (!topic) return;
+    document.getElementById('topic-content').innerHTML =
+      `<div class="card-title" style="margin-bottom:16px">${topic.icon} ${topic.title}</div>${topic.content}`;
+    grid.style.display   = 'none';
+    detail.style.display = 'block';
+    window.location.hash = key;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  back.addEventListener('click', () => {
+    grid.style.display   = 'grid';
+    detail.style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+  });
+
+  const hash = window.location.hash.slice(1);
+  if (hash) showTopic(hash);
+
+  function tog(h) {
+    h.classList.toggle('open');
+    h.nextElementSibling.classList.toggle('open');
+  }
+  var accToggle = tog;
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון מטיסן – כרטיסיות | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+<style>
+  .fc-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:12px }
+  .fc-card { perspective: 800px }
+  .fc-inner { position:relative; width:100%; height:120px; transform-style:preserve-3d; transition:transform .5s }
+  .fc-side { position:absolute; inset:0; backface-visibility:hidden; border-radius:10px; padding:12px; display:flex;align-items:center;justify-content:center }
+  .fc-front { background:linear-gradient(135deg, rgba(59,130,246,.08), rgba(59,130,246,.04)); border:1px solid rgba(59,130,246,.1) }
+  .fc-back  { background:linear-gradient(135deg, rgba(59,130,246,.12), rgba(59,130,246,.04)); border:1px solid rgba(59,130,246,.12); transform:rotateY(180deg) }
+  .flipped { transform: rotateY(180deg) }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רישיון מטיסן · כרטיסיות</span>
+    <h1 class="page-title">כרטיסיות לימוד</h1>
+    <p class="page-subtitle">חזור על החומר באמצעות כרטיסיות</p>
+  </div>
+</div>
+
+<main class="page-main">
+  <div class="card card-glass">
+    <div class="card-title">כרטיסיות</div>
+    <div class="card-desc">הקש/הקלק כדי להסתכל בצד השני</div>
+  </div>
+
+  <div class="fc-grid" id="fc-grid"></div>
+</main>
+
+<script src="js/data.js"></script>
+<script>
+  const FC = FLASHCARDS || [];
+  const grid = document.getElementById('fc-grid');
+  if (!FC.length) grid.innerHTML = '<div class="hbox yellow">כרטיסיות יתווספו בקרוב.</div>';
+  else grid.innerHTML = FC.map((f,i)=>`
+    <div class="fc-card" onclick="flip(this)">
+      <div class="fc-inner" id="fc-${i}">
+        <div class="fc-side fc-front">${f.q}</div>
+        <div class="fc-side fc-back">${f.a}</div>
+      </div>
+    </div>
+  `).join('');
+
+  function flip(el) {
+    const inner = el.querySelector('.fc-inner');
+    inner.classList.toggle('flipped');
+  }
+</script>
+</body>
+</html>
