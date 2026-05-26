@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון רחפן – סקירה | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רישיון מטיסן · רת"א</span>
+    <h1 class="page-title">הכנה לבגרות — רישיון רחפן</h1>
+    <p class="page-subtitle">3 נושאים עיקריים: חוקה · ידע טכני · מטאורולוגיה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <!-- STAT CARDS -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-fc">0 / 30</div>
+      <div class="stat-label">כרטיסיות שנלמדו</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-quiz">0%</div>
+      <div class="stat-label">הישג גבוה בחידון</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-exam">—</div>
+      <div class="stat-label">ציון מבחן אחרון</div>
+    </div>
+  </div>
+
+  <!-- QUICK NAVIGATION CARDS -->
+  <div class="grid">
+    <a href="topics.html" class="card" style="--accent: var(--drone-accent)">
+      <div class="ico">📖</div>
+      <h3>נושאי לימוד</h3>
+      <p>חוקה, ידע טכני, מטאורולוגיה וחישובי גובה — מוסברים לעומק באמצעות טבלאות ודוגמאות.</p>
+    </a>
+    <a href="flashcards.html" class="card" style="--accent: var(--accent2)">
+      <div class="ico">🃏</div>
+      <h3>כרטיסיות לימוד</h3>
+      <p>שנון ולמד מושגי מפתח בעזרת כרטיסיות אינטראקטיביות ו-5 מצבי לימוד מותאמים.</p>
+    </a>
+    <a href="quiz.html" class="card" style="--accent: var(--warning)">
+      <div class="ico">❓</div>
+      <h3>חידון תרגול</h3>
+      <p>בחן את עצמך עם 10 שאלות ידע מהירות וקבל משוב והסברים מפורטים מיד.</p>
+    </a>
+    <a href="exam.html" class="card" style="--accent: var(--danger)">
+      <div class="ico">📝</div>
+      <h3>סימולציית מבחן</h3>
+      <p>מבחן מלא בסגנון רת"א המכיל 18 שאלות מתוך מאגר הבחינות, מוגבל בזמן של 30 דקות.</p>
+    </a>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🚁 על בחינת רשות התעופה האזרחית (רת"א) <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>רישיון מטיסן (לספורט ופנאי) מיועד למי שרוצה להטיס רחפנים באופן פרטי. להלן עיקרי הבחינה:</p>
+      <ul>
+        <li><strong>גיל מינימלי:</strong> 12 שנים.</li>
+        <li><strong>מבנה המבחן:</strong> מבחן אמריקאי מקוון באתר רת"א.</li>
+        <li><strong>נושאי הבחינה:</strong> חוקה ותקנות טיס, ידע טכני ומבנה הרחפן, מטאורולוגיה בסיסית, וחישובי גובה והפרדה אנכית.</li>
+        <li><strong>ציון עובר:</strong> 60 ומעלה.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    // Populate stats from localStorage
+    try {
+      const fcSeen = JSON.parse(localStorage.getItem('drone_fc_seen') || '[]');
+      document.getElementById('stat-fc').textContent = `${fcSeen.length} / 30`;
+
+      const quizHistory = JSON.parse(localStorage.getItem('drone_quiz_history') || '[]');
+      if (quizHistory.length > 0) {
+        const maxScore = Math.max(...quizHistory.map(h => h.score));
+        const total = quizHistory[0].total || 10;
+        document.getElementById('stat-quiz').textContent = `${Math.round(maxScore / total * 100)}%`;
+      } else {
+        document.getElementById('stat-quiz').textContent = '0%';
+      }
+
+      const examHistory = JSON.parse(localStorage.getItem('drone_exam_history') || '[]');
+      if (examHistory.length > 0) {
+        const lastExam = examHistory[examHistory.length - 1];
+        document.getElementById('stat-exam').textContent = lastExam.grade;
+        if (lastExam.grade >= 60) {
+          document.getElementById('stat-exam').style.color = 'var(--success)';
+        } else {
+          document.getElementById('stat-exam').style.color = 'var(--danger)';
+        }
+      } else {
+        document.getElementById('stat-exam').textContent = '—';
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  });
+
+  function onLangChange() {}
+</script>
+</body>
+</html>

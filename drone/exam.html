@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון רחפן – מבחן | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+</head>
+<body>
+
+<!-- TIMER BAR -->
+<div class="exam-timer-bar" id="timer-bar" style="display:none">
+  <div>
+    <div class="exam-timer" id="timer-display">30:00</div>
+    <div style="font-size:.7rem;color:var(--muted)">זמן נותר</div>
+  </div>
+  <div style="flex:1;padding:0 12px">
+    <div class="progress-bar-wrap" style="margin:0">
+      <div class="progress-bar-fill" id="timer-progress" style="width:100%"></div>
+    </div>
+  </div>
+  <div class="exam-progress-text" id="exam-progress-text">0 / 18 נענו</div>
+  <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
+</div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רחפן · בחינה</span>
+    <h1 class="page-title">סימולציית בחינה</h1>
+    <p class="page-subtitle">18 שאלות בסגנון רת"א עם טיימר</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div id="standard-exam">
+
+    <!-- START SCREEN -->
+    <div id="screen-start">
+      <div class="card card-glass">
+        <div class="card-title">📋 הנחיות למבחן</div>
+        <ul class="sl" style="font-size:.87rem;line-height:2">
+          <li>18 שאלות רב-ברירה בנושאי חוקה, ידע טכני, מטאורולוגיה וחישובי גובה.</li>
+          <li>כל שאלה שווה כ-5.5 נקודות (ציון בטווח 0–100).</li>
+          <li>ציון עובר: 60 ומעלה.</li>
+          <li>זמן: 30 דקות.</li>
+          <li>הגשה אוטומטית כשהזמן אוזל.</li>
+          <li>בסוף: ניתוח לפי נושאי הבחינה כדי לדעת איפה צריך להשתפר.</li>
+        </ul>
+      </div>
+
+      <div id="exam-history-card" class="card card-glass" style="display:none">
+        <div class="card-title">📊 ניסיונות קודמים</div>
+        <div id="exam-history-list"></div>
+      </div>
+
+      <div style="text-align:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="startExam()" style="padding:13px 36px;font-size:1rem">
+          🚀 התחל בחינה
+        </button>
+      </div>
+    </div>
+
+    <!-- EXAM SCREEN -->
+    <div id="screen-exam" style="display:none">
+      <div id="exam-questions"></div>
+      <div style="text-align:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="submitEarly()" style="padding:11px 28px">
+          ✅ הגש מבחן
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="screen-results" style="display:none">
+      <div style="text-align:center;padding:24px 0 16px">
+        <span id="result-icon" style="font-size:2rem;display:block;margin-bottom:8px">🚁</span>
+        <h1 id="result-title" style="color:var(--text)">תוצאות המבחן</h1>
+      </div>
+
+      <div class="exam-grade-display">
+        <div class="grade-circle" id="grade-circle">—</div>
+        <div class="grade-label" id="grade-label"></div>
+        <div class="grade-sub"   id="grade-sub"></div>
+      </div>
+
+      <div class="card card-glass">
+        <div class="card-title">📊 סטטיסטיקות</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+          <div class="fc-stat"><strong id="stat-correct" style="color:var(--success)">—</strong>נכון</div>
+          <div class="fc-stat"><strong id="stat-wrong"   style="color:var(--danger)">—</strong>שגוי</div>
+          <div class="fc-stat"><strong id="stat-time"    style="color:var(--accent3)">—</strong>זמן ששימש</div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="result-bar" style="width:0%"></div>
+          </div>
+          <div style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:4px" id="result-pct"></div>
+        </div>
+      </div>
+
+      <!-- TOPIC BREAKDOWN TABLE -->
+      <div class="card card-glass">
+        <div class="card-title">📋 ניתוח לפי נושא</div>
+        <table class="cmp-table" id="topic-table" style="margin:0">
+          <thead>
+            <tr>
+              <th style="text-align:right">נושא</th>
+              <th style="text-align:center">✅ נכון</th>
+              <th style="text-align:center">❌ שגוי</th>
+              <th style="text-align:center">ציון</th>
+              <th style="text-align:center">מצב</th>
+            </tr>
+          </thead>
+          <tbody id="topic-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card card-glass">
+        <div class="card-title">🔍 סקירת תשובות</div>
+        <div id="review-list"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="restartExam()">
+          🔄 נסה שוב
+        </button>
+        <a href="topics.html" class="btn btn-secondary" style="text-decoration:none">📚 נושאים</a>
+        <a href="index.html"  class="btn btn-secondary" style="text-decoration:none">🏠 סקירה</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<div id="exam-toast" style="
+  display:none; position:fixed; top:70px; left:50%; transform:translateX(-50%);
+  background:var(--accent3); color:var(--bg); padding:10px 22px;
+  border-radius:var(--radius-md); font-weight:700; z-index:200;
+  white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,.4);
+"></div>
+
+<script src="js/data.js"></script>
+<script>
+const EXAM_TOPICS = [
+  'תקנות הרישיון', // 0
+  'כללי טיסה',     // 1
+  'כללי טיסה',     // 2
+  'ידע טכני',      // 3
+  'הגדרות',        // 4
+  'כללי טיסה',     // 5
+  'ידע טכני',      // 6
+  'כללי טיסה',     // 7
+  'כללי טיסה',     // 8
+  'כללי טיסה',     // 9
+  'כללי טיסה',     // 10
+  'תקנות הרישיון', // 11
+  'תקנות הרישיון', // 12
+  'מטאורולוגיה',   // 13
+  'ידע טכני',      // 14
+  'חישובי גובה',   // 15
+  'מטאורולוגיה',   // 16
+  'תקנות הרישיון', // 17
+];
+
+const EXAM_DURATION    = 30 * 60;
+const DRONE_EXAM_KEY   = 'drone_exam_history';
+let timerInterval      = null;
+let timeLeft           = EXAM_DURATION;
+let examAnswers        = {};
+let examStartTime      = null;
+let questionOrder      = [];
+let tenMinWarningShown = false;
+
+function updateDroneProgress() {
+  try {
+    const fcSeen = JSON.parse(localStorage.getItem('drone_fc_seen') || '[]');
+    const fcPct = Math.min(100, Math.round((fcSeen.length / 30) * 100));
+
+    const quizHistory = JSON.parse(localStorage.getItem('drone_quiz_history') || '[]');
+    const quizPct = quizHistory.length > 0 ? 100 : 0;
+
+    const examHistory = JSON.parse(localStorage.getItem('drone_exam_history') || '[]');
+    const examPct = examHistory.length > 0 ? 100 : 0;
+
+    const totalProgress = Math.round((fcPct + quizPct + examPct) / 3);
+    localStorage.setItem('drone_total_progress', String(totalProgress));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function startExam() {
+  examAnswers         = {};
+  timeLeft            = EXAM_DURATION;
+  examStartTime       = Date.now();
+  tenMinWarningShown  = false;
+  // Shuffling all 18 questions
+  questionOrder = shuffle([...Array(EXAM_QUESTIONS.length).keys()]);
+
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-exam').style.display  = 'block';
+  document.getElementById('timer-bar').style.display    = 'flex';
+
+  renderExamQuestions();
+  startTimer();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderExamQuestions() {
+  document.getElementById('exam-questions').innerHTML = questionOrder.map((qi, pos) => {
+    const q = EXAM_QUESTIONS[qi];
+    return `
+      <div class="q-card" id="eq${pos}">
+        <div class="q-num">שאלה ${pos + 1} מתוך ${questionOrder.length}</div>
+        <div class="q-text">${esc(q.q)}</div>
+        <div class="q-opts">
+          ${q.o.map((o, oi) =>
+            `<div class="q-opt" id="eo${pos}${oi}" onclick="ansExam(${pos},${oi})">${esc(o)}</div>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function ansExam(pos, oi) {
+  if (document.getElementById(`eo${pos}0`)?.classList.contains('locked')) return;
+  examAnswers[pos] = oi;
+  const q = EXAM_QUESTIONS[questionOrder[pos]];
+  for (let i = 0; i < q.o.length; i++) {
+    const b = document.getElementById(`eo${pos}${i}`);
+    if (!b) continue;
+    b.classList.add('locked');
+    if (i === oi) b.style.borderColor = 'var(--accent)';
+  }
+  document.getElementById('exam-progress-text').textContent =
+    `${Object.keys(examAnswers).length} / ${questionOrder.length} נענו`;
+}
+
+function startTimer() {
+  document.getElementById('timer-progress').style.background = 'var(--accent)';
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) { clearInterval(timerInterval); submitExam(true); }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const display  = document.getElementById('timer-display');
+  const progress = document.getElementById('timer-progress');
+  display.textContent  = fmtTime(timeLeft);
+  progress.style.width = (timeLeft / EXAM_DURATION * 100) + '%';
+  if (timeLeft <= 180) {
+    display.classList.remove('warning-10');
+    display.classList.add('warning');
+    progress.style.background = 'var(--danger)';
+  } else if (timeLeft <= 600) {
+    if (!tenMinWarningShown) {
+      tenMinWarningShown = true;
+      display.classList.add('warning-10');
+      showToast('⚠️ נותרו 10 דקות!');
+    }
+    progress.style.background = 'linear-gradient(90deg,var(--accent3),var(--danger))';
+  }
+}
+
+function showToast(msg) {
+  const el = document.getElementById('exam-toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+function submitEarly() {
+  const unanswered = questionOrder.length - Object.keys(examAnswers).length;
+  if (unanswered > 0 && !confirm(`יש לך ${unanswered} שאלות ללא תשובה. להגיש בכל זאת?`)) return;
+  clearInterval(timerInterval);
+  submitExam(false);
+}
+
+function submitExam(timeUp) {
+  clearInterval(timerInterval);
+  const timeUsed = EXAM_DURATION - timeLeft;
+  let correct = 0;
+  questionOrder.forEach((qi, pos) => {
+    if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) correct++;
+  });
+  const grade = bagrutGrade(correct, questionOrder.length);
+  const pass  = grade >= 60;
+
+  const history = JSON.parse(localStorage.getItem(DRONE_EXAM_KEY) || '[]');
+  history.push({ date: todayStr(), grade, correct, total: questionOrder.length, timeUsed, timeUp });
+  if (history.length > 10) history.shift();
+  localStorage.setItem(DRONE_EXAM_KEY, JSON.stringify(history));
+
+  updateDroneProgress();
+  showResults(correct, grade, pass, timeUsed);
+}
+
+function showResults(correct, grade, pass, timeUsed) {
+  document.getElementById('screen-exam').style.display    = 'none';
+  document.getElementById('timer-bar').style.display      = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+
+  const wrong = questionOrder.length - correct;
+  const pct   = Math.round(correct / questionOrder.length * 100);
+
+  document.getElementById('result-icon').textContent  = pass ? '🎉' : '📚';
+  document.getElementById('result-title').textContent = pass ? 'עברת את המבחן!' : 'המשך לתרגל — אתה מתקרב!';
+
+  const circle = document.getElementById('grade-circle');
+  circle.textContent = grade;
+  circle.className   = 'grade-circle ' + (pass ? 'pass' : 'fail');
+
+  document.getElementById('grade-label').textContent = pass ? '✅ עובר' : '❌ לא עובר';
+  document.getElementById('grade-sub').textContent   =
+    `${correct}/${questionOrder.length} נכון · ${pct}% · ציון ${grade}${pass ? '' : ' (נדרש 60)'}`;
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent   = wrong;
+  document.getElementById('stat-time').textContent    = fmtTime(timeUsed);
+  document.getElementById('result-bar').style.width      = pct + '%';
+  document.getElementById('result-bar').style.background = pctColor(pct);
+  document.getElementById('result-pct').textContent      = pct + '%';
+
+  renderTopicTable();
+  renderReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderExamHistory();
+}
+
+function renderTopicTable() {
+  const topicStats = {};
+  questionOrder.forEach((qi, pos) => {
+    const topic = EXAM_TOPICS[qi] || 'כללי';
+    if (!topicStats[topic]) topicStats[topic] = { correct: 0, wrong: 0 };
+    if (examAnswers[pos] === EXAM_QUESTIONS[qi].c) {
+      topicStats[topic].correct++;
+    } else {
+      topicStats[topic].wrong++;
+    }
+  });
+
+  document.getElementById('topic-tbody').innerHTML = Object.entries(topicStats)
+    .sort((a, b) => (b[1].correct + b[1].wrong) - (a[1].correct + a[1].wrong))
+    .map(([topic, s]) => {
+      const total = s.correct + s.wrong;
+      const tp    = Math.round(s.correct / total * 100);
+      const color = pctColor(tp);
+      const badge = tp >= 80 ? '✅ מצוין'
+                  : tp >= 60 ? '⚠️ בסדר'
+                  :            '❌ לחזור';
+      return `<tr>
+        <td style="font-weight:600">${esc(topic)}</td>
+        <td style="text-align:center;color:var(--success)">${s.correct}</td>
+        <td style="text-align:center;color:var(--danger)">${s.wrong}</td>
+        <td style="text-align:center;font-weight:700;color:${color}">${tp}%</td>
+        <td style="text-align:center;font-size:.78rem">${badge}</td>
+      </tr>`;
+    }).join('');
+}
+
+function renderReview() {
+  document.getElementById('review-list').innerHTML = questionOrder.map((qi, pos) => {
+    const q  = EXAM_QUESTIONS[qi];
+    const oi = examAnswers[pos];
+    const ok = oi === q.c;
+    return `
+      <div style="border-bottom:1px solid var(--border);padding:12px 0">
+        <div style="font-size:.84rem;font-weight:600;margin-bottom:5px">
+          ${ok ? '✅' : '❌'} ${pos + 1}. ${esc(q.q)}
+        </div>
+        ${oi === undefined ? `<div style="color:var(--muted);font-size:.78rem">לא נענה</div>` : ''}
+        ${oi !== undefined && !ok
+          ? `<div style="font-size:.78rem;color:var(--danger);margin-bottom:3px">❌ בחרת: ${esc(q.o[oi])}</div>`
+          : ''}
+        <div style="font-size:.78rem;color:var(--success)">✅ נכון: ${esc(q.o[q.c])}</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:4px;padding:6px 10px;
+          background:rgba(59,130,246,.05);border-radius:5px;border:1px solid rgba(59,130,246,.15)">
+          💡 ${esc(q.exp)}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderExamHistory() {
+  const history = JSON.parse(localStorage.getItem(DRONE_EXAM_KEY) || '[]');
+  const card    = document.getElementById('exam-history-card');
+  const list    = document.getElementById('exam-history-list');
+  if (!history.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = `
+    <table class="cmp-table">
+      <tr><th>תאריך</th><th>ציון</th><th>נכון</th><th>זמן</th><th>תוצאה</th></tr>
+      ${history.slice().reverse().map(h => {
+        const p = h.grade >= 60;
+        return `<tr>
+          <td>${h.date}</td>
+          <td style="font-weight:700;color:${p?'var(--success)':'var(--danger)'}">${h.grade}</td>
+          <td>${h.correct}/${h.total}</td>
+          <td style="direction:ltr">${fmtTime(h.timeUsed)}</td>
+          <td>${p ? '✅ עובר' : '❌ לא עובר'}</td>
+        </tr>`;
+      }).join('')}
+    </table>
+  `;
+}
+
+function restartExam() {
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-start').style.display   = 'block';
+  renderExamHistory();
+}
+
+renderExamHistory();
+
+function onLangChange() {}
+</script>
+</body>
+</html>

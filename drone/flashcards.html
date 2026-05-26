@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון רחפן – כרטיסיות | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+<style>
+  .fc-stats {
+    display: flex;
+    justify-content: space-around;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 20px;
+    font-size: .84rem;
+  }
+  .fc-stat strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--accent);
+  }
+  .progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border-light);
+    transition: background 0.2s;
+  }
+  .dot.active { background: var(--accent); }
+  .dot.seen   { background: var(--success); }
+  .fc-swipe-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .flip-hint {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+  .fc-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 320px;
+    margin: 0 auto 20px;
+  }
+  .fc-nav button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+  .fc-nav button:hover { border-color: var(--accent); }
+  .fc-count { font-size: 0.88rem; font-weight: 700; }
+
+  /* Learn mode */
+  .learn-sides {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .learn-side-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .learn-side-btn.active { border-color: var(--accent); color: var(--accent); }
+  .learn-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    min-height: 180px;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    max-width: 580px;
+    margin: 0 auto 18px;
+  }
+</style>
+</head>
+<body>
+<script src="js/data.js"></script>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רחפן · כרטיסיות</span>
+    <h1 class="page-title">כרטיסיות לימוד</h1>
+    <p class="page-subtitle" id="mode-desc">לחץ להפוך · החלק שמאלה/ימינה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <!-- MODE TABS -->
+  <div class="mode-buttons" id="mode-tabs">
+    <button class="mode-btn active" onclick="setMode('flip',this)">🔄 הפוך</button>
+    <button class="mode-btn"        onclick="setMode('learn',this)">📖 למד</button>
+  </div>
+
+  <!-- ══════════════════ FLIP MODE ══════════════════ -->
+  <div id="mode-flip">
+    <div class="fc-stats" id="flip-stats"></div>
+    <div class="progress-dots" id="flip-dots"></div>
+    <div class="fc-swipe-hint">← החלק ימינה לכרטיס הבא | שמאלה לקודם →</div>
+    <div class="fc-wrap" id="flip-outer">
+      <div class="fc-card-scene">
+        <div class="fc" id="flip-card" onclick="flipCard()">
+          <div class="fc-front">
+            <span class="fc-label">מונח / שאלה</span>
+            <div class="fc-content" id="flip-q"></div>
+            <span class="flip-hint">לחץ להפוך</span>
+          </div>
+          <div class="fc-back">
+            <span class="fc-label">הגדרה / תשובה</span>
+            <div class="fc-content" id="flip-a"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button onclick="flipPrev()">→ הקודם</button>
+      <span class="fc-count" id="flip-count"></span>
+      <button onclick="flipNext()">הבא ←</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+      <button class="btn btn-secondary" onclick="markSeen()" id="btn-seen">✓ סמן כנראה</button>
+      <button class="btn btn-danger" onclick="resetSeen()">🔄 אפס</button>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:.72rem;color:var(--muted)">
+      מקלדת: ← → לניווט | Space להפוך
+    </div>
+  </div>
+
+  <!-- ══════════════════ LEARN MODE ══════════════════ -->
+  <div id="mode-learn" style="display:none">
+    <div class="learn-sides">
+      <button class="learn-side-btn active" id="lside-q" onclick="setLearnSide('q')">שאלה</button>
+      <button class="learn-side-btn" id="lside-a" onclick="setLearnSide('a')">תשובה</button>
+    </div>
+    <div class="progress-dots" id="learn-dots"></div>
+    <div class="learn-card" id="learn-card"></div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:14px" id="learn-reveal-wrap">
+      <button class="btn btn-secondary" id="learn-reveal" onclick="learnReveal()">👁️ הצג תשובה</button>
+    </div>
+    <div id="learn-answer-wrap" style="display:none">
+      <div class="learn-card" id="learn-answer-card" style="border-color:var(--accent);font-size:.85rem;color:var(--accent)"></div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px">
+        <button class="btn btn-secondary" style="border-color:var(--success);color:var(--success)" onclick="learnGotIt()">✅ ידעתי</button>
+        <button class="btn btn-secondary" style="border-color:var(--danger);color:var(--danger)"   onclick="learnAgain()">🔁 עוד פעם</button>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button onclick="learnPrev()">→ הקודם</button>
+      <span class="fc-count" id="learn-count"></span>
+      <button onclick="learnNext()">הבא ←</button>
+    </div>
+    <div style="text-align:center;font-size:.76rem;color:var(--muted)" id="learn-stats"></div>
+  </div>
+
+</main>
+
+<script>
+const FC_SEEN_KEY = 'drone_fc_seen';
+const FC_IDX_KEY  = 'drone_fc_idx';
+const FC_MODE_KEY = 'drone_fc_mode';
+
+function updateDroneProgress() {
+  try {
+    const fcSeen  = JSON.parse(localStorage.getItem(FC_SEEN_KEY) || '[]');
+    const fcPct   = Math.min(100, Math.round(fcSeen.length / FLASHCARDS.length * 100));
+    const qHist   = JSON.parse(localStorage.getItem('drone_quiz_history') || '[]');
+    const eHist   = JSON.parse(localStorage.getItem('drone_exam_history') || '[]');
+    const total   = Math.round((fcPct + (qHist.length ? 100 : 0) + (eHist.length ? 100 : 0)) / 3);
+    localStorage.setItem('drone_total_progress', String(total));
+  } catch (e) {}
+}
+
+let currentMode = Store.get(FC_MODE_KEY, 'flip');
+
+function setMode(mode, btn) {
+  currentMode = mode;
+  Store.set(FC_MODE_KEY, mode);
+  ['flip','learn'].forEach(m => {
+    document.getElementById('mode-' + m).style.display = m === mode ? 'block' : 'none';
+  });
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (mode === 'flip')  initFlip();
+  if (mode === 'learn') initLearn();
+}
+
+function onLangChange() {}
+
+/* ── FLIP MODE ── */
+let flipIdx     = Store.get(FC_IDX_KEY, 0);
+let flipFlipped = false;
+let flipSeen    = new Set(Store.get(FC_SEEN_KEY, []));
+if (flipIdx >= FLASHCARDS.length) flipIdx = 0;
+
+function initFlip() { renderFlip(); }
+
+function renderFlip() {
+  const card = FLASHCARDS[flipIdx];
+  document.getElementById('flip-q').textContent     = card.q;
+  document.getElementById('flip-a').textContent     = card.a;
+  document.getElementById('flip-count').textContent = `${flipIdx + 1} / ${FLASHCARDS.length}`;
+  document.getElementById('flip-card').classList.remove('flipped');
+  flipFlipped = false;
+
+  document.getElementById('flip-dots').innerHTML = FLASHCARDS.map((_, i) => {
+    let cls = 'dot';
+    if (i === flipIdx)       cls += ' active';
+    else if (flipSeen.has(i)) cls += ' seen';
+    return `<div class="${cls}" title="${i+1}"></div>`;
+  }).join('');
+
+  const seenBtn = document.getElementById('btn-seen');
+  seenBtn.textContent = flipSeen.has(flipIdx) ? '✓ נראה' : '✓ סמן כנראה';
+  seenBtn.style.color = flipSeen.has(flipIdx) ? 'var(--success)' : '';
+
+  const pct = Math.round(flipSeen.size / FLASHCARDS.length * 100);
+  document.getElementById('flip-stats').innerHTML = `
+    <div class="fc-stat"><strong>${flipSeen.size}/${FLASHCARDS.length}</strong>נראו</div>
+    <div class="fc-stat"><strong>${pct}%</strong>השלמה</div>
+    <div class="fc-stat"><strong>${FLASHCARDS.length - flipSeen.size}</strong>נותרו</div>
+  `;
+  Store.set(FC_IDX_KEY, flipIdx);
+}
+
+function flipCard() { document.getElementById('flip-card').classList.toggle('flipped'); flipFlipped = !flipFlipped; }
+function flipNext() { flipIdx = (flipIdx + 1) % FLASHCARDS.length; renderFlip(); }
+function flipPrev() { flipIdx = (flipIdx - 1 + FLASHCARDS.length) % FLASHCARDS.length; renderFlip(); }
+function markSeen() {
+  if (flipSeen.has(flipIdx)) flipSeen.delete(flipIdx); else flipSeen.add(flipIdx);
+  Store.set(FC_SEEN_KEY, [...flipSeen]);
+  renderFlip();
+  updateDroneProgress();
+}
+function resetSeen() {
+  if (!confirm('לאפס את כל הכרטיסיות שראית?')) return;
+  flipSeen = new Set();
+  Store.set(FC_SEEN_KEY, []);
+  renderFlip();
+  updateDroneProgress();
+}
+
+document.addEventListener('keydown', e => {
+  if (currentMode !== 'flip') return;
+  if (e.key === 'ArrowRight') flipNext();
+  if (e.key === 'ArrowLeft')  flipPrev();
+  if (e.key === ' ') { e.preventDefault(); flipCard(); }
+});
+
+// Swipe support
+let touchX0 = 0, touchY0 = 0;
+const flipOuter = document.getElementById('flip-outer');
+flipOuter.addEventListener('touchstart', e => { touchX0 = e.touches[0].clientX; touchY0 = e.touches[0].clientY; }, {passive:true});
+flipOuter.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX0;
+  const dy = e.changedTouches[0].clientY - touchY0;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) { dx < 0 ? flipNext() : flipPrev(); }
+}, {passive:true});
+
+/* ── LEARN MODE ── */
+let learnIdx    = 0;
+let learnSide   = 'q';
+let learnOrder  = [];
+let learnGot    = new Set();
+let learnReview = new Set();
+
+function initLearn() {
+  learnOrder = shuffle([...Array(FLASHCARDS.length).keys()]);
+  learnIdx = 0;
+  learnGot.clear();
+  learnReview.clear();
+  renderLearn();
+}
+
+function setLearnSide(side) {
+  learnSide = side;
+  document.getElementById('lside-q').classList.toggle('active', side === 'q');
+  document.getElementById('lside-a').classList.toggle('active', side === 'a');
+  renderLearnCard();
+}
+
+function renderLearn() {
+  renderLearnCard();
+  document.getElementById('learn-count').textContent = `${learnIdx + 1} / ${FLASHCARDS.length}`;
+  document.getElementById('learn-answer-wrap').style.display = 'none';
+  document.getElementById('learn-reveal-wrap').style.display = 'flex';
+  document.getElementById('learn-dots').innerHTML = FLASHCARDS.map((_, i) => {
+    const qi = learnOrder[i] !== undefined ? learnOrder[i] : i;
+    let cls = 'dot';
+    if (i === learnIdx)      cls += ' active';
+    else if (learnGot.has(qi)) cls += ' seen';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+  document.getElementById('learn-stats').textContent =
+    learnGot.size ? `${learnGot.size} ידעתי · ${learnReview.size} לחזור` : '';
+}
+
+function renderLearnCard() {
+  const card = FLASHCARDS[learnOrder[learnIdx] || 0];
+  document.getElementById('learn-card').textContent        = learnSide === 'q' ? card.q : card.a;
+  document.getElementById('learn-answer-card').textContent = learnSide === 'q' ? card.a : card.q;
+}
+
+function learnReveal() {
+  document.getElementById('learn-reveal-wrap').style.display = 'none';
+  document.getElementById('learn-answer-wrap').style.display = 'block';
+}
+function learnGotIt() { learnGot.add(learnOrder[learnIdx]); learnReview.delete(learnOrder[learnIdx]); learnNext(); }
+function learnAgain() { learnReview.add(learnOrder[learnIdx]); learnNext(); }
+function learnNext() {
+  if (learnIdx < FLASHCARDS.length - 1) { learnIdx++; renderLearn(); }
+  else { document.getElementById('learn-stats').textContent = `סיים! ${learnGot.size}/${FLASHCARDS.length} ידעתי`; }
+  updateDroneProgress();
+}
+function learnPrev() { if (learnIdx > 0) { learnIdx--; renderLearn(); } }
+
+/* ── INIT ── */
+(function init() {
+  const savedMode = Store.get(FC_MODE_KEY, 'flip');
+  const valid = ['flip','learn'].includes(savedMode) ? savedMode : 'flip';
+  const tabs = document.querySelectorAll('.mode-btn');
+  tabs.forEach((btn, i) => btn.classList.toggle('active', i === ['flip','learn'].indexOf(valid)));
+  setMode(valid, document.querySelector('.mode-btn.active'));
+})();
+</script>
+</body>
+</html>

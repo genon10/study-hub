@@ -82,6 +82,11 @@
       transform: translateY(-4px);
       box-shadow: 0 0 30px rgba(99,102,241,0.12), 0 8px 32px rgba(0,0,0,0.5);
     }
+    .drone-card:hover {
+      border-color: var(--drone-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 0 30px rgba(59,130,246,0.12), 0 8px 32px rgba(0,0,0,0.5);
+    }
     .proj-header {
       display: flex; justify-content: space-between; align-items: flex-start;
     }
@@ -130,6 +135,7 @@
     }
     .frc-card .proj-progress-bar { background: var(--frc-accent); }
     .mm-card .proj-progress-bar { background: var(--mm-accent); }
+    .drone-card .proj-progress-bar { background: var(--drone-accent); }
     .proj-arrow {
       font-size: 1rem; color: var(--muted);
       transition: all var(--transition);
@@ -246,6 +252,28 @@
       </div>
     </a>
 
+    <a href="drone/index.html" class="proj-card drone-card">
+      <div class="top-line"></div>
+      <div class="proj-header">
+        <span class="proj-icon">🚁</span>
+        <span class="proj-badge">רישיון מטיסן</span>
+      </div>
+      <div class="proj-title">רישיון רחפן</div>
+      <div class="proj-desc">הכנה לבחינת רת"א — חוקה · ידע טכני · מטאורולוגיה</div>
+      <div class="proj-tags">
+        <span class="proj-tag">⚖️ חוקה</span>
+        <span class="proj-tag">🔧 ידע טכני</span>
+        <span class="proj-tag">🌤️ מטאורולוגיה</span>
+        <span class="proj-tag">🎯 בחינה</span>
+      </div>
+      <div class="proj-footer">
+        <div class="proj-arrow">←</div>
+        <div class="proj-progress-wrap">
+          <div class="proj-progress-bar" id="drone-bar"></div>
+        </div>
+      </div>
+    </a>
+
   </main>
 
   <!-- Footer -->
@@ -258,9 +286,11 @@
     window.addEventListener('load', () => {
       const frc = Number(localStorage.getItem('frc_total_progress') || 0);
       const mm  = Number(localStorage.getItem('mm_total_progress')  || 0);
+      const drone = Number(localStorage.getItem('drone_total_progress') || 0);
       setTimeout(() => {
         document.getElementById('frc-bar').style.width = frc + '%';
         document.getElementById('mm-bar').style.width  = mm  + '%';
+        document.getElementById('drone-bar').style.width = drone + '%';
       }, 400);
     });
   </script>

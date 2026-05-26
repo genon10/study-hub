@@ -16,6 +16,9 @@
   --mm-accent: #6366f1;
   --mm-glow: rgba(99,102,241,0.15);
   --mm-dim: rgba(99,102,241,0.08);
+  --drone-accent: #3b82f6;
+  --drone-glow: rgba(59,130,246,0.15);
+  --drone-dim: rgba(59,130,246,0.08);
   --success: #22c55e;
   --warning: #ffd166;
   --danger: #ff5f5f;
@@ -281,6 +284,7 @@ a { text-decoration: none; color: inherit; }
 }
 .badge-frc { background: var(--frc-dim); color: var(--frc-accent); }
 .badge-mm { background: var(--mm-dim); color: var(--mm-accent); }
+.badge-drone { background: var(--drone-dim); color: var(--drone-accent); }
 .badge-warn { background: rgba(255,209,102,0.1); color: var(--warning); }
 .badge-info { background: rgba(56,189,248,0.1); color: var(--info); }
 .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
@@ -621,3 +625,8 @@ ul.sl li { margin-bottom: 6px; }
   background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.25);
   border-radius: var(--radius-sm); padding: 11px 14px; margin-top: 14px; font-size: .82rem; line-height: 1.7;
 }
+
+/* ── DRONE CARD OVERRIDES ── */
+.drone-card:hover { border-color: var(--drone-accent); box-shadow: 0 0 30px rgba(59,130,246,0.12); }
+.drone-card .top-line { background: linear-gradient(90deg, transparent, var(--drone-accent), transparent); }
+.drone-card .proj-badge { background: var(--drone-dim); color: var(--drone-accent); }

@@ -3,8 +3,9 @@
   const path = window.location.pathname;
   const inFRC = path.includes('/frc/');
   const inMM  = path.includes('/minesweeper/');
-  const accent = inFRC ? 'var(--frc-accent)' : 'var(--mm-accent)';
-  const root   = (inFRC || inMM) ? '../' : '';
+  const inDrone = path.includes('/drone/');
+  const accent = inFRC ? 'var(--frc-accent)' : inMM ? 'var(--mm-accent)' : 'var(--drone-accent)';
+  const root   = (inFRC || inMM || inDrone) ? '../' : '';
 
   // FRC pages
   const frcPages = [
@@ -28,7 +29,16 @@
     { label: '🏗️ ארכיטקטורה', href: 'architecture.html' },
   ];
 
-  const pages = inFRC ? frcPages : inMM ? mmPages : [];
+  // Drone pages
+  const dronePages = [
+    { label: '🏠 סקירה',       href: 'index.html' },
+    { label: '📖 נושאים',      href: 'topics.html' },
+    { label: '🃏 כרטיסיות',    href: 'flashcards.html' },
+    { label: '❓ חידון',        href: 'quiz.html' },
+    { label: '📝 בחינה',        href: 'exam.html' },
+  ];
+
+  const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : [];
 
   // Get current filename
   const currentFile = path.split('/').pop() || 'index.html';
@@ -43,12 +53,14 @@
     ? '<span class="nav-section-badge frc">FRC</span>'
     : inMM
     ? '<span class="nav-section-badge mm">MM</span>'
+    : inDrone
+    ? '<span class="nav-section-badge drone">רחפן</span>'
     : '';
 
   const navHtml = `
     <nav class="site-nav" id="site-nav">
       <a href="${root}index.html" class="nav-home">← Study Hub</a>
-      ${(inFRC || inMM) ? '<div class="nav-divider"></div>' : ''}
+      ${(inFRC || inMM || inDrone) ? '<div class="nav-divider"></div>' : ''}
       ${sectionLabel}
       <div class="nav-links">${linksHtml}</div>
     </nav>
@@ -73,6 +85,10 @@
     .nav-section-badge.mm {
       background: var(--mm-dim);
       color: var(--mm-accent);
+    }
+    .nav-section-badge.drone {
+      background: var(--drone-dim);
+      color: var(--drone-accent);
     }
   `;
   document.head.appendChild(style);

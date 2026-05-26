@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רישיון רחפן – נושאים | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+<style>
+  /* ---- topic content extras ---- */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: .83rem;
+  }
+  .tbl th {
+    background: var(--surface);
+    padding: 9px 12px;
+    text-align: right;
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent);
+  }
+  .tbl td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .tbl tr:hover td { background: rgba(255,255,255,.015); }
+  .pro { color: var(--accent); }
+  .con { color: var(--danger); }
+  
+  /* level badges */
+  .lvl {
+    display: inline-block;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    letter-spacing: .04em;
+  }
+  .lvl-1 { background: rgba(59,130,246,.15);  color: var(--accent); }
+  .lvl-2 { background: rgba(245,158,11,.15); color: var(--accent3); }
+  .lvl-3 { background: rgba(239,68,68,.15);  color: var(--danger); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">רחפן · נושאים</span>
+    <h1 class="page-title">נושאי לימוד</h1>
+    <p class="page-subtitle">חוקה · ידע טכני · מטאורולוגיה · חישובים</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="חפש נושא, מושג, מונח..." autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+
+  <!-- TOPIC GRID -->
+  <div class="topic-grid" id="topic-grid"></div>
+
+  <!-- TOPIC DETAIL -->
+  <div class="card card-glass" id="topic-detail" style="display:none">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <button id="topic-back" class="btn btn-secondary" style="font-size:.8rem">← חזור לנושאים</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <span class="lvl lvl-1">רמה 1 — ידע</span>
+        <span class="lvl lvl-2">רמה 2 — הבנה</span>
+        <span class="lvl lvl-3">רמה 3 — ניתוח</span>
+      </div>
+    </div>
+    <div id="topic-content"></div>
+  </div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script>
+  const grid   = document.getElementById('topic-grid');
+  const detail = document.getElementById('topic-detail');
+  const back   = document.getElementById('topic-back');
+  const searchInput = document.getElementById('search-input');
+  const searchClear = document.getElementById('search-clear');
+  const searchResults = document.getElementById('search-results');
+
+  // Render topic cards
+  grid.innerHTML = TOPICS.map(topic => `
+    <div class="topic-card" onclick="showTopic('${topic.key}')">
+      <div class="tc-icon">${topic.icon}</div>
+      <div class="tc-title">${topic.title}</div>
+      <div class="tc-desc">${topic.subtitle}</div>
+    </div>
+  `).join('');
+
+  function showTopic(key) {
+    const topic = TOPICS.find(x => x.key === key);
+    if (!topic) return;
+    document.getElementById('topic-content').innerHTML =
+      `<div class="card-title" style="margin-bottom:16px">${topic.icon} ${topic.title}</div>${topic.content}`;
+    grid.style.display   = 'none';
+    detail.style.display = 'block';
+    window.location.hash = key;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    searchResults.classList.remove('open');
+  }
+
+  back.addEventListener('click', () => {
+    grid.style.display   = 'grid';
+    detail.style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+  });
+
+  // Deep-link: topics.html#definitions
+  const hash = window.location.hash.slice(1);
+  if (hash) showTopic(hash);
+
+  // Search Engine
+  function search(query) {
+    query = query.trim().toLowerCase();
+    if (query.length < 2) {
+      searchResults.classList.remove('open');
+      searchClear.classList.remove('visible');
+      return;
+    }
+    searchClear.classList.add('visible');
+
+    const hits = TOPICS.filter(t => 
+      t.title.toLowerCase().includes(query) || 
+      t.subtitle.toLowerCase().includes(query) || 
+      t.content.toLowerCase().includes(query)
+    );
+
+    if (!hits.length) {
+      searchResults.innerHTML = `<div class="search-no-results">לא נמצאו תוצאות עבור "${esc(query)}"</div>`;
+    } else {
+      searchResults.innerHTML = hits.map(h => `
+        <div class="search-result-item" onclick="showTopic('${h.key}')">
+          <span class="sri-tag">נושא</span>
+          <div class="sri-text">
+            <div class="sri-title">${esc(h.title)}</div>
+            <div class="sri-snippet">${esc(h.subtitle)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    searchResults.classList.add('open');
+  }
+
+  searchInput.addEventListener('input', () => search(searchInput.value));
+  searchInput.addEventListener('focus', () => { if (searchInput.value.length >= 2) searchResults.classList.add('open'); });
+
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchResults.classList.remove('open');
+    searchClear.classList.remove('visible');
+    searchInput.focus();
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrap') && !e.target.closest('.search-results')) {
+      searchResults.classList.remove('open');
+    }
+  });
+
+  function onLangChange() {}
+
+  function tog(h) {
+    h.classList.toggle('open');
+    h.nextElementSibling.classList.toggle('open');
+  }
+  var accToggle = tog;
+</script>
+</body>
+</html>
