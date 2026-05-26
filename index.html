@@ -171,6 +171,28 @@
       border-top: 1px solid var(--border);
     }
 
+    .lang-toggle-btn {
+      font-size: 0.75rem; font-weight: 700;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+      letter-spacing: 0.06em;
+    }
+    .lang-toggle-btn:hover {
+      border-color: var(--border-light);
+      color: var(--text);
+    }
+    .lang-toggle-btn.active-en {
+      background: var(--frc-dim);
+      border-color: var(--frc-accent);
+      color: var(--frc-accent);
+    }
+
     @media (max-width: 600px) {
       .hero { padding: 48px 16px 40px; }
       .projects { grid-template-columns: 1fr; padding: 0 16px 48px; }
@@ -186,6 +208,9 @@
       <span>📚</span>
       <span>Study Hub</span>
     </div>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <button class="lang-toggle-btn" onclick="toggleLang()" id="langBtn">EN</button>
+    </div>
   </nav>
 
   <!-- Hero -->
@@ -193,7 +218,7 @@
     <div class="hero-glow"></div>
     <div class="hero-badge">מרכז לימוד לבגרות טכנולוגית</div>
     <h1 class="hero-title">
-      כל הפרויקטים שלך<br>
+      <span class="hero-title-main">כל הפרויקטים שלך</span><br>
       <span class="gradient-text">במקום אחד</span>
     </h1>
     <p class="hero-sub">
@@ -208,13 +233,13 @@
       <div class="top-line"></div>
       <div class="proj-header">
         <span class="proj-icon">🤖</span>
-        <span class="proj-badge">FRC · REBUILD</span>
+        <span class="proj-badge" id="frc-badge">FRC · REBUILD</span>
       </div>
-      <div class="proj-title">Black Unicorns #5135</div>
-      <div class="proj-desc">
+      <div class="proj-title" id="frc-title">Black Unicorns #5135</div>
+      <div class="proj-desc" id="frc-desc">
         רובוט REBUILD · Swerve Drive · Shooter · Vision · AdvantageKit · Java
       </div>
-      <div class="proj-tags">
+      <div class="proj-tags" id="frc-tags">
         <span class="proj-tag">⚙️ מכניקה</span>
         <span class="proj-tag">💻 תוכנה</span>
         <span class="proj-tag">📐 תיאוריה</span>
@@ -232,13 +257,13 @@
       <div class="top-line"></div>
       <div class="proj-header">
         <span class="proj-icon">💣</span>
-        <span class="proj-badge">Android · Java</span>
+        <span class="proj-badge" id="mm-badge">Android · Java</span>
       </div>
-      <div class="proj-title">MineMaster</div>
-      <div class="proj-desc">
+      <div class="proj-title" id="mm-title">MineMaster</div>
+      <div class="proj-desc" id="mm-desc">
         משחק שדה מוקשים לאנדרואיד · RecyclerView · Algorithms · OOP
       </div>
-      <div class="proj-tags">
+      <div class="proj-tags" id="mm-tags">
         <span class="proj-tag">☕ Java</span>
         <span class="proj-tag">📱 Android</span>
         <span class="proj-tag">🧮 אלגוריתמים</span>
@@ -256,11 +281,11 @@
       <div class="top-line"></div>
       <div class="proj-header">
         <span class="proj-icon">🚁</span>
-        <span class="proj-badge">רישיון מטיסן</span>
+        <span class="proj-badge" id="drone-badge">רישיון מטיסן</span>
       </div>
-      <div class="proj-title">רישיון רחפן</div>
-      <div class="proj-desc">הכנה לבחינת רת"א — חוקה · ידע טכני · מטאורולוגיה</div>
-      <div class="proj-tags">
+      <div class="proj-title" id="drone-title">רישיון רחפן</div>
+      <div class="proj-desc" id="drone-desc">הכנה לבחינת רת"א — חוקה · ידע טכני · מטאורולוגיה</div>
+      <div class="proj-tags" id="drone-tags">
         <span class="proj-tag">⚖️ חוקה</span>
         <span class="proj-tag">🔧 ידע טכני</span>
         <span class="proj-tag">🌤️ מטאורולוגיה</span>
@@ -282,14 +307,113 @@
   </footer>
 
   <script>
-    // Animate progress bars from localStorage
+    const TRANSLATIONS = {
+      he: {
+        heroTitle: 'כל הפרויקטים שלך',
+        heroGradient: 'במקום אחד',
+        heroSub: 'כרטיסיות · חידונים · בחינות · קוד · תיאוריה — לכל פרויקט בנפרד',
+        heroBadge: 'מרכז לימוד לבגרות טכנולוגית',
+        frcTitle: 'Black Unicorns #5135',
+        frcDesc: 'רובוט REBUILD · Swerve Drive · Shooter · Vision · AdvantageKit · Java',
+        frcBadge: 'FRC · REBUILD',
+        frcTag1: '⚙️ מכניקה', frcTag2: '💻 תוכנה', frcTag3: '📐 תיאוריה', frcTag4: '🎯 בגרות',
+        mmTitle: 'MineMaster',
+        mmDesc: 'משחק שדה מוקשים לאנדרואיד · RecyclerView · Algorithms · OOP',
+        mmBadge: 'Android · Java',
+        mmTag1: '☕ Java', mmTag2: '📱 Android', mmTag3: '🧮 אלגוריתמים', mmTag4: '🎯 בגרות',
+        droneTitle: 'רישיון רחפן',
+        droneDesc: 'הכנה לבחינת רת"א — חוקה · ידע טכני · מטאורולוגיה',
+        droneBadge: 'רישיון מטיסן',
+        droneTag1: '⚖️ חוקה', droneTag2: '🔧 ידע טכני', droneTag3: '🌤️ מטאורולוגיה', droneTag4: '🎯 בחינה',
+        footer: 'Study Hub · Black Unicorns #5135'
+      },
+      en: {
+        heroTitle: 'All your projects',
+        heroGradient: 'in one place',
+        heroSub: 'Flashcards · Quizzes · Exams · Code · Theory — for each project separately',
+        heroBadge: 'Study Hub for Tech Matriculation',
+        frcTitle: 'Black Unicorns #5135',
+        frcDesc: 'REBUILD Robot · Swerve Drive · Shooter · Vision · AdvantageKit · Java',
+        frcBadge: 'FRC · REBUILD',
+        frcTag1: '⚙️ Mechanics', frcTag2: '💻 Software', frcTag3: '📐 Theory', frcTag4: '🎯 Exam',
+        mmTitle: 'MineMaster',
+        mmDesc: 'Android Minesweeper · RecyclerView · Algorithms · OOP',
+        mmBadge: 'Android · Java',
+        mmTag1: '☕ Java', mmTag2: '📱 Android', mmTag3: '🧮 Algorithms', mmTag4: '🎯 Exam',
+        droneTitle: 'Drone License',
+        droneDesc: 'CAAI Exam Prep — Regulations · Technical · Meteorology',
+        droneBadge: 'Drone Pilot',
+        droneTag1: '⚖️ Law', droneTag2: '🔧 Technical', droneTag3: '🌤️ Meteorology', droneTag4: '🎯 Exam',
+        footer: 'Study Hub · Black Unicorns #5135'
+      }
+    };
+
+    let currentLang = localStorage.getItem('homeLang') || 'he';
+
+    function applyLang(lang) {
+      const t = TRANSLATIONS[lang];
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+
+      document.querySelector('.hero-badge').textContent = t.heroBadge;
+      document.querySelector('.hero-title-main').textContent = t.heroTitle;
+      document.querySelector('.gradient-text').textContent = t.heroGradient;
+      document.querySelector('.hero-sub').textContent = t.heroSub;
+
+      document.getElementById('frc-title').textContent = t.frcTitle;
+      document.getElementById('frc-desc').textContent = t.frcDesc;
+      document.getElementById('frc-badge').textContent = t.frcBadge;
+      document.querySelectorAll('#frc-tags span')[0].textContent = t.frcTag1;
+      document.querySelectorAll('#frc-tags span')[1].textContent = t.frcTag2;
+      document.querySelectorAll('#frc-tags span')[2].textContent = t.frcTag3;
+      document.querySelectorAll('#frc-tags span')[3].textContent = t.frcTag4;
+
+      document.getElementById('mm-title').textContent = t.mmTitle;
+      document.getElementById('mm-desc').textContent = t.mmDesc;
+      document.getElementById('mm-badge').textContent = t.mmBadge;
+      document.querySelectorAll('#mm-tags span')[0].textContent = t.mmTag1;
+      document.querySelectorAll('#mm-tags span')[1].textContent = t.mmTag2;
+      document.querySelectorAll('#mm-tags span')[2].textContent = t.mmTag3;
+      document.querySelectorAll('#mm-tags span')[3].textContent = t.mmTag4;
+
+      const droneTitle = document.getElementById('drone-title');
+      if (droneTitle) {
+        droneTitle.textContent = t.droneTitle;
+        document.getElementById('drone-desc').textContent = t.droneDesc;
+        document.getElementById('drone-badge').textContent = t.droneBadge;
+        document.querySelectorAll('#drone-tags span')[0].textContent = t.droneTag1;
+        document.querySelectorAll('#drone-tags span')[1].textContent = t.droneTag2;
+        document.querySelectorAll('#drone-tags span')[2].textContent = t.droneTag3;
+        document.querySelectorAll('#drone-tags span')[3].textContent = t.droneTag4;
+      }
+
+      const btn = document.getElementById('langBtn');
+      if (lang === 'en') {
+        btn.textContent = 'עב';
+        btn.classList.add('active-en');
+      } else {
+        btn.textContent = 'EN';
+        btn.classList.remove('active-en');
+      }
+
+      document.querySelector('.site-footer').textContent = t.footer;
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'he' ? 'en' : 'he';
+      localStorage.setItem('homeLang', currentLang);
+      applyLang(currentLang);
+    }
+
     window.addEventListener('load', () => {
-      const frc = Number(localStorage.getItem('frc_total_progress') || 0);
-      const mm  = Number(localStorage.getItem('mm_total_progress')  || 0);
-      const drone = Number(localStorage.getItem('drone_total_progress') || 0);
+      applyLang(currentLang);
+
+      const frc   = Number(localStorage.getItem('frc_total_progress')   || 0);
+      const mm    = Number(localStorage.getItem('mm_total_progress')     || 0);
+      const drone = Number(localStorage.getItem('drone_total_progress')  || 0);
       setTimeout(() => {
-        document.getElementById('frc-bar').style.width = frc + '%';
-        document.getElementById('mm-bar').style.width  = mm  + '%';
+        document.getElementById('frc-bar').style.width   = frc   + '%';
+        document.getElementById('mm-bar').style.width    = mm    + '%';
         document.getElementById('drone-bar').style.width = drone + '%';
       }, 400);
     });
