@@ -509,7 +509,22 @@ const FLASHCARDS = [
       en: "Fragment: reusable UI component inside an Activity. Lifecycle: onAttach → onCreate → onCreateView → onStart → onResume → onPause → onStop → onDestroyView → onDetach. Advantage: UI logic reusable across screens. In project: no Fragments — direct Activities.",
       mix: "Fragment = reusable UI inside Activity. Lifecycle: onAttach→onCreate→onCreateView→...→onDetach. פרויקט: Activities ישירות, לא Fragments."
     }
-  }
+  },
+  { q: "מה ההבדל בין RecyclerView ל-ListView?", a: "RecyclerView יעיל יותר: מחזיר Views לשימוש חוזר, תומך ב-LayoutManagers שונים, אנימציות built-in" },
+  { q: "מה תפקיד ViewHolder ב-RecyclerView?", a: "שומר רפרנסים לרכיבי View של פריט — מונע קריאות יקרות ל-findViewById בכל scroll" },
+  { q: "מה ההבדל בין apply() ל-commit() ב-SharedPreferences?", a: "apply() = אסינכרוני (מהיר, לא מחזיר ערך). commit() = סינכרוני (מחזיר boolean)" },
+  { q: "מה זה ContentValues ב-SQLite?", a: "אובייקט לאחסון זוגות key-value לפעולות INSERT/UPDATE במסד נתונים" },
+  { q: "מה זה Cursor ב-SQLite?", a: "מצביע על שורות תוצאה של Query. מתקדם עם moveToNext(), קורא עם getString/getInt" },
+  { q: "למה אסור לגעת ב-UI מ-Thread אחר?", a: "Android מאפשר גישה ל-UI רק מה-Main Thread. גישה מThread אחר = RuntimeException" },
+  { q: "מה ההבדל בין Executor ל-AsyncTask?", a: "AsyncTask deprecated (API 30). Executor מודרני יותר — thread pool מנוהל + Handler לUI" },
+  { q: "מה זה Intent Explicit לעומת Implicit?", a: "Explicit: מציינים Activity ספציפי. Implicit: מציינים פעולה, המערכת בוחרת מי יטפל" },
+  { q: "מה עושה ActivityResultLauncher?", a: "מאפשר לשלוח Intent ולקבל תוצאה חזרה (מחליף startActivityForResult שהוא deprecated)" },
+  { q: "מה זה Fragment?", a: "חלק ממסך עם lifecycle משלו. ניתן לשלב כמה ב-Activity אחד ולהחליף ביניהם" },
+  { q: "מה ההבדל בין WorkManager ל-Thread?", a: "Thread: רץ רק כשהאפליקציה פתוחה. WorkManager: מובטח לרוץ גם כשהאפליקציה סגורה" },
+  { q: "מה זה SQLiteOpenHelper?", a: "מחלקת עזר לניהול מסד נתונים — יוצרת/משדרגת את ה-DB, מחזירה Readable/Writable DB" },
+  { q: "איך מגנים מ-SQL Injection?", a: "שימוש ב-Parameterized Queries עם ? במקום חיבור strings. לדוגמה: WHERE name=? עם String[]" },
+  { q: "מה זה WebView?", a: "רכיב המציג תוכן אינטרנט בתוך האפליקציה — דפדפן מובנה" },
+  { q: "מה עושה CountDownTimer?", a: "ספירה לאחור עם tick כל X מילישניות. onTick לעדכון UI, onFinish בסיום" }
 ];
 
 // ----------------------------------------------------------------
@@ -987,6 +1002,46 @@ const EXAM_QUESTIONS = [
     ],
     c: 1,
     e: "onCleared() נקרא כשה-ViewModel נהרס לצמיתות (Activity סגורה). ViewModel שורד rotation ולא קורא onCleared() אז. timer.cancel() (ב-java.util.Timer) או handler.removeCallbacks() מונעים memory leak — Timer ממשיך בלי ניקוי."
+  },
+  {
+    q: "מה תפקיד ה-Adapter ב-RecyclerView?",
+    o: ["מנהל animation", "מחבר בין נתונים לתצוגה", "מנהל זיכרון", "מגדיר Layout"],
+    c: 1, e: "Adapter מקבל רשימת נתונים ומייצר View לכל פריט על ידי onCreateViewHolder ו-onBindViewHolder."
+  },
+  {
+    q: "מה ההבדל בין MODE_PRIVATE ל-MODE_APPEND ב-SharedPreferences?",
+    o: ["אין הבדל", "PRIVATE: קובץ חדש/ממחק. APPEND: מוסיף לקיים", "APPEND: מהיר יותר", "PRIVATE: מוצפן"],
+    c: 1, e: "MODE_PRIVATE יוצר קובץ חדש או ממחק קיים. MODE_APPEND פותח קיים ומוסיף אליו."
+  },
+  {
+    q: "מה קורה אם לא סוגרים Cursor לאחר שימוש?",
+    o: ["כלום", "שגיאה מיידית", "דליפת זיכרון ובעיות ביצועים", "מסד נתונים נמחק"],
+    c: 2, e: "Cursor פתוח = דליפת זיכרון (memory leak). תמיד לקרוא cursor.close() בסיום."
+  },
+  {
+    q: "מה ההבדל בין Explicit ל-Implicit Intent?",
+    o: ["אין הבדל", "Explicit: מציין Activity. Implicit: מציין פעולה", "Implicit: יותר מהיר", "Explicit: לאפליקציות אחרות"],
+    c: 1, e: "Explicit: יודעים לאיפה (מחלקה ספציפית). Implicit: מציינים פעולה כמו ACTION_VIEW, המערכת בוחרת מי יטפל."
+  },
+  {
+    q: "למה AsyncTask הפך ל-deprecated?",
+    o: ["איטי מדי", "בעיות דליפת זיכרון וקשה לניהול נכון", "לא תומך ב-API חדש", "יקר מדי"],
+    c: 1, e: "AsyncTask גרם לדליפות זיכרון (memory leaks) בשילוב עם Activity lifecycle. Executor/Coroutines הם הפתרון המודרני."
+  },
+  {
+    q: "מה מגדיר onCreateOptionsMenu?",
+    o: ["Layout של Activity", "רשימת Fragments", "תפריט ActionBar/Toolbar", "RecyclerView Adapter"],
+    c: 2, e: "onCreateOptionsMenu מנפח (inflate) קובץ XML של Menu ל-ActionBar/Toolbar."
+  },
+  {
+    q: "מה יקרה אם תבצע פעולת רשת ב-Main Thread?",
+    o: ["יעבוד לאט", "NetworkOnMainThreadException", "הרשת תיחסם", "אפשרי רק ב-Debug"],
+    c: 1, e: "Android זורק NetworkOnMainThreadException. פעולות רשת חייבות להיות ב-Thread נפרד."
+  },
+  {
+    q: "מה ההבדל בין Internal Storage ל-External Storage?",
+    o: ["אין הבדל", "Internal: פרטי לאפליקציה, לא נגיש לאחרים. External: גיש לכולם", "External: מהיר יותר", "Internal: גדול יותר"],
+    c: 1, e: "Internal Storage פרטי ומוחק עם האפליקציה. External Storage גיש לאפליקציות אחרות ולמשתמש דרך מחשב."
   }
 ];
 
@@ -1017,6 +1072,14 @@ const EXAM_TOPICS = [
   'GameEngine',  // 22 — First Click Safe
   'GameEngine',  // 23 — toggleFlag
   'MVVM',        // 24 — onCleared / Timer leak
+  'UI Components', // 25 — RecyclerView Adapter
+  'Data Storage',  // 26 — SharedPreferences modes
+  'Data Storage',  // 27 — Cursor memory leak
+  'Navigation',    // 28 — Intent types
+  'Background',    // 29 — AsyncTask deprecated
+  'Navigation',    // 30 — onCreateOptionsMenu
+  'Background',    // 31 — NetworkOnMainThreadException
+  'Data Storage',  // 32 — Internal vs External Storage
 ];
 
 // ----------------------------------------------------------------
@@ -1316,6 +1379,584 @@ statsViewModel = <span class="kw">new</span> <span class="cn">ViewModelProvider<
 ✗ <strong>REJECTED: BFS Queue</strong> — דורש Queue ידנית, קוד ארוך יותר.<br>
 💡 <strong>WHY:</strong> גדלי הלוח הנוכחיים (עד 30×16) בטוחים מ-StackOverflow. BFS = פתרון אם לוחות גדולים מאוד דרושים.
 </div></div>`
+  },
+
+  // ─── TOPIC: UI Components ───
+  {
+    key: 'ui_components',
+    icon: '🎨',
+    title: 'רכיבי UI',
+    desc: 'TextView · Button · EditText · ImageView · RecyclerView · ועוד',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📝 TextView ו-EditText</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>TextView</strong> — תצוגת טקסט לקריאה בלבד. מאפיינים עיקריים:</p>
+      <pre>android:text="Hello"
+android:textSize="18sp"
+android:textColor="#000000"
+android:gravity="center"</pre>
+      <p><strong>EditText</strong> — שדה קלט מהמשתמש. יורש מ-TextView:</p>
+      <pre>android:hint="הכנס טקסט..."
+android:inputType="text|textPassword|number"
+android:maxLength="50"
+
+// קריאת ערך בקוד:
+String value = editText.getText().toString().trim();</pre>
+      <p><strong>TextInputLayout + TextInputEditText</strong> — עיצוב Material Design:</p>
+      <pre>// עוטף EditText ונותן label צף + שגיאות
+textInputLayout.setError("שדה חובה");
+textInputLayout.setErrorEnabled(true);</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔘 כפתורים ובחירה</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Button:</strong> כפתור פשוט. <strong>ImageButton:</strong> כפתור עם תמונה.</p>
+      <pre>button.setOnClickListener(v -> {
+    // פעולה בלחיצה
+});</pre>
+      <p><strong>CheckBox:</strong></p>
+      <pre>checkBox.setOnCheckedChangeListener((btn, isChecked) -> {
+    if (isChecked) { /* מסומן */ }
+});</pre>
+      <p><strong>RadioButton + RadioGroup:</strong> בחירה בלעדית מתוך קבוצה:</p>
+      <pre>int selectedId = radioGroup.getCheckedRadioButtonId();
+RadioButton rb = findViewById(selectedId);</pre>
+      <p><strong>Switch + ToggleButton:</strong> מצב דלוק/כבוי.</p>
+      <p><strong>SeekBar:</strong> בחירת ערך מתוך טווח (0-100):</p>
+      <pre>seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    public void onProgressChanged(SeekBar s, int progress, boolean fromUser) {}
+    public void onStartTrackingTouch(SeekBar s) {}
+    public void onStopTrackingTouch(SeekBar s) {}
+});</pre>
+      <p><strong>Chip + ChipGroup:</strong> תגיות Material Design לסינון/בחירה:</p>
+      <pre>chip.setOnCheckedChangeListener((btn, isChecked) -> {});</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🖼️ תמונות ומדיה</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>ImageView:</strong> הצגת תמונות:</p>
+      <pre>imageView.setImageResource(R.drawable.image);
+imageView.setImageBitmap(bitmap);
+imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);</pre>
+      <p><strong>VideoView:</strong> הצגת וידאו:</p>
+      <pre>videoView.setVideoURI(Uri.parse(url));
+videoView.start();
+videoView.setOnCompletionListener(mp -> { /* סיים */ });</pre>
+      <p><strong>animate():</strong> אנימציה על View:</p>
+      <pre>view.animate()
+    .alpha(0f)
+    .translationX(100)
+    .rotation(360f)
+    .setDuration(500)
+    .start();</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📋 RecyclerView</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>RecyclerView = תצוגת רשימה יעילה. מחזיר Views לשימוש חוזר (Recycle).</p>
+      <p><strong>3 מרכיבים עיקריים:</strong></p>
+      <ul>
+        <li><strong>RecyclerView</strong> — המיכל ב-XML</li>
+        <li><strong>Adapter</strong> — מחבר בין הנתונים לתצוגה</li>
+        <li><strong>ViewHolder</strong> — מחזיק רפרנסים לרכיבי ה-View של פריט אחד</li>
+      </ul>
+      <pre>public class MyAdapter extends RecyclerView.Adapter&lt;MyAdapter.MyViewHolder&gt; {
+    private List&lt;String&gt; data;
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView textView;
+        MyViewHolder(View v) {
+            super(v);
+            textView = v.findViewById(R.id.tv);
+        }
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                   .inflate(R.layout.item_layout, parent, false);
+        return new MyViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.textView.setText(data.get(position));
+    }
+
+    @Override
+    public int getItemCount() { return data.size(); }
+}</pre>
+      <p><strong>LayoutManagers:</strong></p>
+      <pre>LinearLayoutManager  // רשימה רגילה (אנכי/אופקי)
+GridLayoutManager(context, 2)  // רשת 2 עמודות
+StaggeredGridLayoutManager  // רשת לא שווה
+
+recyclerView.setLayoutManager(new LinearLayoutManager(this));
+recyclerView.setAdapter(myAdapter);</pre>
+      <div class="highlight green">✅ RecyclerView עדיף על ListView: ניהול זיכרון טוב יותר, תמיכה ב-LayoutManagers שונים, אנימציות built-in</div>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📜 Spinner ו-ListView</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Spinner</strong> — תפריט נפתח (Dropdown):</p>
+      <pre>ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;&gt;(
+    this, android.R.layout.simple_spinner_item, myList);
+adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+spinner.setAdapter(adapter);
+spinner.setOnItemSelectedListener(...);</pre>
+      <p><strong>ListView</strong> — רשימה פשוטה (ישן יותר, פחות יעיל מ-RecyclerView):</p>
+      <pre>ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;&gt;(
+    this, android.R.layout.simple_list_item_1, list);
+listView.setAdapter(adapter);</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📦 CardView ו-Layouts</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>CardView:</strong> כרטיס עם elevation ופינות מעוגלות:</p>
+      <pre>app:cardCornerRadius="8dp"
+app:cardElevation="4dp"
+app:cardBackgroundColor="#ffffff"</pre>
+      <p><strong>GridLayout:</strong> פריסה בטבלה:</p>
+      <pre>android:columnCount="3"
+android:rowCount="4"</pre>
+      <p><strong>ScrollView / HorizontalScrollView / NestedScrollView:</strong></p>
+      <pre>// NestedScrollView תומך ב-RecyclerView בפנים
+// ScrollView = רק ילד אחד ישיר</pre>
+    </div></div>
+    `
+  },
+
+  // ─── TOPIC: Navigation ───
+  {
+    key: 'navigation',
+    icon: '🧭',
+    title: 'ניווט ותפריטים',
+    desc: 'Intent · Fragment · BottomNavigationView · NavigationView · Toolbar',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🚀 Intent</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Intent</strong> — הודעה למעבר בין Activities או הפעלת שירות.</p>
+      <p><strong>Explicit Intent</strong> — מפורש, יודעים לאיפה:</p>
+      <pre>Intent intent = new Intent(this, SecondActivity.class);
+intent.putExtra("key", value);
+startActivity(intent);</pre>
+      <p><strong>Implicit Intent</strong> — לא מציינים Activity, המערכת בוחרת:</p>
+      <pre>Intent intent = new Intent(Intent.ACTION_VIEW);
+intent.setData(Uri.parse("https://google.com"));
+startActivity(intent);</pre>
+      <p><strong>קבלת נתונים ב-Activity חדש:</strong></p>
+      <pre>String value = getIntent().getStringExtra("key");
+int num = getIntent().getIntExtra("num", 0);</pre>
+      <p><strong>ActivityResultLauncher</strong> — קבלת תוצאה חזרה:</p>
+      <pre>ActivityResultLauncher&lt;Intent&gt; launcher =
+    registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+            }
+        });
+
+launcher.launch(intent);
+
+// ב-Activity השני:
+Intent result = new Intent();
+result.putExtra("response", "hello");
+setResult(RESULT_OK, result);
+finish();</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧩 Fragment</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>Fragment = חלק ממסך, עם lifecycle משלו. ניתן לשלב כמה Fragments במסך אחד.</p>
+      <pre>public class MyFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                              ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+}</pre>
+      <p><strong>Fragment Transaction:</strong></p>
+      <pre>getSupportFragmentManager()
+    .beginTransaction()
+    .replace(R.id.fragment_container, new MyFragment())
+    .addToBackStack(null)
+    .commit();</pre>
+      <p><strong>DialogFragment:</strong></p>
+      <pre>public class MyDialog extends DialogFragment {
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AlertDialog.Builder(getActivity())
+            .setTitle("כותרת")
+            .setMessage("הודעה")
+            .setPositiveButton("אישור", (d, w) -> {})
+            .create();
+    }
+}</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📱 תפריטי ניווט</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>BottomNavigationView:</strong></p>
+      <pre>bottomNav.setOnItemSelectedListener(item -> {
+    switch (item.getItemId()) {
+        case R.id.home: loadFragment(homeFragment); return true;
+        case R.id.profile: loadFragment(profileFragment); return true;
+    }
+    return false;
+});</pre>
+      <p><strong>NavigationView (Drawer):</strong></p>
+      <pre>DrawerLayout drawer = findViewById(R.id.drawer_layout);
+NavigationView navView = findViewById(R.id.nav_view);
+navView.setNavigationItemSelectedListener(item -> {
+    drawer.closeDrawers();
+    return true;
+});</pre>
+      <p><strong>Toolbar:</strong></p>
+      <pre>Toolbar toolbar = findViewById(R.id.toolbar);
+setSupportActionBar(toolbar);
+getSupportActionBar().setTitle("כותרת");</pre>
+      <p><strong>Options Menu:</strong></p>
+      <pre>@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+}
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.action_settings) { /* ... */ }
+    return super.onOptionsItemSelected(item);
+}</pre>
+      <p><strong>ViewPager2:</strong></p>
+      <pre>viewPager2.setAdapter(new FragmentStateAdapter(this) {
+    @Override public int getItemCount() { return 3; }
+    @Override public Fragment createFragment(int pos) {
+        return TabFragment.newInstance(pos);
+    }
+});</pre>
+    </div></div>
+    `
+  },
+
+  // ─── TOPIC: Data Storage ───
+  {
+    key: 'data_storage',
+    icon: '💾',
+    title: 'אחסון נתונים',
+    desc: 'SharedPreferences · SQLite · Internal Storage · Serialization',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ SharedPreferences</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>אחסון key-value פשוט. מתאים להגדרות, העדפות משתמש, נתונים קטנים.</p>
+      <pre>// שמירה:
+SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+SharedPreferences.Editor editor = prefs.edit();
+editor.putString("username", "yinon");
+editor.putInt("score", 100);
+editor.putBoolean("darkMode", true);
+editor.apply(); // async | editor.commit() = sync
+
+// קריאה:
+String name = prefs.getString("username", "default");
+int score = prefs.getInt("score", 0);
+boolean dark = prefs.getBoolean("darkMode", false);
+
+// מחיקה:
+editor.remove("username");
+editor.clear();</pre>
+      <div class="highlight blue">💡 apply() = אסינכרוני (מהיר יותר). commit() = סינכרוני (מחזיר boolean).</div>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗄️ SQLite — יסודות</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>מסד נתונים מקומי. מושלם לנתונים מובנים (רשימות, יומן וכד').</p>
+      <pre>public class DBHelper extends SQLiteOpenHelper {
+    private static final String DB_NAME = "mydb.db";
+    private static final int DB_VERSION = 1;
+
+    public DBHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE users (" +
+            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "name TEXT NOT NULL, " +
+            "score INTEGER DEFAULT 0)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
+        db.execSQL("DROP TABLE IF EXISTS users");
+        onCreate(db);
+    }
+}</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗄️ SQLite — CRUD</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre>SQLiteDatabase db = helper.getWritableDatabase();
+
+// INSERT:
+ContentValues cv = new ContentValues();
+cv.put("name", "ינון");
+cv.put("score", 95);
+long id = db.insert("users", null, cv);
+
+// UPDATE:
+ContentValues cv2 = new ContentValues();
+cv2.put("score", 100);
+int rows = db.update("users", cv2, "name=?", new String[]{"ינון"});
+
+// DELETE:
+db.delete("users", "_id=?", new String[]{String.valueOf(id)});
+
+// QUERY עם Cursor:
+Cursor cursor = db.query("users", null, null, null, null, null, "name ASC");
+while (cursor.moveToNext()) {
+    String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+    int score = cursor.getInt(cursor.getColumnIndexOrThrow("score"));
+}
+cursor.close();
+db.close();</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗄️ SQLite — אבטחה</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>SQL Injection:</strong></p>
+      <pre>// ❌ מסוכן:
+db.rawQuery("SELECT * FROM users WHERE name='" + userInput + "'", null);
+
+// ✅ בטוח — Parameterized Query:
+db.query("users", null, "name=?", new String[]{userInput}, null, null, null);</pre>
+      <div class="highlight orange">⚠️ תמיד השתמש ב-Parameterized Queries. חיבור strings = SQL Injection.</div>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📁 אחסון קבצים</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Internal Storage:</strong></p>
+      <pre>// כתיבה:
+FileOutputStream fos = openFileOutput("data.txt", MODE_PRIVATE);
+fos.write("תוכן".getBytes());
+fos.close();
+
+// קריאה:
+FileInputStream fis = openFileInput("data.txt");
+InputStreamReader isr = new InputStreamReader(fis);
+BufferedReader br = new BufferedReader(isr);
+String line = br.readLine();</pre>
+      <p><strong>Serializable:</strong> שמירת אובייקט ב-Intent:</p>
+      <pre>public class User implements Serializable {
+    String name;
+    int score;
+}
+
+intent.putExtra("user", userObject);
+
+User u = (User) getIntent().getSerializableExtra("user");</pre>
+    </div></div>
+    `
+  },
+
+  // ─── TOPIC: Background Processing ───
+  {
+    key: 'background',
+    icon: '⚙️',
+    title: 'עיבוד ברקע',
+    desc: 'Thread · Handler · AsyncTask · Executor · WorkManager · CountDownTimer',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧵 Thread ו-Handler</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div class="highlight orange"><strong>חוק:</strong> פעולות ארוכות ב-Main Thread גורמות ל-ANR (App Not Responding).</div>
+      <p><strong>Thread:</strong></p>
+      <pre>new Thread(() -> {
+    String result = fetchData(); // פעולה ארוכה
+
+    runOnUiThread(() -> {
+        textView.setText(result);
+    });
+}).start();</pre>
+      <p><strong>Handler:</strong></p>
+      <pre>Handler handler = new Handler(Looper.getMainLooper());
+
+handler.postDelayed(() -> {
+    textView.setText("עודכן!");
+}, 2000);
+
+handler.post(() -> textView.setText(result));</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚡ AsyncTask ו-Executor</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>AsyncTask</strong> (deprecated API 30):</p>
+      <pre>class MyTask extends AsyncTask&lt;Void, Integer, String&gt; {
+    @Override
+    protected void onPreExecute() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+    @Override
+    protected String doInBackground(Void... params) {
+        return fetchData(); // אסור לגעת ב-UI
+    }
+    @Override
+    protected void onPostExecute(String result) {
+        progressBar.setVisibility(View.GONE);
+        textView.setText(result);
+    }
+}
+new MyTask().execute();</pre>
+      <p><strong>Executor</strong> — חלופה מודרנית:</p>
+      <pre>ExecutorService executor = Executors.newSingleThreadExecutor();
+Handler handler = new Handler(Looper.getMainLooper());
+
+executor.execute(() -> {
+    String result = fetchData();
+    handler.post(() -> textView.setText(result));
+});</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⏱️ CountDownTimer ו-WorkManager</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>CountDownTimer:</strong></p>
+      <pre>new CountDownTimer(30000, 1000) {
+    public void onTick(long millisUntilFinished) {
+        textView.setText(millisUntilFinished / 1000 + " שניות");
+    }
+    public void onFinish() {
+        textView.setText("סיום!");
+    }
+}.start();</pre>
+      <p><strong>WorkManager:</strong> עבודות ברקע גם כשהאפליקציה סגורה:</p>
+      <pre>public class MyWorker extends Worker {
+    public MyWorker(Context ctx, WorkerParameters params) { super(ctx, params); }
+
+    @Override
+    public Result doWork() {
+        return Result.success();
+    }
+}
+
+OneTimeWorkRequest workRequest =
+    new OneTimeWorkRequest.Builder(MyWorker.class).build();
+WorkManager.getInstance(context).enqueue(workRequest);</pre>
+    </div></div>
+    `
+  },
+
+  // ─── TOPIC: Dialogs & Pickers ───
+  {
+    key: 'dialogs',
+    icon: '💬',
+    title: 'דיאלוגים ובוחרים',
+    desc: 'AlertDialog · DatePickerDialog · TimePickerDialog · Toast',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚠️ AlertDialog</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre>new AlertDialog.Builder(this)
+    .setTitle("אישור מחיקה")
+    .setMessage("האם למחוק?")
+    .setPositiveButton("כן", (dialog, which) -> deleteItem())
+    .setNegativeButton("לא", (dialog, which) -> dialog.dismiss())
+    .setNeutralButton("ביטול", null)
+    .setCancelable(false)
+    .show();</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📅 DatePickerDialog ו-TimePickerDialog</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <pre>Calendar cal = Calendar.getInstance();
+new DatePickerDialog(this,
+    (view, year, month, day) -> {
+        textView.setText(day + "/" + (month+1) + "/" + year);
+    },
+    cal.get(Calendar.YEAR),
+    cal.get(Calendar.MONTH),
+    cal.get(Calendar.DAY_OF_MONTH)).show();
+
+new TimePickerDialog(this,
+    (view, hour, minute) -> {
+        textView.setText(hour + ":" + minute);
+    },
+    cal.get(Calendar.HOUR_OF_DAY),
+    cal.get(Calendar.MINUTE), true).show();</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🍞 Toast ו-BottomSheet</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Toast:</strong></p>
+      <pre>Toast.makeText(this, "נשמר!", Toast.LENGTH_SHORT).show();
+// LENGTH_SHORT = 2 שניות | LENGTH_LONG = 3.5 שניות</pre>
+      <p><strong>BottomSheetBehavior:</strong></p>
+      <pre>BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+behavior.setPeekHeight(200);</pre>
+    </div></div>
+    `
+  },
+
+  // ─── TOPIC: Connectivity ───
+  {
+    key: 'connectivity',
+    icon: '🌐',
+    title: 'קישוריות ומיקום',
+    desc: 'GPS · Google Maps · WebView · Bluetooth',
+    content: `
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📍 GPS ומיקום</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>דורש הרשאה: ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION</p>
+      <pre>FusedLocationProviderClient client =
+    LocationServices.getFusedLocationProviderClient(this);
+
+client.getLastLocation().addOnSuccessListener(location -> {
+    if (location != null) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+    }
+});</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗺️ Google Maps ו-OpenStreetMap</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>Google Maps:</strong></p>
+      <pre>@Override
+public void onMapReady(GoogleMap googleMap) {
+    LatLng location = new LatLng(32.0, 34.8);
+    googleMap.addMarker(new MarkerOptions()
+        .position(location)
+        .title("תל אביב"));
+    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
+}</pre>
+      <p><strong>OpenStreetMap (OSMdroid):</strong> מפות חינמיות ללא API Key:</p>
+      <pre>MapView map = findViewById(R.id.map);
+map.setTileSource(TileSourceFactory.MAPNIK);
+map.getController().setZoom(15.0);
+map.getController().setCenter(new GeoPoint(32.0, 34.8));</pre>
+    </div></div>
+
+    <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🌍 WebView ו-Bluetooth</span><span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>WebView:</strong></p>
+      <pre>webView.getSettings().setJavaScriptEnabled(true);
+webView.setWebViewClient(new WebViewClient());
+webView.loadUrl("https://example.com");
+
+webView.addJavascriptInterface(new MyInterface(), "Android");</pre>
+      <p><strong>Bluetooth:</strong></p>
+      <pre>BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+if (!adapter.isEnabled()) {
+    Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+    startActivity(enable);
+}
+Set&lt;BluetoothDevice&gt; paired = adapter.getBondedDevices();</pre>
+    </div></div>
+    `
   }
 ];
 
