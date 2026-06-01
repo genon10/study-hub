@@ -1453,7 +1453,7 @@ videoView.setOnCompletionListener(mp -> { /* סיים */ });</pre>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📋 RecyclerView</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p>RecyclerView = תצוגת רשימה יעילה. מחזיר Views לשימוש חוזר (Recycle).</p>
+      <p dir="ltr" style="text-align:left">RecyclerView = תצוגת רשימה יעילה. מחזיר Views לשימוש חוזר (Recycle).</p>
       <p><strong>3 מרכיבים עיקריים:</strong></p>
       <ul>
         <li><strong>RecyclerView</strong> — המיכל ב-XML</li>
@@ -1568,7 +1568,7 @@ finish();</pre>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧩 Fragment</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p>Fragment = חלק ממסך, עם lifecycle משלו. ניתן לשלב כמה Fragments במסך אחד.</p>
+      <p dir="ltr" style="text-align:left">Fragment = חלק ממסך, עם lifecycle משלו. ניתן לשלב כמה Fragments במסך אחד.</p>
       <pre>public class MyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -1652,7 +1652,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
     content: `
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⚙️ SharedPreferences</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p>אחסון key-value פשוט. מתאים להגדרות, העדפות משתמש, נתונים קטנים.</p>
+      <p dir="rtl" style="text-align:right">אחסון key-value פשוט. מתאים להגדרות, העדפות משתמש, נתונים קטנים.</p>
       <pre>// שמירה:
 SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 SharedPreferences.Editor editor = prefs.edit();
@@ -1674,7 +1674,7 @@ editor.clear();</pre>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🗄️ SQLite — יסודות</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p>מסד נתונים מקומי. מושלם לנתונים מובנים (רשימות, יומן וכד').</p>
+      <p dir="rtl" style="text-align:right">מסד נתונים מקומי. מושלם לנתונים מובנים (רשימות, יומן וכד').</p>
       <pre>public class DBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "mydb.db";
     private static final int DB_VERSION = 1;
@@ -1910,7 +1910,7 @@ behavior.setPeekHeight(200);</pre>
     content: `
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📍 GPS ומיקום</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p>דורש הרשאה: ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION</p>
+      <p dir="rtl" style="text-align:right">דורש הרשאה: ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION</p>
       <pre>FusedLocationProviderClient client =
     LocationServices.getFusedLocationProviderClient(this);
 

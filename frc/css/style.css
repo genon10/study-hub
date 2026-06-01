@@ -257,3 +257,22 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--muted); }
   .ball-path { gap: 4px; }
   .bp-arrow  { font-size: 1rem; }
 }
+
+/* ---- DIRECTION FIXES — FRC (Hebrew primary) ---- */
+.acc-b p, .acc-b li, .acc-b td {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: embed;
+}
+.acc-b code {
+  direction: ltr;
+  display: inline-block;
+  unicode-bidi: embed;
+}
+
+/* Search bar RTL */
+#search-input, .search-wrap input {
+  direction: rtl;
+  text-align: right;
+}
+#search-input::placeholder { text-align: right; }

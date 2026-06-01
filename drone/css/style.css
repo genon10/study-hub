@@ -158,3 +158,13 @@
   .stat-grid { grid-template-columns: 1fr; gap: 8px; }
   .grid { grid-template-columns: 1fr; }
 }
+
+/* ---- DIRECTION FIXES — Drone (Hebrew primary) ---- */
+.acc-b p, .acc-b li, .acc-b td {
+  direction: rtl;
+  text-align: right;
+}
+.acc-b code {
+  direction: ltr;
+  display: inline-block;
+}

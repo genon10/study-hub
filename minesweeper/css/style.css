@@ -264,3 +264,20 @@
 }
 .match-tile.wrong { border-color: var(--danger); background: rgba(255,95,95,.1); animation: shake .35s ease; }
 .match-tile.term { font-family: var(--font-mono); font-size: .75rem; direction: ltr; }
+
+/* ---- DIRECTION FIXES — Minesweeper (English primary) ---- */
+.acc-b { direction: ltr; text-align: left; }
+.acc-h { direction: rtl; text-align: right; }
+
+/* Hebrew explanation paragraphs inside accordion bodies */
+.acc-b p[dir="rtl"],
+.acc-b .hbox {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Search bar LTR */
+#search-input, .search-wrap input {
+  direction: ltr;
+  text-align: left;
+}

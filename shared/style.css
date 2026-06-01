@@ -153,11 +153,11 @@ a { text-decoration: none; color: inherit; }
   transition: border-color var(--transition-slow);
 }
 .acc-h {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
   padding: 15px 20px; cursor: pointer;
   font-weight: 600; font-size: 0.92rem; color: var(--text);
   user-select: none; transition: background var(--transition);
-  gap: 12px;
+  gap: 12px; text-align: right; direction: rtl;
 }
 .acc-h:hover { background: var(--surface2); }
 .acc-arrow {
@@ -630,3 +630,36 @@ ul.sl li { margin-bottom: 6px; }
 .drone-card:hover { border-color: var(--drone-accent); box-shadow: 0 0 30px rgba(59,130,246,0.12); }
 .drone-card .top-line { background: linear-gradient(90deg, transparent, var(--drone-accent), transparent); }
 .drone-card .proj-badge { background: var(--drone-dim); color: var(--drone-accent); }
+
+/* ── DIRECTION / BIDI FIXES ── */
+html { direction: rtl; }
+
+/* Code blocks always LTR */
+.code-block, pre, code {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: embed;
+  font-family: var(--font-mono);
+}
+
+/* English terms inline inside Hebrew text */
+.mixed-term {
+  unicode-bidi: embed;
+  direction: ltr;
+  display: inline-block;
+}
+
+/* Table cells with code */
+.data-table td code,
+.data-table th code {
+  direction: ltr;
+  display: inline-block;
+}
+
+/* English-only pages or sections */
+.lang-en { direction: ltr; text-align: left; }
+.lang-en .acc-h { text-align: left; }
+.lang-en .code-block { direction: ltr; text-align: left; }
+
+/* LTR pages (minesweeper) — flip accordion back to normal row */
+html[dir="ltr"] .acc-h { flex-direction: row; text-align: left; direction: ltr; }
