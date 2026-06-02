@@ -264,6 +264,10 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--muted); }
   text-align: right;
   unicode-bidi: embed;
 }
+.acc-b .highlight, .acc-b .hbox {
+  direction: rtl;
+  text-align: right;
+}
 .acc-b code {
   direction: ltr;
   display: inline-block;

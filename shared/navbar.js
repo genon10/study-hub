@@ -57,9 +57,10 @@
     ? '<span class="nav-section-badge drone">רחפן</span>'
     : '';
 
+  const homeLabel = inMM ? '← Study Hub' : 'Study Hub ←';
   const navHtml = `
     <nav class="site-nav" id="site-nav">
-      <a href="${root}index.html" class="nav-home">← Study Hub</a>
+      <a href="${root}index.html" class="nav-home">${homeLabel}</a>
       ${(inFRC || inMM || inDrone) ? '<div class="nav-divider"></div>' : ''}
       ${sectionLabel}
       <div class="nav-links">${linksHtml}</div>

@@ -1092,14 +1092,14 @@ const TOPICS = [
     title: 'א-סינכרוני',
     desc: 'ExecutorService, WorkManager, postValue vs setValue',
     content: `
-<div class="highlight orange"><strong>למה חשוב?</strong> Android לא מאפשר פעולות רשת/DB ב-UI Thread — גורם ל-ANR (App Not Responding).</div>
+<div class="highlight orange" dir="rtl" style="text-align:right"><strong>למה חשוב?</strong> Android לא מאפשר פעולות רשת/DB ב-UI Thread — גורם ל-ANR (App Not Responding).</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>שכבה 1: ExecutorService (Room writes)</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <pre><span class="cm">// ב-Repository — שמירה ל-Room ברקע</span>
 <span class="cn">AppDatabase</span>.databaseWriteExecutor.<span class="fn">execute</span>(() -&gt; {
     gameDao.<span class="fn">insertGame</span>(entity);
 });</pre>
-<code>Executors.newFixedThreadPool(4)</code> נוצר ב-build של AppDatabase.
+<p dir="rtl" style="text-align:right"><code>Executors.newFixedThreadPool(4)</code> נוצר ב-build של AppDatabase.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>שכבה 2: new Thread (StatisticsViewModel)</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1108,7 +1108,7 @@ const TOPICS = [
     <span class="cn">StatisticsData</span> stats = <span class="fn">calculateStatistics</span>(games);
     statisticsData.<span class="fn">postValue</span>(stats); <span class="cm">// postValue — לא setValue!</span>
 }).<span class="fn">start</span>();</pre>
-<strong>חוק:</strong> setValue() = main thread בלבד. postValue() = מכל thread.
+<p dir="rtl" style="text-align:right"><strong>חוק:</strong> <code>setValue()</code> = main thread בלבד. <code>postValue()</code> = מכל thread.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>שכבה 3: WorkManager (Background Service)</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1117,7 +1117,7 @@ const TOPICS = [
     .<span class="fn">setConstraints</span>(<span class="kw">new</span> <span class="cn">Constraints.Builder</span>()
         .<span class="fn">setRequiredNetworkType</span>(<span class="cn">NetworkType</span>.<span class="nm">CONNECTED</span>).<span class="fn">build</span>())
     .<span class="fn">build</span>();</pre>
-WorkManager שורד: reboot, process death, כיבוי. AsyncTask (deprecated) לא שורד.
+<p dir="rtl" style="text-align:right"><code>WorkManager</code> שורד: reboot, process death, כיבוי. <code>AsyncTask</code> (deprecated) לא שורד.</p>
 </div></div>`
   },
   {
@@ -1126,7 +1126,7 @@ WorkManager שורד: reboot, process death, כיבוי. AsyncTask (deprecated) 
     title: 'מסד נתונים',
     desc: 'DSD, 5 טבלאות, קישור, migrations',
     content: `
-<div class="highlight"><strong>5 טבלאות ב-Room v6:</strong></div>
+<div class="highlight" dir="rtl" style="text-align:right"><strong>5 טבלאות ב-Room v6:</strong></div>
 <table class="cmp-table">
 <tr><th>טבלה</th><th>שדות עיקריים</th><th>תפקיד</th></tr>
 <tr><td><code>games</code></td><td>id, userId, difficultyId, status, secondsElapsed, boardState(JSON), syncedToFirebase</td><td>היסטוריית משחקים</td></tr>
@@ -1144,11 +1144,11 @@ WorkManager שורד: reboot, process death, כיבוי. AsyncTask (deprecated) 
         db.<span class="fn">execSQL</span>(<span class="st">"ALTER TABLE games ADD COLUMN syncedToFirebase INTEGER DEFAULT 0"</span>);
     }
 };</pre>
-בלי Migration — האפליקציה קורסת למשתמשים עם גרסה ישנה (IllegalStateException).
+<p dir="rtl" style="text-align:right">בלי Migration — האפליקציה קורסת למשתמשים עם גרסה ישנה (<code>IllegalStateException</code>).</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>boardState כ-JSON – למה?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-Cell[][] לא ניתן לשמירה ישירה. GameEngine.serializeBoardState() בונה JSON עם StringBuilder (ללא Gson — Pure Java domain). שמירה בעמודה אחת. restoreBoardState() טוען חזרה.
+<p dir="rtl" style="text-align:right"><code>Cell[][]</code> לא ניתן לשמירה ישירה. <code>GameEngine.serializeBoardState()</code> בונה JSON עם <code>StringBuilder</code> (ללא <code>Gson</code> — Pure Java domain). שמירה בעמודה אחת. <code>restoreBoardState()</code> טוען חזרה.</p>
 </div></div>`
   },
   {
@@ -1157,7 +1157,7 @@ Cell[][] לא ניתן לשמירה ישירה. GameEngine.serializeBoardState()
     title: 'GameEngine',
     desc: 'DFS flood fill, mine placement, score, serialization',
     content: `
-<div class="highlight green"><code>GameEngine.java</code> ב-domain/usecase — Pure Java, ללא Android dependency.</div>
+<div class="highlight green" dir="rtl" style="text-align:right"><code>GameEngine.java</code> ב-domain/usecase — Pure Java, ללא Android dependency.</div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>floodReveal DFS — קוד מלא (מהפרויקט)</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
 <pre><span class="kw">private void</span> <span class="fn">floodReveal</span>(<span class="kw">int</span> x, <span class="kw">int</span> y) {
@@ -1179,7 +1179,7 @@ Cell[][] לא ניתן לשמירה ישירה. GameEngine.serializeBoardState()
         }
     }
 }</pre>
-Guard: <code>isCovered()</code> — לאחר REVEALED, תא לא יעובד שוב.
+<p dir="rtl" style="text-align:right">Guard: <code>isCovered()</code> — לאחר REVEALED, תא לא יעובד שוב.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Score Calculation — קוד מלא</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1209,7 +1209,7 @@ json.<span class="fn">append</span>(<span class="st">"{\"cells\":["</span>);
     }
 }
 json.<span class="fn">append</span>(<span class="st">"]}"</span>);</pre>
-Pure Java — ללא Gson, ללא Android dependency.
+<p dir="rtl" style="text-align:right">Pure Java — ללא <code>Gson</code>, ללא Android dependency.</p>
 </div></div>`
   },
   {
@@ -1227,8 +1227,8 @@ Pure Java — ללא Gson, ללא Android dependency.
 <tr><td>Offline cache</td><td>מובנה, מצוין</td><td>חלקי</td></tr>
 </table>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Firebase Auth – 3 דרכי כניסה</span><span class="acc-arrow">▼</span></div>
-<div class="acc-b">1. Email + Password<br>2. Google Sign-In<br>3. Anonymous (אורח — משחק ללא גיבוי)<br><br>
-AuthViewModel מנהל מצב. כתיבה לFirestore: <code>FirebaseAuth.getInstance().getCurrentUser().getUid()</code>.
+<div class="acc-b"><p dir="rtl" style="text-align:right">1. Email + Password<br>2. Google Sign-In<br>3. Anonymous (אורח — משחק ללא גיבוי)</p>
+<p dir="rtl" style="text-align:right"><code>AuthViewModel</code> מנהל מצב. כתיבה ל-Firestore: <code>FirebaseAuth.getInstance().getCurrentUser().getUid()</code>.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Security Rules — שורה אחר שורה</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1255,11 +1255,13 @@ service cloud.firestore {
     content: `
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>ירושה — 5 דוגמאות מהפרויקט</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-1. <code>BaseNavigationActivity</code> ← GameActivity, StatisticsActivity, LeaderboardActivity, ProfileActivity, AchievementsActivity<br>
-2. <code>View</code> ← <code>GameBoardView</code> (Canvas + touch)<br>
-3. <code>Worker</code> ← <code>FirebaseSyncWorker</code>, <code>AchievementSyncWorker</code><br>
-4. <code>ViewModel</code> ← GameViewModel, StatisticsViewModel, AchievementsViewModel, AuthViewModel<br>
-5. <code>BaseFirebaseModel</code> ← UserRecord, LeaderboardEntry
+<ol dir="rtl" style="text-align:right;padding-right:20px;padding-left:0">
+<li><code>BaseNavigationActivity</code> ← GameActivity, StatisticsActivity, LeaderboardActivity, ProfileActivity, AchievementsActivity</li>
+<li><code>View</code> ← <code>GameBoardView</code> (Canvas + touch)</li>
+<li><code>Worker</code> ← <code>FirebaseSyncWorker</code>, <code>AchievementSyncWorker</code></li>
+<li><code>ViewModel</code> ← GameViewModel, StatisticsViewModel, AchievementsViewModel, AuthViewModel</li>
+<li><code>BaseFirebaseModel</code> ← UserRecord, LeaderboardEntry</li>
+</ol>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Singleton Pattern — App.getInstance()</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1285,7 +1287,7 @@ service cloud.firestore {
         <span class="kw">if</span> (firebase.<span class="fn">isOnline</span>()) firebase.<span class="fn">uploadGame</span>(r);          <span class="cm">// REMOTE async</span>
     }
 }</pre>
-ViewModel לא יודע מאיפה המידע — ניתן להחליף מקור ללא שינוי ViewModel.
+<p dir="rtl" style="text-align:right"><code>ViewModel</code> לא יודע מאיפה המידע — ניתן להחליף מקור ללא שינוי <code>ViewModel</code>.</p>
 </div></div>`
   },
   {
@@ -1302,12 +1304,12 @@ ViewModel לא יודע מאיפה המידע — ניתן להחליף מקור
     <span class="kw">void</span> <span class="fn">updateProgress</span>(<span class="cn">String</span> uid, <span class="cn">PlayerProgress</span> p, <span class="cn">NetworkCallback</span>&lt;<span class="cn">Boolean</span>&gt; cb);
     <span class="kw">void</span> <span class="fn">deleteAccount</span>(<span class="cn">String</span> uid, <span class="cn">NetworkCallback</span>&lt;<span class="cn">Boolean</span>&gt; cb);
 }</pre>
-DI: ViewModel תלוי ב-Interface לא ב-Firebase — ניתן להחליף ל-REST בלי לגעת ב-ViewModel.
+<p dir="rtl" style="text-align:right">DI: <code>ViewModel</code> תלוי ב-Interface לא ב-Firebase — ניתן להחליף ל-REST בלי לגעת ב-<code>ViewModel</code>.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>הרחבה 1 – Image Upload</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-ProfileActivity: גלריה → דחיסה → Firebase Storage (async) → URL → Firestore users/{uid}/photoUrl. <br>
-<code>Glide.with(ctx).load(url).placeholder(defaultAvatar).into(imageView)</code> — caching אוטומטי.
+<p dir="rtl" style="text-align:right"><code>ProfileActivity</code>: גלריה → דחיסה → Firebase Storage (async) → URL → Firestore users/{uid}/photoUrl.</p>
+<p dir="ltr" style="text-align:left"><code>Glide.with(ctx).load(url).placeholder(defaultAvatar).into(imageView)</code> — caching אוטומטי.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>הרחבה 2 – AES Encryption</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1316,7 +1318,7 @@ ProfileActivity: גלריה → דחיסה → Firebase Storage (async) → URL 
 cipher.<span class="fn">init</span>(<span class="cn">Cipher</span>.<span class="nm">ENCRYPT_MODE</span>, key);
 <span class="cn">String</span> encrypted = <span class="cn">Base64</span>.<span class="fn">encodeToString</span>(
     cipher.<span class="fn">doFinal</span>(data.<span class="fn">getBytes</span>()), <span class="cn">Base64</span>.<span class="nm">DEFAULT</span>);</pre>
-AES = סימטרי. לפענוח: Cipher.DECRYPT_MODE + Base64.decode.
+<p dir="rtl" style="text-align:right">AES = סימטרי. לפענוח: <code>Cipher.DECRYPT_MODE</code> + <code>Base64.decode</code>.</p>
 </div></div>`
   },
   {
@@ -1327,12 +1329,12 @@ AES = סימטרי. לפענוח: Cipher.DECRYPT_MODE + Base64.decode.
     content: `
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Activity Lifecycle — הסדר המלא</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-onCreate → onStart → onResume [ACTIVE] → onPause → onStop → onDestroy<br><br>
-StatisticsActivity.onResume() → viewModel.loadStatistics() (טוען נתונים עדכניים כשחוזרים מ-GameActivity).
+<p dir="ltr" style="text-align:left">onCreate → onStart → onResume [ACTIVE] → onPause → onStop → onDestroy</p>
+<p dir="rtl" style="text-align:right"><code>StatisticsActivity.onResume()</code> → <code>viewModel.loadStatistics()</code> (טוען נתונים עדכניים כשחוזרים מ-<code>GameActivity</code>).</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>ViewModel שורד סיבוב מסך</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-Activity נהרסת ונוצרת מחדש בסיבוב מסך. ViewModel שורד — board[][], timerSeconds, score, gameStatus נשמרים. onCleared() נקרא רק כשה-Activity סגורה לצמיתות.
+<p dir="rtl" style="text-align:right">Activity נהרסת ונוצרת מחדש בסיבוב מסך. <code>ViewModel</code> שורד — <code>board[][], timerSeconds, score, gameStatus</code> נשמרים. <code>onCleared()</code> נקרא רק כשה-Activity סגורה לצמיתות.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>VMFactory — הצהרה ושימוש</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
@@ -1352,32 +1354,38 @@ statsViewModel = <span class="kw">new</span> <span class="cn">ViewModelProvider<
     content: `
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>NFC – תרחיש שיתוף שלם</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-1. שחקן א' → NfcActivity → "שתף מפה" → NfcHandler.write(mapData)<br>
-2. NDEF Message עם: rows, cols, bombPositions<br>
-3. שחקן ב' קרב טלפון → onNewIntent(intent) מופעל (launchMode=singleTop)<br>
-4. handleIntent() → NdefMessage.getRecords()[0].getPayload() → deserialize<br>
-5. btnAcceptChallenge → startGame(customMap)<br><br>
-<code>simulate_nfc=true</code> ב-Intent → simulateNfc() לבדיקה ללא חומרה.
+<ol dir="rtl" style="text-align:right;padding-right:20px;padding-left:0">
+<li>שחקן א' → <code>NfcActivity</code> → "שתף מפה" → <code>NfcHandler.write(mapData)</code></li>
+<li>NDEF Message עם: rows, cols, bombPositions</li>
+<li>שחקן ב' קרב טלפון → <code>onNewIntent(intent)</code> מופעל (<code>launchMode=singleTop</code>)</li>
+<li><code>handleIntent()</code> → <code>NdefMessage.getRecords()[0].getPayload()</code> → deserialize</li>
+<li><code>btnAcceptChallenge</code> → <code>startGame(customMap)</code></li>
+</ol>
+<p dir="rtl" style="text-align:right"><code>simulate_nfc=true</code> ב-Intent → <code>simulateNfc()</code> לבדיקה ללא חומרה.</p>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>GameBoardView – Canvas ב-3 שלבים</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-1. <code>setGame(game)</code> → שמור reference → <code>invalidate()</code> = ציור מחדש<br>
-2. <code>onDraw(Canvas)</code> → לולאה board[r][c] → drawCell(canvas, r, c, cellPx)<br>
-3. <code>onTouchEvent(MotionEvent)</code> → col=(int)(x/cellPx), row=(int)(y/cellPx) → listener.onCellClick(row,col)
+<ol dir="rtl" style="text-align:right;padding-right:20px;padding-left:0">
+<li><code>setGame(game)</code> → שמור reference → <code>invalidate()</code> = ציור מחדש</li>
+<li><code>onDraw(Canvas)</code> → לולאה board[r][c] → <code>drawCell(canvas, r, c, cellPx)</code></li>
+<li><code>onTouchEvent(MotionEvent)</code> → col=(int)(x/cellPx), row=(int)(y/cellPx) → <code>listener.onCellClick(row,col)</code></li>
+</ol>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Multiplayer – RTDB flow מלא</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-1. MultiplayerLobbyActivity → <code>rooms.push()</code> → roomId<br>
-2. שחקן ב' → <code>rooms/{roomId}/players.push(uid)</code><br>
-3. שניהם → ValueEventListener על <code>rooms/{roomId}</code><br>
-4. כל לחיצה → כתיבה ל-RTDB → callback מיידי לשני המכשירים<br>
-5. Disconnect → <code>onDisconnect().removeValue()</code> → חדר נמחק אוטומטית
+<ol dir="rtl" style="text-align:right;padding-right:20px;padding-left:0">
+<li><code>MultiplayerLobbyActivity</code> → <code>rooms.push()</code> → roomId</li>
+<li>שחקן ב' → <code>rooms/{roomId}/players.push(uid)</code></li>
+<li>שניהם → <code>ValueEventListener</code> על <code>rooms/{roomId}</code></li>
+<li>כל לחיצה → כתיבה ל-RTDB → callback מיידי לשני המכשירים</li>
+<li>Disconnect → <code>onDisconnect().removeValue()</code> → חדר נמחק אוטומטית</li>
+</ol>
 </div></div>
 <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>Design Decisions – למה DFS ולא BFS?</span><span class="acc-arrow">▼</span></div>
 <div class="acc-b">
-✓ <strong>CHOSEN: DFS recursion</strong> — פשוטה יותר לכתוב, קוד קצר.<br>
-✗ <strong>REJECTED: BFS Queue</strong> — דורש Queue ידנית, קוד ארוך יותר.<br>
-💡 <strong>WHY:</strong> גדלי הלוח הנוכחיים (עד 30×16) בטוחים מ-StackOverflow. BFS = פתרון אם לוחות גדולים מאוד דרושים.
+<p dir="rtl" style="text-align:right">✓ <strong>CHOSEN: DFS recursion</strong> — פשוטה יותר לכתוב, קוד קצר.</p>
+<p dir="rtl" style="text-align:right">✗ <strong>REJECTED: BFS Queue</strong> — דורש Queue ידנית, קוד ארוך יותר.</p>
+<p dir="rtl" style="text-align:right">💡 <strong>WHY:</strong> גדלי הלוח הנוכחיים (עד 30×16) בטוחים מ-StackOverflow. BFS = פתרון אם לוחות גדולים מאוד דרושים.</p>
 </div></div>`
   },
 
@@ -1453,7 +1461,7 @@ videoView.setOnCompletionListener(mp -> { /* סיים */ });</pre>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📋 RecyclerView</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p dir="ltr" style="text-align:left">RecyclerView = תצוגת רשימה יעילה. מחזיר Views לשימוש חוזר (Recycle).</p>
+      <p dir="rtl" style="text-align:right"><code>RecyclerView</code> = תצוגת רשימה יעילה. מחזיר Views לשימוש חוזר (Recycle).</p>
       <p><strong>3 מרכיבים עיקריים:</strong></p>
       <ul>
         <li><strong>RecyclerView</strong> — המיכל ב-XML</li>
@@ -1493,7 +1501,7 @@ StaggeredGridLayoutManager  // רשת לא שווה
 
 recyclerView.setLayoutManager(new LinearLayoutManager(this));
 recyclerView.setAdapter(myAdapter);</pre>
-      <div class="highlight green">✅ RecyclerView עדיף על ListView: ניהול זיכרון טוב יותר, תמיכה ב-LayoutManagers שונים, אנימציות built-in</div>
+      <div class="highlight green" dir="rtl" style="text-align:right">✅ <code>RecyclerView</code> עדיף על <code>ListView</code>: ניהול זיכרון טוב יותר, תמיכה ב-<code>LayoutManagers</code> שונים, אנימציות built-in</div>
     </div></div>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📜 Spinner ו-ListView</span><span class="acc-arrow">▼</span></div>
@@ -1568,7 +1576,7 @@ finish();</pre>
 
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧩 Fragment</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <p dir="ltr" style="text-align:left">Fragment = חלק ממסך, עם lifecycle משלו. ניתן לשלב כמה Fragments במסך אחד.</p>
+      <p dir="rtl" style="text-align:right"><code>Fragment</code> = חלק ממסך, עם lifecycle משלו. ניתן לשלב כמה Fragments במסך אחד.</p>
       <pre>public class MyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -1773,7 +1781,7 @@ User u = (User) getIntent().getSerializableExtra("user");</pre>
     content: `
     <div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🧵 Thread ו-Handler</span><span class="acc-arrow">▼</span></div>
     <div class="acc-b">
-      <div class="highlight orange"><strong>חוק:</strong> פעולות ארוכות ב-Main Thread גורמות ל-ANR (App Not Responding).</div>
+      <div class="highlight orange" dir="rtl" style="text-align:right"><strong>חוק:</strong> פעולות ארוכות ב-Main Thread גורמות ל-<code>ANR</code> (App Not Responding).</div>
       <p><strong>Thread:</strong></p>
       <pre>new Thread(() -> {
     String result = fetchData(); // פעולה ארוכה

@@ -269,11 +269,19 @@
 .acc-b { direction: ltr; text-align: left; }
 .acc-h { direction: rtl; text-align: right; }
 
-/* Hebrew explanation paragraphs inside accordion bodies */
+/* Hebrew paragraphs / list items / tip boxes inside English accordion */
 .acc-b p[dir="rtl"],
-.acc-b .hbox {
+.acc-b li[dir="rtl"],
+.acc-b .hbox,
+.acc-b .highlight[dir="rtl"] {
   direction: rtl;
   text-align: right;
+}
+
+/* Accordion title span — Hebrew label stays RTL */
+.acc-h span:first-child {
+  direction: rtl;
+  unicode-bidi: isolate;
 }
 
 /* Search bar LTR */

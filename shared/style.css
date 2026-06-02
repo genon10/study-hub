@@ -631,35 +631,100 @@ ul.sl li { margin-bottom: 6px; }
 .drone-card .top-line { background: linear-gradient(90deg, transparent, var(--drone-accent), transparent); }
 .drone-card .proj-badge { background: var(--drone-dim); color: var(--drone-accent); }
 
-/* ── DIRECTION / BIDI FIXES ── */
+/* ── BIDIRECTIONAL TEXT FIX ── */
 html { direction: rtl; }
 
-/* Code blocks always LTR */
-.code-block, pre, code {
+/* Code blocks: always LTR */
+.code-block {
   direction: ltr !important;
   text-align: left !important;
+  unicode-bidi: isolate;
+}
+pre {
+  direction: ltr;
+  text-align: left;
   unicode-bidi: embed;
-  font-family: var(--font-mono);
 }
 
-/* English terms inline inside Hebrew text */
-.mixed-term {
-  unicode-bidi: embed;
+/* Inline code inside accordion body — keeps LTR inside any RTL/LTR context */
+.acc-b code {
   direction: ltr;
+  unicode-bidi: embed;
   display: inline-block;
+  vertical-align: middle;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* Auto-detect paragraph direction from first strong char */
+.acc-b p, .acc-b li {
+  unicode-bidi: plaintext;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Highlight/tip boxes */
+.hbox {
+  unicode-bidi: plaintext;
+  word-break: break-word;
+}
+
+/* Table cells */
+.data-table td, .data-table th {
+  unicode-bidi: plaintext;
+  word-break: break-word;
 }
 
 /* Table cells with code */
-.data-table td code,
-.data-table th code {
+.data-table td code, .data-table th code {
   direction: ltr;
   display: inline-block;
 }
 
-/* English-only pages or sections */
+/* English-only sections */
 .lang-en { direction: ltr; text-align: left; }
 .lang-en .acc-h { text-align: left; }
-.lang-en .code-block { direction: ltr; text-align: left; }
 
 /* LTR pages (minesweeper) — flip accordion back to normal row */
 html[dir="ltr"] .acc-h { flex-direction: row; text-align: left; direction: ltr; }
+
+/* ── HELPER CLASSES ── */
+.rtl { direction: rtl; text-align: right; unicode-bidi: isolate; }
+.ltr { direction: ltr; text-align: left; unicode-bidi: isolate; }
+
+/* Term highlight — English terms inside Hebrew text */
+.term {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--accent);
+  direction: ltr;
+  unicode-bidi: embed;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Hebrew ordered/unordered lists */
+.steps-rtl {
+  direction: rtl;
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 0;
+}
+.steps-rtl li { margin-bottom: 8px; }
+
+/* English ordered/unordered lists */
+.steps-ltr {
+  direction: ltr;
+  text-align: left;
+  padding-left: 20px;
+}
+.steps-ltr li { margin-bottom: 8px; }
