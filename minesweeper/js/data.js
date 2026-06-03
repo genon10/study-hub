@@ -524,7 +524,19 @@ const FLASHCARDS = [
   { q: "מה זה SQLiteOpenHelper?", a: "מחלקת עזר לניהול מסד נתונים — יוצרת/משדרגת את ה-DB, מחזירה Readable/Writable DB" },
   { q: "איך מגנים מ-SQL Injection?", a: "שימוש ב-Parameterized Queries עם ? במקום חיבור strings. לדוגמה: WHERE name=? עם String[]" },
   { q: "מה זה WebView?", a: "רכיב המציג תוכן אינטרנט בתוך האפליקציה — דפדפן מובנה" },
-  { q: "מה עושה CountDownTimer?", a: "ספירה לאחור עם tick כל X מילישניות. onTick לעדכון UI, onFinish בסיום" }
+  { q: "מה עושה CountDownTimer?", a: "ספירה לאחור עם tick כל X מילישניות. onTick לעדכון UI, onFinish בסיום" },
+  { q: "מה 4 עמודי OOP?", a: "Encapsulation (הסתרה) · Inheritance (ירושה) · Polymorphism (פולימורפיזם) · Abstraction (הפשטה)" },
+  { q: "מה ההבדל בין ArrayList ל-Array?", a: "Array: גודל קבוע, מהיר יותר. ArrayList: גודל דינמי, add/remove נוח" },
+  { q: "מה HashMap ומתי להשתמש?", a: "מפתח-ערך (key-value). חיפוש מהיר O(1). מתאים כשצריך lookup מהיר לפי מפתח" },
+  { q: "מה סדר מחזור החיים של Activity?", a: "onCreate → onStart → onResume → [פעיל] → onPause → onStop → onDestroy" },
+  { q: "מה onSaveInstanceState?", a: "שומר מצב Activity לפני סיבוב מסך/השמדה. משחזרים ב-onCreate מתוך savedInstanceState" },
+  { q: "מה ConstraintLayout ולמה עדיף?", a: "Layout גמיש עם constraints. עדיף כי: flat hierarchy, תמיכה ב-%, ביצועים טובים" },
+  { q: "מה ההבדל בין dp ל-sp?", a: "dp = density-independent pixels (לגדלים). sp = scale-independent pixels (לטקסט, כולל הגדרות גופן)" },
+  { q: "מה דרישות חובה ל-5 יחידות Android?", a: "1) שימוש ברכיב מתקדם (Notification/API/Service). 2) אחסון נתונים (SQLite/Firebase). 3) שני נושאים מתקדמים" },
+  { q: "מה מדד 12 בהערכת פרויקט Android?", a: "שימוש נכון ב-OOP: מחלקות, הפרדה ללוגיקה ותצוגה, קשרים בין מחלקות, הפשטה, ירושה" },
+  { q: "מה TextWatcher?", a: "Listener לשינויי טקסט ב-EditText בזמן אמת. שימוש: ולידציה מיידית בזמן הקלדה" },
+  { q: "מה ViewModel ו-LiveData?", a: "ViewModel שומר state בין סיבובי מסך. LiveData מעדכן UI אוטומטית כשהנתונים משתנים" },
+  { q: "כיצד מבקשים Runtime Permission?", a: "checkSelfPermission → אם לא מאושר: requestPermissions → טיפול ב-onRequestPermissionsResult" }
 ];
 
 // ----------------------------------------------------------------
@@ -1042,6 +1054,31 @@ const EXAM_QUESTIONS = [
     q: "מה ההבדל בין Internal Storage ל-External Storage?",
     o: ["אין הבדל", "Internal: פרטי לאפליקציה, לא נגיש לאחרים. External: גיש לכולם", "External: מהיר יותר", "Internal: גדול יותר"],
     c: 1, e: "Internal Storage פרטי ומוחק עם האפליקציה. External Storage גיש לאפליקציות אחרות ולמשתמש דרך מחשב."
+  },
+  {
+    q: "מה ההבדל בין private ל-public ב-Java?",
+    o: ["אין הבדל", "private: נגיש רק בתוך המחלקה. public: נגיש מכל מקום", "public: מהיר יותר", "private: רק למתודות סטטיות"],
+    c: 1, e: "Encapsulation: private מסתיר נתונים בתוך המחלקה. גישה דרך getters/setters בלבד."
+  },
+  {
+    q: "באיזה שלב של Lifecycle מאתחלים את רכיבי המסך?",
+    o: ["onStart", "onResume", "onCreate", "onRestart"],
+    c: 2, e: "onCreate נקרא פעם אחת בלבד כשהActivity נוצר. כאן קוראים setContentView ו-findViewById."
+  },
+  {
+    q: "מה הדרישה #7 לפרויקט Android 5 יחידות?",
+    o: ["שימוש ב-Fragment", "אחסון וטיפול בנתונים — קריאה וכתיבה", "ממשק גרפי", "שני מסכים לפחות"],
+    c: 1, e: "דרישה #7: אחסון נתונים — SQLite / Firebase / SharedPreferences / JSON — כולל קריאה וכתיבה."
+  },
+  {
+    q: "מה מדד 15 בהערכת פרויקט?",
+    o: ["מספר המסכים", "שימוש במבני נתונים מתאימים", "גודל הקוד", "מספר ה-Activities"],
+    c: 1, e: "מדד 15: שימוש במבני נתונים מתאימים — מערך, ArrayList, Set, Map, עץ, גרף."
+  },
+  {
+    q: "מה ConstraintLayout ולמה הוא מועדף?",
+    o: ["Layout פשוט לתחילת דרך בלבד", "הכי גמיש — תומך ב-%, flat hierarchy, ביצועים טובים", "רק לרשימות", "רק ל-Fragments"],
+    c: 1, e: "ConstraintLayout הוא ה-Layout המומלץ ב-Android Studio — גמיש, תומך ב-%, flat hierarchy."
   }
 ];
 
@@ -1080,6 +1117,11 @@ const EXAM_TOPICS = [
   'Navigation',    // 30 — onCreateOptionsMenu
   'Background',    // 31 — NetworkOnMainThreadException
   'Data Storage',  // 32 — Internal vs External Storage
+  'Java',            // 33 — private vs public
+  'Lifecycle',       // 34 — onCreate
+  'Requirements',    // 35 — requirement #7
+  'Requirements',    // 36 — criterion 15
+  'UI',              // 37 — ConstraintLayout
 ];
 
 // ----------------------------------------------------------------
@@ -1965,6 +2007,111 @@ if (!adapter.isEnabled()) {
 Set&lt;BluetoothDevice&gt; paired = adapter.getBondedDevices();</pre>
     </div></div>
     `
+  },
+  {
+    key: 'android_theory',
+    icon: '📚',
+    title: 'תיאוריה כללית — Android ב-Java',
+    desc: 'Java יסודות · OOP · מבני נתונים · Activity Lifecycle · Layouts',
+    content: `
+<div class="highlight orange" dir="rtl" style="text-align:right"><strong>בסיס הכל:</strong> Android apps כתובות ב-Java. הבנת Java הכרחית לכל פיתוח Android.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>☕ יסודות Java</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<p><strong>מבנה תוכנית Java:</strong> class, main, packages, imports, קומפילציה</p>
+<table class="data-table">
+  <tr><th>טיפוס</th><th>דוגמה</th><th>ברירת מחדל</th></tr>
+  <tr><td>int</td><td>int x = 5;</td><td>0</td></tr>
+  <tr><td>boolean</td><td>boolean ok = true;</td><td>false</td></tr>
+  <tr><td>String</td><td>String s = "hi";</td><td>null</td></tr>
+  <tr><td>double</td><td>double d = 3.14;</td><td>0.0</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🏛️ 4 עמודי OOP</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<table class="data-table">
+  <tr><th>עמוד</th><th>הסבר</th><th>דוגמה Android</th></tr>
+  <tr><td><strong>Encapsulation</strong></td><td>הסתרת נתונים — private + getters/setters</td><td>GameEngine.board — private, ניגש דרך getCell()</td></tr>
+  <tr><td><strong>Inheritance</strong></td><td>ירושה — extends. מחלקה בת יורשת שדות ומתודות</td><td>GameActivity extends BaseNavigationActivity</td></tr>
+  <tr><td><strong>Polymorphism</strong></td><td>פולימורפיזם — override, interface impl</td><td>onClick() ב-OnClickListener שונה בכל View</td></tr>
+  <tr><td><strong>Abstraction</strong></td><td>הפשטה — abstract class / interface</td><td>INetworkService — ממשק, לא יודע איך זה עובד</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🔄 Activity Lifecycle</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<p><strong>סדר:</strong> onCreate → onStart → onResume → [פעיל] → onPause → onStop → onDestroy</p>
+<table class="data-table">
+  <tr><th>מתודה</th><th>מה קורה</th><th>שימוש</th></tr>
+  <tr><td>onCreate</td><td>Activity נוצרת</td><td>setContentView, findViewById, אתחול</td></tr>
+  <tr><td>onResume</td><td>מסך בפוקוס</td><td>הפעלת אנימציות, רישום listeners</td></tr>
+  <tr><td>onPause</td><td>Activity מאבדת פוקוס</td><td>שמירת נתונים זמניים</td></tr>
+  <tr><td>onDestroy</td><td>Activity נהרסת</td><td>ניקוי משאבים, ביטול timers</td></tr>
+</table>
+<div class="highlight blue" dir="rtl" style="text-align:right">💡 <code>onSaveInstanceState(Bundle)</code> — שומר מצב לפני סיבוב מסך. משחזרים ב-<code>onCreate(savedInstanceState)</code>.</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📐 Layouts ב-XML</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<table class="data-table">
+  <tr><th>Layout</th><th>שימוש</th></tr>
+  <tr><td><strong>ConstraintLayout</strong></td><td>הכי גמיש — flat hierarchy, תמיכה ב-%, ביצועים טובים. מומלץ</td></tr>
+  <tr><td><strong>LinearLayout</strong></td><td>אנכי/אופקי פשוט. orientation=vertical/horizontal</td></tr>
+  <tr><td><strong>RelativeLayout</strong></td><td>מיקום יחסי לרכיבים אחרים. פחות מומלץ היום</td></tr>
+</table>
+<p><strong>יחידות:</strong> <code>dp</code> = density-independent pixels (לגדלים). <code>sp</code> = scale-independent (לטקסט).</p>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>🌐 בדיקת חיבור + לוגים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b">
+<pre>ConnectivityManager cm = (ConnectivityManager)
+    getSystemService(Context.CONNECTIVITY_SERVICE);
+boolean isConnected = cm.getActiveNetworkInfo() != null;
+
+// לוגים לדיבוג
+Log.d("TAG", "ערך: " + value);   // Debug
+Log.e("TAG", "שגיאה: " + error); // Error
+Log.i("TAG", "מידע כללי");        // Info</pre>
+</div></div>
+<div class="highlight orange" dir="rtl" style="text-align:right">⚠️ <strong>אבטחה בסיסית:</strong> לא לשמור סיסמאות כ-plain text · לבקש הרשאות מינימליות בלבד · להשתמש ב-HTTPS · לא להשאיר API Keys בקוד</div>
+`
+  },
+  {
+    key: 'project_requirements',
+    icon: '✅',
+    title: 'דרישות הפרויקט וצ\'קליסט',
+    desc: 'דרישות חובה · נושאים מתקדמים · מינימום ל-5 יחידות · טבלת בדיקה',
+    content: `
+<div class="highlight orange" dir="rtl" style="text-align:right"><strong>מטרה:</strong> להבטיח שהפרויקט עומד בכל הדרישות לציון 5 יחידות בבגרות מדעי המחשב.</div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📋 דרישות חובה בסיסיות</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<table class="data-table">
+  <tr><th>#</th><th>דרישה</th></tr>
+  <tr><td>1</td><td>אפליקציה לטלפונים חכמים בסביבת Android</td></tr>
+  <tr><td>2</td><td>התוכנית עובדת בזמן הרצה ללא קריסות</td></tr>
+  <tr><td>3</td><td>שימוש ב-Activity, Intent, ובמידת הצורך Fragment — מספר מסכים</td></tr>
+  <tr><td>4</td><td>תוכנית אינטראקטיבית: קלט, פלט, ממשק ברור, שימושי ואסתטי</td></tr>
+  <tr><td>5</td><td>שימוש באירועים: פקדים, מאזינים, מקשים ואירועי משתמש</td></tr>
+  <tr><td>6</td><td>שימוש נכון ב-OOP: מחלקות, הורשה, פולימורפיזם, הפשטה</td></tr>
+  <tr><td>7</td><td>אחסון וטיפול בנתונים — קריאה וכתיבה (SQLite/Firebase/SharedPreferences)</td></tr>
+  <tr><td>8</td><td>טיפול בשגיאות ומצבי קצה — try/catch, בדיקות תקינות</td></tr>
+</table>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>⭐ נושאים מתקדמים ל-5 יחידות</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<div class="highlight green" dir="rtl" style="text-align:right"><strong>שלב ב — אפליקציה אמיתית:</strong> מספר מסכים · RecyclerView · Dialogs · SharedPreferences · SQLite/Firebase · הרשאות · API</div>
+<div class="highlight blue" dir="rtl" style="text-align:right"><strong>שלב ג — דרישות מתקדמות:</strong> Notifications/Service/AlarmManager · Camera/Gallery · GPS/Maps · Threads/Handler · SpeechToText/TextToSpeech · Sensors/Bluetooth/NFC</div>
+<div class="highlight orange" dir="rtl" style="text-align:right"><strong>שלב ד — איכות והגשה:</strong> ארכיטקטורה · הפרדת מחלקות · Debugging · טיפול בשגיאות · אבטחה · תיעוד · בדיקת כל הדרישות</div>
+</div></div>
+<div class="acc"><div class="acc-h" onclick="accToggle(this)"><span>📊 מדדי הערכה מרכזיים</span><span class="acc-arrow">▼</span></div>
+<div class="acc-b" dir="rtl" style="text-align:right">
+<table class="data-table">
+  <tr><th>מדד</th><th>תיאור</th></tr>
+  <tr><td>12</td><td>שימוש נכון ב-OOP: מחלקות, הפרדה, קשרים, הפשטה, ירושה</td></tr>
+  <tr><td>13</td><td>עיצוב ממשק משתמש — UI/UX, נגישות, עיצוב עקבי</td></tr>
+  <tr><td>14</td><td>טיפול נכון בשגיאות ומצבי קצה</td></tr>
+  <tr><td>15</td><td>שימוש במבני נתונים מתאימים: מערך, ArrayList, Set, Map, עץ, גרף</td></tr>
+  <tr><td>16</td><td>תיעוד הקוד — JavaDoc, הסברים, README</td></tr>
+  <tr><td>17</td><td>רכיב מתקדם: Notification / API / Service / Camera / GPS</td></tr>
+</table>
+</div></div>
+`
   }
 ];
 
