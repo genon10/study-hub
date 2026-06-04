@@ -1,11 +1,12 @@
 (function() {
   // Detect which section we're in
   const path = window.location.pathname;
-  const inFRC = path.includes('/frc/');
-  const inMM  = path.includes('/minesweeper/');
+  const inFRC   = path.includes('/frc/');
+  const inMM    = path.includes('/minesweeper/');
   const inDrone = path.includes('/drone/');
-  const accent = inFRC ? 'var(--frc-accent)' : inMM ? 'var(--mm-accent)' : 'var(--drone-accent)';
-  const root   = (inFRC || inMM || inDrone) ? '../' : '';
+  const inFPV   = path.includes('/fpv/');
+  const accent = inFRC ? 'var(--frc-accent)' : inMM ? 'var(--mm-accent)' : inFPV ? 'var(--fpv-accent)' : 'var(--drone-accent)';
+  const root   = (inFRC || inMM || inDrone || inFPV) ? '../' : '';
 
   // FRC pages
   const frcPages = [
@@ -36,10 +37,14 @@
     { label: '🃏 כרטיסיות',    href: 'flashcards.html' },
     { label: '❓ חידון',        href: 'quiz.html' },
     { label: '📝 בחינה',        href: 'exam.html' },
-    { label: '🚁 FPV',          href: 'fpv.html' },
   ];
 
-  const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : [];
+  // FPV pages
+  const fpvPages = [
+    { label: '🏠 קורס FPV',    href: 'index.html' },
+  ];
+
+  const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : inFPV ? fpvPages : [];
 
   // Get current filename
   const currentFile = path.split('/').pop() || 'index.html';
@@ -56,6 +61,8 @@
     ? '<span class="nav-section-badge mm">MM</span>'
     : inDrone
     ? '<span class="nav-section-badge drone">רחפן</span>'
+    : inFPV
+    ? '<span class="nav-section-badge fpv">FPV</span>'
     : '';
 
   const homeLabel = inMM ? '← Study Hub' : 'Study Hub ←';
@@ -91,6 +98,10 @@
     .nav-section-badge.drone {
       background: var(--drone-dim);
       color: var(--drone-accent);
+    }
+    .nav-section-badge.fpv {
+      background: var(--fpv-dim);
+      color: var(--fpv-accent);
     }
   `;
   document.head.appendChild(style);

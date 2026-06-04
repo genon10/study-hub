@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>לימוד FPV — Study Hub</title>
+  <title>FPV — 20 שעות לטיסה ראשונה | Study Hub</title>
   <link rel="stylesheet" href="../shared/style.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="../shared/navbar.js" defer></script>
@@ -16,7 +16,7 @@
       overflow: hidden;
       transition: border-color var(--transition-slow);
     }
-    .phase-card.open { border-color: var(--phase-color, var(--drone-accent)); }
+    .phase-card.open { border-color: var(--phase-color, var(--fpv-accent)); }
 
     .phase-header {
       display: flex; align-items: center; gap: 14px;
@@ -44,14 +44,14 @@
 
     .phase-goal {
       background: var(--surface2);
-      border-right: 3px solid var(--drone-accent);
+      border-right: 3px solid var(--fpv-accent);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       padding: 10px 14px;
       margin-bottom: 14px;
       font-size: 0.85rem;
       color: var(--text-secondary);
     }
-    .phase-goal strong { color: var(--drone-accent); }
+    .phase-goal strong { color: var(--fpv-accent); }
 
     .task-item {
       display: flex; align-items: flex-start; gap: 10px;
@@ -64,7 +64,7 @@
     .task-item input[type=checkbox] {
       margin-top: 2px; width: 15px; height: 15px;
       flex-shrink: 0; cursor: pointer;
-      accent-color: var(--drone-accent);
+      accent-color: var(--fpv-accent);
     }
     .task-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
     .task-item.done .task-text { text-decoration: line-through; color: var(--muted); }
@@ -136,7 +136,7 @@
 
 <div class="page-header">
   <div class="page-header-inner">
-    <span class="page-eyebrow">🚁 רישיון רחפן · FPV</span>
+    <span class="page-eyebrow">🎮 FPV Drone</span>
     <h1 class="page-title">לימוד FPV — 20 שעות לטיסה ראשונה</h1>
     <p class="page-subtitle">מבוסס על חוק 20 השעות של Josh Kaufman · מאפס לטיסה ראשונה</p>
   </div>
@@ -151,7 +151,6 @@
     ו-20 שעות מחויבות ללא ויתור.
   </div>
 
-  <!-- Overall Progress -->
   <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:28px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span style="font-size:0.85rem; color:var(--muted)">התקדמות כוללת</span>
@@ -212,7 +211,7 @@
 </main>
 
 <script>
-const PHASES = [
+var PHASES = [
   {
     id: 1, emoji: '🧠', color: '#FF6B35',
     title: 'שלב 1: יסודות הבנת המכשיר',
@@ -224,7 +223,7 @@ const PHASES = [
       'למד את 4 ערוצי השלט: Throttle, Roll, Pitch, Yaw',
       'הכר את מצבי השלט: Acro vs Angle/Horizon mode',
       'הורד סימולטור: Liftoff או Velocidrone (יש גרסאות חינמיות)',
-      'חבר את שלט ה-PS4 לסימולטור דרך USB',
+      'חבר את שלט ה-PS4 לסימולטור דרך USB'
     ]
   },
   {
@@ -238,7 +237,7 @@ const PHASES = [
       'תרגיל: הרם לגובה 1 מטר, החזק 30 שניות ללא תנועה',
       'תרגיל: עלה-רד-עלה-רד ×20 פעמים בשליטה',
       'תרגיל: הרחק Throttle stick מ-0% ל-50% בצורה חלקה',
-      'יעד: Hover יציב 60 שניות ללא correction גדול',
+      'יעד: Hover יציב 60 שניות ללא correction גדול'
     ]
   },
   {
@@ -252,12 +251,12 @@ const PHASES = [
       'תרגיל: עיגול ידני – Pitch + Roll בו זמנית',
       'תרגיל: Figure-8 איטי ×10 ברצף',
       'תרגיל: נחיתה מדויקת על עיגול קוטר 50 ס"מ',
-      'תרגיל: שינוי גובה תוך כדי תנועה קדימה',
+      'תרגיל: שינוי גובה תוך כדי תנועה קדימה'
     ]
   },
   {
     id: 4, emoji: '🔄', color: '#A29BFE',
-    title: "שלב 4: Orientation & Yaw",
+    title: 'שלב 4: Orientation & Yaw',
     hours: '9–14 שעות',
     goal: "טוס כשהרחפן לא מכוון אליך – הצ'אלנג' האמיתי",
     tip: "Nose-in הוא המחסום הגדול ביותר. המוח 'מתהפך' כשהרחפן מכוון אליך. עובר עם חזרות.",
@@ -266,7 +265,7 @@ const PHASES = [
       'תרגיל: Left/Right side-in Hover',
       'תרגיל: Slow Yaw spin תוך כדי Hover – 360° ×5',
       'תרגיל: ריבוע עם Yaw – בכל פינה סובב 90° ואז קדימה',
-      'תרגיל: Continuous Yaw עם Forward Flight – spiral',
+      'תרגיל: Continuous Yaw עם Forward Flight – spiral'
     ]
   },
   {
@@ -280,7 +279,7 @@ const PHASES = [
       'תרגיל: Hover ב-Acro Mode – זה מרגיש חדש לגמרי',
       'תרגיל: Figure-8 ב-Acro Mode לאט',
       'תרגיל: נחיתה מדויקת ב-Acro Mode',
-      'תרגיל: טיסה דרך שער (שתי כיסאות) ×20',
+      'תרגיל: טיסה דרך שער (שתי כיסאות) ×20'
     ]
   },
   {
@@ -294,51 +293,43 @@ const PHASES = [
       'תרגיל: FPV Acro Hover 30 שניות',
       'כשהשלט האמיתי מגיע: Hover בחצר ב-Angle Mode ראשון',
       'טיסה ראשונה ב-FPV view עם הרחפן האמיתי – קצרה ושקטה',
-      '🎉 סיים 20 שעות – יש לך בסיס אמיתי ב-FPV!',
+      '🎉 סיים 20 שעות – יש לך בסיס אמיתי ב-FPV!'
     ]
   }
 ];
 
-const PS4_TIPS = [
+var PS4_TIPS = [
   ['Throttle', 'Stick שמאל למעלה/למטה – הבעיה: הוא חוזר למרכז. תרגל להחזיק ב-50%'],
   ['Yaw',      'Stick שמאל ימין/שמאל – לסיבוב ציר אנכי'],
   ['Pitch',    'Stick ימין למעלה/למטה – קדימה/אחורה'],
   ['Roll',     'Stick ימין ימין/שמאל – הטייה לצדדים'],
-  ['הגדרה',   'Velocidrone: Settings → Controller → Map buttons → בחר PS4'],
+  ['הגדרה',   'Velocidrone: Settings → Controller → Map buttons → בחר PS4']
 ];
 
-const SIMS = [
-  { name: 'Velocidrone',    price: '💰 חינמי / זול', desc: 'הכי פופולרי בקהילה. מציאותי מאוד. תמיכה טובה ב-PS4.' },
-  { name: 'Liftoff',        price: '💰 ~$20',         desc: 'גרפיקה יפה, physics טוב. יש demo חינמי.' },
-  { name: 'DRL Simulator',  price: '💰 חינמי',        desc: 'רשמי של Drone Racing League. קל להתחלה.' },
-  { name: 'Uncrashed',      price: '💰 ~$15',         desc: 'הכי מציאותי ל-freestyle. מומלץ אחרי שיש בסיס.' },
+var SIMS = [
+  { name: 'Velocidrone',   price: '💰 חינמי / זול', desc: 'הכי פופולרי בקהילה. מציאותי מאוד. תמיכה טובה ב-PS4.' },
+  { name: 'Liftoff',       price: '💰 ~$20',         desc: 'גרפיקה יפה, physics טוב. יש demo חינמי.' },
+  { name: 'DRL Simulator', price: '💰 חינמי',        desc: 'רשמי של Drone Racing League. קל להתחלה.' },
+  { name: 'Uncrashed',     price: '💰 ~$15',         desc: 'הכי מציאותי ל-freestyle. מומלץ אחרי שיש בסיס.' }
 ];
 
-const STORAGE_KEY = 'fpv_tasks';
-let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-let openPhase = 1;
+var STORAGE_KEY = 'fpv_tasks';
+var completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+var openPhase = 1;
 
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
-}
-
-function totalTasks() {
-  return PHASES.reduce(function(sum, p) { return sum + p.tasks.length; }, 0);
-}
-
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(completed)); }
+function totalTasks() { return PHASES.reduce(function(s, p) { return s + p.tasks.length; }, 0); }
 function totalDone() {
-  return PHASES.reduce(function(sum, p) {
-    return sum + p.tasks.filter(function(_, i) { return completed[p.id + '_' + i]; }).length;
+  return PHASES.reduce(function(s, p) {
+    return s + p.tasks.filter(function(_, i) { return completed[p.id + '_' + i]; }).length;
   }, 0);
 }
-
 function phaseDone(phase) {
   return phase.tasks.filter(function(_, i) { return completed[phase.id + '_' + i]; }).length;
 }
 
 function renderOverall() {
-  var total = totalTasks();
-  var done = totalDone();
+  var total = totalTasks(), done = totalDone();
   var pct = Math.round(done / total * 100);
   document.getElementById('overall-pct').textContent = pct + '%';
   document.getElementById('overall-fill').style.width = pct + '%';
@@ -354,76 +345,44 @@ function renderPhases() {
     var pctHtml = pp === 100
       ? '<span style="color:#00B894">✓ הושלם</span>'
       : '<span style="color:' + phase.color + '">' + pp + '%</span>';
-
     var tasksHtml = phase.tasks.map(function(task, i) {
       var tid = phase.id + '_' + i;
       var done = !!completed[tid];
       return '<label class="task-item' + (done ? ' done' : '') + '">' +
         '<input type="checkbox"' + (done ? ' checked' : '') + ' onchange="toggleTask(\'' + tid + '\')">' +
-        '<span class="task-text">' + task + '</span>' +
-        '</label>';
+        '<span class="task-text">' + task + '</span></label>';
     }).join('');
-
     return '<div class="phase-card' + (isOpen ? ' open' : '') + '" style="--phase-color:' + phase.color + '">' +
       '<div class="phase-header" onclick="togglePhase(' + phase.id + ')">' +
         '<span class="phase-emoji">' + phase.emoji + '</span>' +
-        '<div class="phase-info">' +
-          '<div class="phase-title">' + phase.title + '</div>' +
-          '<div class="phase-hours">' + phase.hours + '</div>' +
-        '</div>' +
-        '<div class="phase-progress-wrap">' +
-          '<div class="phase-pct">' + pctHtml + '</div>' +
-          '<div class="phase-bar-bg"><div class="phase-bar-fill" style="width:' + pp + '%;background:' + phase.color + '"></div></div>' +
-        '</div>' +
+        '<div class="phase-info"><div class="phase-title">' + phase.title + '</div><div class="phase-hours">' + phase.hours + '</div></div>' +
+        '<div class="phase-progress-wrap"><div class="phase-pct">' + pctHtml + '</div>' +
+          '<div class="phase-bar-bg"><div class="phase-bar-fill" style="width:' + pp + '%;background:' + phase.color + '"></div></div></div>' +
         '<span class="phase-arrow">' + (isOpen ? '▲' : '▼') + '</span>' +
       '</div>' +
-      (isOpen
-        ? '<div class="phase-body open">' +
-            '<div class="phase-goal"><strong>מטרת השלב:</strong> ' + phase.goal + '</div>' +
-            tasksHtml +
-            '<div class="phase-tip">💡 <strong>טיפ:</strong> ' + phase.tip + '</div>' +
-          '</div>'
-        : '') +
+      (isOpen ? '<div class="phase-body open"><div class="phase-goal"><strong>מטרת השלב:</strong> ' + phase.goal + '</div>' +
+        tasksHtml + '<div class="phase-tip">💡 <strong>טיפ:</strong> ' + phase.tip + '</div></div>' : '') +
       '</div>';
   }).join('');
 }
 
 function renderPS4() {
-  document.getElementById('ps4-tips').innerHTML = PS4_TIPS.map(function(row) {
-    return '<div class="ps4-row">' +
-      '<span class="ps4-key">' + row[0] + '</span>' +
-      '<span class="ps4-val">' + row[1] + '</span>' +
-      '</div>';
+  document.getElementById('ps4-tips').innerHTML = PS4_TIPS.map(function(r) {
+    return '<div class="ps4-row"><span class="ps4-key">' + r[0] + '</span><span class="ps4-val">' + r[1] + '</span></div>';
   }).join('');
 }
 
 function renderSims() {
   document.getElementById('sims-container').innerHTML = SIMS.map(function(s) {
-    return '<div class="sim-card">' +
-      '<div style="display:flex;justify-content:space-between">' +
-        '<span class="sim-name">' + s.name + '</span>' +
-        '<span class="sim-price">' + s.price + '</span>' +
-      '</div>' +
-      '<p class="sim-desc">' + s.desc + '</p>' +
-      '</div>';
+    return '<div class="sim-card"><div style="display:flex;justify-content:space-between">' +
+      '<span class="sim-name">' + s.name + '</span><span class="sim-price">' + s.price + '</span></div>' +
+      '<p class="sim-desc">' + s.desc + '</p></div>';
   }).join('');
 }
 
-function render() {
-  renderOverall();
-  renderPhases();
-}
-
-function togglePhase(id) {
-  openPhase = openPhase === id ? null : id;
-  render();
-}
-
-function toggleTask(tid) {
-  completed[tid] = !completed[tid];
-  save();
-  render();
-}
+function render() { renderOverall(); renderPhases(); }
+function togglePhase(id) { openPhase = openPhase === id ? null : id; render(); }
+function toggleTask(tid) { completed[tid] = !completed[tid]; save(); render(); }
 
 renderPS4();
 renderSims();

@@ -87,6 +87,16 @@
       transform: translateY(-4px);
       box-shadow: 0 0 30px rgba(59,130,246,0.12), 0 8px 32px rgba(0,0,0,0.5);
     }
+    .fpv-card .top-line {
+      background: linear-gradient(90deg, transparent, var(--fpv-accent), transparent);
+    }
+    .fpv-card:hover {
+      border-color: var(--fpv-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 0 30px rgba(255,107,53,0.12), 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .fpv-card .proj-progress-bar { background: var(--fpv-accent); }
+    .fpv-card .proj-badge { background: var(--fpv-dim); color: var(--fpv-accent); }
     .proj-header {
       display: flex; justify-content: space-between; align-items: flex-start;
     }
@@ -277,6 +287,28 @@
       </div>
     </a>
 
+    <a href="fpv/index.html" class="proj-card fpv-card">
+      <div class="top-line"></div>
+      <div class="proj-header">
+        <span class="proj-icon">🎮</span>
+        <span class="proj-badge" id="fpv-badge">FPV · 20 שעות</span>
+      </div>
+      <div class="proj-title" id="fpv-title">לימוד FPV</div>
+      <div class="proj-desc" id="fpv-desc">קורס 20 שעות לטיסה ראשונה · סימולטור · Acro Mode</div>
+      <div class="proj-tags" id="fpv-tags">
+        <span class="proj-tag">🚁 טיסה</span>
+        <span class="proj-tag">🎮 סימולטור</span>
+        <span class="proj-tag">⚡ Acro</span>
+        <span class="proj-tag">🥽 FPV</span>
+      </div>
+      <div class="proj-footer">
+        <div class="proj-arrow">←</div>
+        <div class="proj-progress-wrap">
+          <div class="proj-progress-bar" id="fpv-bar"></div>
+        </div>
+      </div>
+    </a>
+
     <a href="drone/index.html" class="proj-card drone-card">
       <div class="top-line"></div>
       <div class="proj-header">
@@ -325,6 +357,10 @@
         droneDesc: 'הכנה לבחינת רת"א — חוקה · ידע טכני · מטאורולוגיה',
         droneBadge: 'רישיון מטיסן',
         droneTag1: '⚖️ חוקה', droneTag2: '🔧 ידע טכני', droneTag3: '🌤️ מטאורולוגיה', droneTag4: '🎯 בחינה',
+        fpvTitle: 'לימוד FPV',
+        fpvDesc: 'קורס 20 שעות לטיסה ראשונה · סימולטור · Acro Mode',
+        fpvBadge: 'FPV · 20 שעות',
+        fpvTag1: '🚁 טיסה', fpvTag2: '🎮 סימולטור', fpvTag3: '⚡ Acro', fpvTag4: '🥽 FPV',
         footer: 'Study Hub · Black Unicorns #5135'
       },
       en: {
@@ -344,6 +380,10 @@
         droneDesc: 'CAAI Exam Prep — Regulations · Technical · Meteorology',
         droneBadge: 'Drone Pilot',
         droneTag1: '⚖️ Law', droneTag2: '🔧 Technical', droneTag3: '🌤️ Meteorology', droneTag4: '🎯 Exam',
+        fpvTitle: 'FPV Course',
+        fpvDesc: '20-Hour course to first flight · Simulator · Acro Mode',
+        fpvBadge: 'FPV · 20 Hours',
+        fpvTag1: '🚁 Flying', fpvTag2: '🎮 Simulator', fpvTag3: '⚡ Acro', fpvTag4: '🥽 FPV',
         footer: 'Study Hub · Black Unicorns #5135'
       }
     };
@@ -387,6 +427,17 @@
         document.querySelectorAll('#drone-tags span')[3].textContent = t.droneTag4;
       }
 
+      const fpvTitle = document.getElementById('fpv-title');
+      if (fpvTitle) {
+        fpvTitle.textContent = t.fpvTitle;
+        document.getElementById('fpv-desc').textContent = t.fpvDesc;
+        document.getElementById('fpv-badge').textContent = t.fpvBadge;
+        document.querySelectorAll('#fpv-tags span')[0].textContent = t.fpvTag1;
+        document.querySelectorAll('#fpv-tags span')[1].textContent = t.fpvTag2;
+        document.querySelectorAll('#fpv-tags span')[2].textContent = t.fpvTag3;
+        document.querySelectorAll('#fpv-tags span')[3].textContent = t.fpvTag4;
+      }
+
       const btn = document.getElementById('langBtn');
       if (lang === 'en') {
         btn.textContent = 'עב';
@@ -411,10 +462,13 @@
       const frc   = Number(localStorage.getItem('frc_total_progress')   || 0);
       const mm    = Number(localStorage.getItem('mm_total_progress')     || 0);
       const drone = Number(localStorage.getItem('drone_total_progress')  || 0);
+      const fpvDone = Object.values(JSON.parse(localStorage.getItem('fpv_tasks') || '{}')).filter(Boolean).length;
+      const fpv = Math.round(fpvDone / 30 * 100);
       setTimeout(() => {
         document.getElementById('frc-bar').style.width   = frc   + '%';
         document.getElementById('mm-bar').style.width    = mm    + '%';
         document.getElementById('drone-bar').style.width = drone + '%';
+        document.getElementById('fpv-bar').style.width   = fpv   + '%';
       }, 400);
     });
   </script>

@@ -1,0 +1,80 @@
+/* ============================================================
+   FPV COURSE — section-specific styles
+   Accent: #FF6B35 (orange)
+   ============================================================ */
+
+:root {
+  --accent:     var(--fpv-accent);
+  --accent-dim: var(--fpv-dim);
+  --accent2: #FFB347;
+  --fpv-2: #FFB347;
+  --shadow-accent: 0 0 32px rgba(255,107,53,.25);
+}
+
+.nav-item.active, .nav-link.active {
+  color: var(--fpv-accent) !important;
+  border-bottom-color: var(--fpv-accent) !important;
+  background: var(--fpv-dim);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--fpv-accent), var(--fpv-2));
+  box-shadow: 0 4px 14px rgba(255,107,53,.35);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--fpv-2), var(--fpv-accent));
+  box-shadow: 0 6px 24px rgba(255,107,53,.5);
+}
+
+.section-header h1 {
+  background: linear-gradient(130deg, var(--fpv-accent), var(--fpv-2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ---- ACCORDION ---- */
+.acc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.acc-h {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px; cursor: pointer; font-weight: 700; font-size: .92rem;
+  transition: background .2s; user-select: none;
+}
+.acc-h:hover { background: var(--surface2); }
+.acc-arrow { transition: transform .3s; color: var(--muted); font-size: .75rem; }
+.acc-h.open { color: var(--accent); }
+.acc-h.open .acc-arrow { transform: rotate(180deg); color: var(--accent); }
+.acc-b { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); font-size: .88rem; }
+.acc-b.open { display: block; }
+.acc-b p { margin-top: 12px; line-height: 1.75; }
+.acc-b ul, .acc-b ol { margin-top: 10px; padding-right: 20px; }
+.acc-b li { margin-bottom: 7px; }
+.acc-b strong { color: var(--text); }
+
+/* ---- STAT CARDS ---- */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 18px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
+.stat-num { font-size: 1.8rem; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+.stat-label { font-size: .75rem; color: var(--muted); }
+
+/* ---- QUICK NAV CARDS ---- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; cursor: pointer;
+  transition: transform .2s, border-color .2s; position: relative; overflow: hidden;
+  text-decoration: none; color: inherit; display: block;
+}
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
+.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.card h3 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; }
+.card p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.card .ico { font-size: 1.6rem; margin-bottom: 10px; }
+
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: 1fr; gap: 8px; }
+  .grid { grid-template-columns: 1fr; }
+}

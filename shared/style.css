@@ -19,6 +19,9 @@
   --drone-accent: #3b82f6;
   --drone-glow: rgba(59,130,246,0.15);
   --drone-dim: rgba(59,130,246,0.08);
+  --fpv-accent: #FF6B35;
+  --fpv-glow: rgba(255,107,53,0.15);
+  --fpv-dim: rgba(255,107,53,0.08);
   --success: #22c55e;
   --warning: #ffd166;
   --danger: #ff5f5f;
