@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>חומרי עזר FPV | Study Hub</title>
+  <link rel="stylesheet" href="../shared/style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="../shared/navbar.js" defer></script>
+  <style>
+    .ref-table { width:100%; border-collapse:collapse; font-size:0.84rem; margin-top:12px; }
+    .ref-table th { text-align:right; padding:9px 12px; color:var(--fpv-accent); font-weight:700; border-bottom:2px solid var(--border); }
+    .ref-table td { padding:8px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:top; }
+    .ref-table tr:last-child td { border-bottom:none; }
+    .ref-table td:first-child { font-weight:700; color:var(--text); white-space:nowrap; }
+    .chip { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:var(--radius-full); }
+    .chip-orange { background:var(--fpv-dim); color:var(--fpv-accent); }
+    .chip-green  { background:rgba(34,197,94,0.1); color:#22c55e; }
+    .chip-blue   { background:rgba(59,130,246,0.1); color:#60a5fa; }
+    .chip-red    { background:rgba(255,95,95,0.1); color:#ff5f5f; }
+    .mono { font-family:var(--font-mono); font-size:0.8rem; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">🎮 FPV Drone · חומרי עזר</span>
+    <h1 class="page-title">חומרי עזר — Quick Reference</h1>
+    <p class="page-subtitle">מילון מונחים · ערוצי וידאו · מנועים · Rates · טבלאות שימושיות</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <!-- Glossary -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">📖 מילון מונחים FPV <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table class="ref-table">
+        <thead><tr><th>מונח</th><th>הסבר</th></tr></thead>
+        <tbody>
+          <tr><td>ARM / DISARM</td><td>הפעלה / כיבוי מנועים. חובה לפני כל טיסה ואחריה.</td></tr>
+          <tr><td>Acro Mode</td><td>מצב טיסה ללא ייצוב. Stick = קצב סיבוב. הסטנדרט ב-FPV.</td></tr>
+          <tr><td>Angle Mode</td><td>מצב מתחילים — FC מייצב לאופקי אוטומטית, מוגבל ל-45°.</td></tr>
+          <tr><td>Betaflight</td><td>Firmware בקוד פתוח ל-Flight Controller. הנפוץ ביותר.</td></tr>
+          <tr><td>BEC</td><td>Battery Elimination Circuit — מסדיר מתח ל-5V / 12V לאביזרים.</td></tr>
+          <tr><td>Blackbox</td><td>הקלטת נתוני טיסה (log) לניתוח ב-Blackbox Explorer.</td></tr>
+          <tr><td>BLDC</td><td>Brushless DC Motor — המנוע הסטנדרטי ב-FPV.</td></tr>
+          <tr><td>DSHOT</td><td>פרוטוקול דיגיטלי בין FC ל-ESC. DSHOT600 = הנפוץ.</td></tr>
+          <tr><td>ELRS</td><td>ExpressLRS — פרוטוקול RC קוד פתוח, latency נמוך מאוד.</td></tr>
+          <tr><td>ESC</td><td>Electronic Speed Controller — שולט על מנוע בודד לפי פקודת FC.</td></tr>
+          <tr><td>FC</td><td>Flight Controller — המוח של הרחפן. מריץ Betaflight/iNav.</td></tr>
+          <tr><td>FOV</td><td>Field of View — זווית ראייה של המצלמה.</td></tr>
+          <tr><td>Freestyle</td><td>סגנון טיסה — תנועות אמנותיות, flips, rolls, tricks.</td></tr>
+          <tr><td>Hover</td><td>ריחוף במקום — Throttle ~50%, שמירה על גובה יציב.</td></tr>
+          <tr><td>IMU</td><td>Inertial Measurement Unit — גירוסקופ + מד-תאוצה ב-FC.</td></tr>
+          <tr><td>KV</td><td>סיבובים לדקה לוולט. 2300KV @ 4S = ~34,000 RPM ריקה.</td></tr>
+          <tr><td>Latency</td><td>עיכוב הווידאו. Analog ~20ms, Digital ~30-50ms.</td></tr>
+          <tr><td>LiPo</td><td>Lithium Polymer Battery — מצבר הסטנדרט ב-FPV.</td></tr>
+          <tr><td>Maiden</td><td>טיסת הבכורה של build חדש.</td></tr>
+          <tr><td>Nose-in</td><td>הרחפן מכוון אליך — Roll/Pitch מתהפכים. מאתגר.</td></tr>
+          <tr><td>OSD</td><td>On-Screen Display — מידע על הווידאו (מתח, מהירות).</td></tr>
+          <tr><td>PID</td><td>Proportional-Integral-Derivative — אלגוריתם ייצוב ה-FC.</td></tr>
+          <tr><td>Props</td><td>פרופלרים. גודל 5" = 5 אינץ' קוטר.</td></tr>
+          <tr><td>Punchout</td><td>Throttle full — האצה אנכית מקסימלית.</td></tr>
+          <tr><td>Racing</td><td>טיסה מהירה דרך שערים — מהירות מעל 160 קמ"ש.</td></tr>
+          <tr><td>Rates</td><td>הגדרות Betaflight לרגישות הסטיק — קובעות °/sec.</td></tr>
+          <tr><td>RX / TX</td><td>Receiver (ברחפן) / Transmitter (השלט ביד).</td></tr>
+          <tr><td>Throttle</td><td>גז — Stick שמאל למעלה/למטה. שולט על כוח המנועים.</td></tr>
+          <tr><td>Turtle Mode</td><td>מסובב רחפן שנחת הפוך חזרה לרגיל.</td></tr>
+          <tr><td>VTX</td><td>Video Transmitter — משדר וידאו אנלוגי 5.8GHz.</td></tr>
+          <tr><td>Whoops</td><td>רחפנים קטנים עם מגן פרופלר — לטיסה בפנים.</td></tr>
+          <tr><td>Yaw</td><td>סיבוב ציר אנכי — Stick שמאל ימינה/שמאלה.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Video Channels 5.8GHz -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">📻 ערוצי וידאו 5.8GHz — Analog FPV <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>טייסים מרובים חייבים להיות על ערוצים שונים (הפרש לפחות 2 ערוצים בין טייסים).</p>
+      <div style="overflow-x:auto;margin-top:12px">
+        <table class="ref-table" style="min-width:600px">
+          <thead><tr><th>Band</th><th>CH1</th><th>CH2</th><th>CH3</th><th>CH4</th><th>CH5</th><th>CH6</th><th>CH7</th><th>CH8</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="chip chip-orange">A</span></td>
+              <td class="mono">5865</td><td class="mono">5845</td><td class="mono">5825</td><td class="mono">5805</td>
+              <td class="mono">5785</td><td class="mono">5765</td><td class="mono">5745</td><td class="mono">5725</td>
+            </tr>
+            <tr>
+              <td><span class="chip chip-blue">B</span></td>
+              <td class="mono">5733</td><td class="mono">5752</td><td class="mono">5771</td><td class="mono">5790</td>
+              <td class="mono">5809</td><td class="mono">5828</td><td class="mono">5847</td><td class="mono">5866</td>
+            </tr>
+            <tr>
+              <td><span class="chip chip-green">E</span></td>
+              <td class="mono">5705</td><td class="mono">5685</td><td class="mono">5665</td><td class="mono">5645</td>
+              <td class="mono">5885</td><td class="mono">5905</td><td class="mono">5925</td><td class="mono">5945</td>
+            </tr>
+            <tr>
+              <td><span class="chip chip-red">F</span></td>
+              <td class="mono">5740</td><td class="mono">5760</td><td class="mono">5780</td><td class="mono">5800</td>
+              <td class="mono">5820</td><td class="mono">5840</td><td class="mono">5860</td><td class="mono">5880</td>
+            </tr>
+            <tr>
+              <td><span class="chip chip-orange">R (Race)</span></td>
+              <td class="mono">5658</td><td class="mono">5695</td><td class="mono">5732</td><td class="mono">5769</td>
+              <td class="mono">5806</td><td class="mono">5843</td><td class="mono">5880</td><td class="mono">5917</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;font-size:0.8rem;color:var(--muted)">יחידות: MHz. R-Band (RaceBand) הנפוץ ביותר בתחרויות.</p>
+    </div>
+  </div>
+
+  <!-- Motor & Prop matching -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">⚙️ מנועים ופרופלרים — Quick Match <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div style="overflow-x:auto">
+        <table class="ref-table" style="min-width:560px">
+          <thead><tr><th>גודל Quad</th><th>פרופ</th><th>Stator</th><th>KV (4S)</th><th>KV (6S)</th><th>שימוש</th></tr></thead>
+          <tbody>
+            <tr><td>Tiny Whoop (~65mm)</td><td>31–40mm</td><td>0802–1102</td><td class="mono">19000–25000</td><td>—</td><td>בפנים, מגן</td></tr>
+            <tr><td>2" (Toothpick)</td><td>2"</td><td>1103–1404</td><td class="mono">6000–8000</td><td>—</td><td>קל, רגיש</td></tr>
+            <tr><td>3" (Cinewhoop)</td><td>3"</td><td>1404–1507</td><td class="mono">3000–4000</td><td class="mono">2000–2500</td><td>Cine עם מגן</td></tr>
+            <tr><td>5" (Standard)</td><td>5"</td><td>2205–2306</td><td class="mono">2300–2600</td><td class="mono">1700–1900</td><td>Freestyle + Racing</td></tr>
+            <tr><td>7" (Long Range)</td><td>7"</td><td>2506–2807</td><td class="mono">1300–1700</td><td class="mono">900–1200</td><td>Long Range</td></tr>
+            <tr><td>10" (Cine)</td><td>10"</td><td>3510–4014</td><td>—</td><td class="mono">400–700</td><td>Cinematic, שקט</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;font-size:0.8rem;color:var(--muted)">💡 KV גבוה + פרופ קטן = מהיר, אגרסיבי. KV נמוך + פרופ גדול = יעיל, חלק.</p>
+    </div>
+  </div>
+
+  <!-- Betaflight Rates -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🎮 Betaflight Rates — הגדרות מומלצות <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>Rates קובעים קצב סיבוב מקסימלי ותחושת Stick. סגנון Betaflight Rates:</p>
+      <div style="overflow-x:auto">
+        <table class="ref-table" style="min-width:500px">
+          <thead><tr><th>רמה</th><th>RC Rate</th><th>Super Rate</th><th>Expo</th><th>מקס °/sec</th><th>מתאים ל</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip chip-green">מתחיל</span></td><td class="mono">0.8</td><td class="mono">0.60</td><td class="mono">0.20</td><td class="mono">~400</td><td>לימוד ראשוני ב-Acro</td></tr>
+            <tr><td><span class="chip chip-blue">בינוני</span></td><td class="mono">1.0</td><td class="mono">0.70</td><td class="mono">0.30</td><td class="mono">~600</td><td>Freestyle בסיסי</td></tr>
+            <tr><td><span class="chip chip-orange">מתקדם</span></td><td class="mono">1.2</td><td class="mono">0.75</td><td class="mono">0.40</td><td class="mono">~800</td><td>Freestyle מלא</td></tr>
+            <tr><td><span class="chip chip-red">Racing</span></td><td class="mono">1.0</td><td class="mono">0.73</td><td class="mono">0.00</td><td class="mono">~750</td><td>Racing — תגובה לינארית</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;font-size:0.82rem;color:var(--text-secondary)"><strong>Expo גבוה</strong> = Stick רגיש פחות באמצע, עוזר למתחילים. <strong>Throttle Expo</strong> מומלץ 0.3 למתחיל.</p>
+    </div>
+  </div>
+
+  <!-- LiPo Voltage -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🔋 טבלת מתח LiPo — State of Charge <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div style="overflow-x:auto">
+        <table class="ref-table" style="min-width:480px">
+          <thead><tr><th>% טעינה</th><th>לתא</th><th>3S</th><th>4S</th><th>6S</th><th>מצב</th></tr></thead>
+          <tbody>
+            <tr><td>100%</td><td class="mono">4.20V</td><td class="mono">12.6V</td><td class="mono">16.8V</td><td class="mono">25.2V</td><td><span class="chip chip-green">מלא</span></td></tr>
+            <tr><td>80%</td><td class="mono">3.99V</td><td class="mono">12.0V</td><td class="mono">16.0V</td><td class="mono">23.9V</td><td></td></tr>
+            <tr><td>60%</td><td class="mono">3.83V</td><td class="mono">11.5V</td><td class="mono">15.3V</td><td class="mono">23.0V</td><td></td></tr>
+            <tr><td>50%</td><td class="mono">3.75V</td><td class="mono">11.3V</td><td class="mono">15.0V</td><td class="mono">22.5V</td><td><span class="chip chip-blue">Storage</span></td></tr>
+            <tr><td>30%</td><td class="mono">3.65V</td><td class="mono">11.0V</td><td class="mono">14.6V</td><td class="mono">21.9V</td><td><span class="chip chip-orange">נמוך</span></td></tr>
+            <tr><td>10%</td><td class="mono">3.50V</td><td class="mono">10.5V</td><td class="mono">14.0V</td><td class="mono">21.0V</td><td><span class="chip chip-red">⚠ נחת!</span></td></tr>
+            <tr><td>0%</td><td class="mono">3.27V</td><td class="mono">9.8V</td><td class="mono">13.1V</td><td class="mono">19.6V</td><td><span class="chip chip-red">⛔ נזק</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;font-size:0.82rem;color:var(--text-secondary)">💡 נחת ב-3.5V לתא. אחסן ב-3.8V אם לא טסים שבוע+.</p>
+    </div>
+  </div>
+
+  <!-- Pre-flight Checklist -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">✅ Checklist — לפני כל טיסה <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div style="display:grid;gap:8px;margin-top:8px" id="checklist-container"></div>
+    </div>
+  </div>
+
+  <!-- Velocidrone Tips -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🖥️ Velocidrone — הגדרות מומלצות <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table class="ref-table">
+        <thead><tr><th>נושא</th><th>הגדרה מומלצת</th></tr></thead>
+        <tbody>
+          <tr><td>Physics Model</td><td>Real Feel Physics (הכי מציאותי)</td></tr>
+          <tr><td>Flight Mode</td><td>Acro Mode (אחרי שיש Hover יציב)</td></tr>
+          <tr><td>Rates</td><td>מתחיל: RC Rate 0.8, Expo 0.2</td></tr>
+          <tr><td>Throttle Curve</td><td>Expo 0.3 — מחליק את ה-Throttle</td></tr>
+          <tr><td>Camera Angle</td><td>30° — מציאותי לרוב הטייסים</td></tr>
+          <tr><td>Controller</td><td>Settings → Controller → Map PS4/Xbox</td></tr>
+          <tr><td>Track למתחיל</td><td>Floating Islands Large / Practice Hover</td></tr>
+          <tr><td>Track לאחר Hover</td><td>Figure 8 Course / Gates</td></tr>
+          <tr><td>Track לAcro</td><td>Hovering Platforms / Tiny Practice Track</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Resources -->
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🔗 משאבים שימושיים <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table class="ref-table">
+        <thead><tr><th>משאב</th><th>שימוש</th></tr></thead>
+        <tbody>
+          <tr><td>Betaflight Configurator</td><td>הגדרת FC — הורד מ-GitHub של Betaflight</td></tr>
+          <tr><td>Blackbox Explorer</td><td>ניתוח logs של טיסות — לאיתור בעיות PID</td></tr>
+          <tr><td>ExpressLRS Configurator</td><td>Flash ל-ELRS TX/RX</td></tr>
+          <tr><td>EdgeTX Companion</td><td>הגדרת שלט EdgeTX (Radiomaster, Jumper)</td></tr>
+          <tr><td>Oscar Liang Blog</td><td>oscarliang.com — הבלוג הטוב ביותר ל-FPV</td></tr>
+          <tr><td>Joshua Bardwell YouTube</td><td>הסברים טכניים — Betaflight, PID, builds</td></tr>
+          <tr><td>Mr. Steele YouTube</td><td>Freestyle inspiration + tips</td></tr>
+          <tr><td>Rotorbuilds</td><td>rotorbuilds.com — builds של קהילה</td></tr>
+          <tr><td>r/fpv Reddit</td><td>קהילה, שאלות, עזרה לכל בעיה</td></tr>
+          <tr><td>B4UFly (רת"א)</td><td>אפליקציה לבדיקת אזורי טיסה מותרים בישראל</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+var CHECKLIST_DATA = [
+  { cat: 'לפני טיסה — חשמל', items: [
+    'בדוק וולטז\' מצבר — לא מתחת ל-3.7V לתא',
+    'חבר מצבר בקוטביות נכונה',
+    'VTX על ערוץ נכון — לא מתנגש עם טייסים אחרים'
+  ]},
+  { cat: 'לפני טיסה — מכני', items: [
+    'בדוק פרופלרים — אין סדקים, מהודקים',
+    'בדוק שכל הברגים מהודקים',
+    'אנטנת VTX לא חסומה'
+  ]},
+  { cat: 'לפני ARM', items: [
+    'שלט מופעל לפני חיבור מצבר',
+    'אין שגיאות Arming ב-Betaflight',
+    'אין אנשים ליד הרחפן',
+    'עמוד רחוק מהרחפן'
+  ]},
+  { cat: 'אחרי נחיתה', items: [
+    'DISARM מיד כשנוחת',
+    'נתק מצבר לפני שניגש לרחפן',
+    'בדוק מתח מצבר — לא מתחת ל-3.5V לתא'
+  ]}
+];
+
+var STORAGE_KEY = 'fpv_checklist';
+var checked = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function saveChecklist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); }
+
+function renderChecklist() {
+  var container = document.getElementById('checklist-container');
+  if (!container) return;
+  container.innerHTML = CHECKLIST_DATA.map(function(section) {
+    var itemsHtml = section.items.map(function(item, i) {
+      var key = section.cat + '_' + i;
+      var done = !!checked[key];
+      return '<label style="display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;' +
+        (done ? 'background:rgba(34,197,94,0.04)' : '') + '">' +
+        '<input type="checkbox"' + (done ? ' checked' : '') +
+        ' style="margin-top:2px;accent-color:var(--fpv-accent);flex-shrink:0" onchange="toggleCheck(\'' + key + '\')">' +
+        '<span style="font-size:0.875rem;' + (done ? 'text-decoration:line-through;color:var(--muted)' : 'color:var(--text-secondary)') + '">' + item + '</span>' +
+        '</label>';
+    }).join('');
+    return '<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px">' +
+      '<div style="font-size:0.75rem;font-weight:700;color:var(--fpv-accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">' +
+      section.cat + '</div>' + itemsHtml + '</div>';
+  }).join('');
+}
+
+function toggleCheck(key) {
+  checked[key] = !checked[key];
+  saveChecklist();
+  renderChecklist();
+}
+
+function accToggle(header) {
+  var body = header.nextElementSibling;
+  var isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+  header.querySelector('.acc-arrow').textContent = isOpen ? '▼' : '▲';
+  if (!isOpen && body.querySelector('#checklist-container')) renderChecklist();
+}
+</script>
+
+</body>
+</html>

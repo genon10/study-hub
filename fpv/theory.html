@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>תיאוריה FPV | Study Hub</title>
+  <link rel="stylesheet" href="../shared/style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="../shared/navbar.js" defer></script>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">🎮 FPV Drone · תיאוריה</span>
+    <h1 class="page-title">תיאוריה — איך עובד FPV</h1>
+    <p class="page-subtitle">רכיבים · פיזיקה · מצבי טיסה · ציוד · LiPo · Betaflight</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🥽 מה זה FPV? <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>FPV = First Person View</strong> — טיסה מנקודת מבט של הרחפן עצמו, דרך מצלמה שמשדרת תמונה חיה למשקפי FPV או מסך.</p>
+      <p>בניגוד לטיסה רגילה (Line of Sight), ב-FPV אתה "בתוך" הרחפן. זה מייצר חוויה שונה לחלוטין ודורש תרגול נפרד.</p>
+      <ul>
+        <li><strong>Analog FPV</strong> — שידור וידאו אנלוגי. זמן תגובה ~20ms. איכות תמונה נמוכה אבל latency נמוך מאוד. הנפוץ ביותר.</li>
+        <li><strong>Digital FPV</strong> — DJI O3, Walksnail, HDZero. תמונה HD. latency ~30-50ms. יקר יותר.</li>
+        <li><strong>Long Range</strong> — ELRS, Crossfire. לטיסות מרחק עם RC קישור חזק.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🔧 מרכיבי הרחפן <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:12px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border)">
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent);font-weight:700">רכיב</th>
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent);font-weight:700">תפקיד</th>
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent);font-weight:700">פרמטרים חשובים</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Frame</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">שלדת הרחפן</td>
+            <td style="padding:8px 12px;color:var(--muted)">גודל (3" / 5"), חומר (Carbon Fiber)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Motor</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">מנוע BLDC, מסובב פרופלר</td>
+            <td style="padding:8px 12px;color:var(--muted)">KV (סיבובים לוולט), stator size (2207, 2306)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">ESC</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">Electronic Speed Controller — שולט על מהירות המנועים</td>
+            <td style="padding:8px 12px;color:var(--muted)">אמפר (30A / 40A / 60A), פרוטוקול (DSHOT600)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">FC</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">Flight Controller — מחשב הרחפן, מריץ Betaflight</td>
+            <td style="padding:8px 12px;color:var(--muted)">חיישן IMU (גירוסקופ + מד-תאוצה)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">VTX</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">Video Transmitter — משדר וידאו לאנלוג</td>
+            <td style="padding:8px 12px;color:var(--muted)">הספק (25mW–1W), תדר (5.8GHz), ערוץ</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Camera</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">מצלמת FPV, מצלמת GoPro/action</td>
+            <td style="padding:8px 12px;color:var(--muted)">FOV, latency, dynamic range</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Receiver (RX)</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">מקלט רדיו — מקבל פקודות מהשלט</td>
+            <td style="padding:8px 12px;color:var(--muted)">פרוטוקול: ELRS, FrSky, Futaba</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;font-weight:700">Props</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">פרופלרים — מייצרים עילוי ומנע</td>
+            <td style="padding:8px 12px;color:var(--muted)">גודל (5"), pitch (4.5), מספר להבים (3 / 4)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">✈️ מצבי טיסה — Angle, Horizon, Acro <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>Betaflight תומך ב-3 מצבים עיקריים. ההבדל: כמה ה-FC מייצב אוטומטית.</p>
+      <div style="display:grid;gap:10px;margin-top:14px">
+        <div style="background:var(--surface2);border:1px solid rgba(34,197,94,0.3);border-radius:var(--radius-sm);padding:14px">
+          <div style="font-weight:700;color:#22c55e;margin-bottom:6px">🟢 Angle Mode</div>
+          <p style="margin:0">הרחפן <strong>לא יכול לעבור 45°</strong>. FC מייצב לגמרי. הכי קל למתחילים. לחץ על Stick → הרחפן נוטה זווית מוגדרת ומחזיר לאופקי לבד.</p>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,177,0,0.3);border-radius:var(--radius-sm);padding:14px">
+          <div style="font-weight:700;color:#ffd166;margin-bottom:6px">🟡 Horizon Mode</div>
+          <p style="margin:0">כמו Angle בתנועות קטנות. בתנועות גדולות — מאפשר flip ו-roll מלאים. Stick באמצע → חוזר לאופקי אוטומטית.</p>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,107,53,0.3);border-radius:var(--radius-sm);padding:14px">
+          <div style="font-weight:700;color:#FF6B35;margin-bottom:6px">🟠 Acro / Rate Mode</div>
+          <p style="margin:0"><strong>אין ייצוב אוטומטי.</strong> Stick קובע <em>קצב סיבוב</em> (°/sec). Stick באמצע → הרחפן נשאר בזווית שהוא היה בה. הדרך האמיתית לטוס FPV freestyle ו-racing.</p>
+        </div>
+      </div>
+      <p style="margin-top:14px">💡 <strong>למה Acro?</strong> Angle Mode מגביל תנועות. ב-Acro יש לך שליטה מלאה — חיוני לכל טיסת freestyle או racing.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">⚡ פיזיקת הטיסה — Thrust, Torque, Props <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p><strong>4 מנועים, 2 זוגות:</strong> שני מנועים סובבים עם כיוון השעון (CW), שניים נגד (CCW). זה מבטל Torque reaction.</p>
+      <ul style="margin-top:10px">
+        <li><strong>Thrust (עילוי)</strong> — כוח כלפי מעלה שמייצרים הפרופלרים. תלוי ב-KV × וולטז' × גודל פרופ.</li>
+        <li><strong>Throttle 50%</strong> — בערך Hover point. פחות = יורד, יותר = עולה.</li>
+        <li><strong>Pitch</strong> — ה-FC מגביר 2 מנועים קדמיים, מקטין 2 אחוריים → הרחפן נוטה קדימה.</li>
+        <li><strong>Roll</strong> — ה-FC מגביר מנועי ימין, מקטין שמאל → הטייה לצד.</li>
+        <li><strong>Yaw</strong> — ה-FC מגביר מנועי CW, מקטין CCW → סיבוב ציר אנכי.</li>
+      </ul>
+      <p style="margin-top:12px"><strong>Gyroscope (גירוסקופ)</strong> — חיישן ב-FC שמודד סיבוב בכל ציר. מדגם ב-8kHz. ה-PID loop רץ 4000–8000 פעמים בשנייה.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🔋 מצברי LiPo — Lithium Polymer <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:12px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border)">
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent)">מונח</th>
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent)">הסבר</th>
+            <th style="text-align:right;padding:8px 12px;color:var(--fpv-accent)">ערכים אופייניים</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Cell count (S)</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">מספר תאים בסדרה</td>
+            <td style="padding:8px 12px;color:var(--muted)">3S (11.1V) · 4S (14.8V) · 6S (22.2V)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">Capacity (mAh)</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">קיבולת — כמה זמן טיסה</td>
+            <td style="padding:8px 12px;color:var(--muted)">650mAh (racing) · 1300–1500mAh (5") · 2200mAh (freestyle)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-weight:700">C Rating</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">קצב פריקה מקסימלי</td>
+            <td style="padding:8px 12px;color:var(--muted)">100C @ 1300mAh = 130A מקסימום</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;font-weight:700">Voltage per cell</td>
+            <td style="padding:8px 12px;color:var(--text-secondary)">טווח מתח לתא</td>
+            <td style="padding:8px 12px;color:var(--muted)">מלא: 4.2V · Nominal: 3.7V · ריק: 3.5V (אל תרד מ-3.3V!)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="background:rgba(255,95,95,0.08);border:1px solid rgba(255,95,95,0.3);border-radius:var(--radius-sm);padding:12px;margin-top:14px">
+        <strong style="color:#ff5f5f">⚠️ בטיחות LiPo:</strong>
+        <ul style="margin-top:6px;color:var(--text-secondary)">
+          <li>אל תפרוק מתחת ל-3.3V לתא — נזק קבוע למצבר</li>
+          <li>אל תטען מעל 4.2V לתא (4.35V ל-HV LiPo)</li>
+          <li>טעינה תמיד בנוכחות — לא ללאות</li>
+          <li>אחסון ב-3.8V לתא (Storage charge)</li>
+          <li>מצבר נפוח (puffed) = לזרוק. לא לטוס.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">📡 מערכת שלט — Radio Link <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>השלט (TX) שולח פקודות, המקלט (RX) ברחפן מקבל. מחובר ל-FC.</p>
+      <div style="display:grid;gap:8px;margin-top:12px">
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="font-weight:700;color:#FF6B35;margin-bottom:4px">ELRS (ExpressLRS)</div>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-secondary)">הפרוטוקול המומלץ ב-2024+. קוד פתוח. latency ~1ms. טווח עצום. 2.4GHz ו-900MHz.</p>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="font-weight:700;color:#60a5fa;margin-bottom:4px">FrSky</div>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-secondary)">נפוץ מאוד. פרוטוקולים: D16, D8, ACCESS. שלטי Taranis פופולריים. 2.4GHz.</p>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="font-weight:700;color:#a29bfe;margin-bottom:4px">TBS Crossfire / Tracer</div>
+          <p style="margin:0;font-size:0.85rem;color:var(--text-secondary)">Long Range. 900MHz (Crossfire) או 2.4GHz (Tracer). טווח קילומטרים.</p>
+        </div>
+      </div>
+      <p style="margin-top:14px"><strong>4 הערוצים העיקריים (Mode 2):</strong></p>
+      <ul>
+        <li><strong>CH1 — Roll</strong>: Stick ימין ימינה/שמאלה</li>
+        <li><strong>CH2 — Pitch</strong>: Stick ימין למעלה/למטה</li>
+        <li><strong>CH3 — Throttle</strong>: Stick שמאל למעלה/למטה</li>
+        <li><strong>CH4 — Yaw</strong>: Stick שמאל ימינה/שמאלה</li>
+        <li><strong>CH5+</strong> — מתגים: Arm, Flight Mode, Beeper, Turtle Mode</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">💻 Betaflight — Flight Controller Software <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <p>Betaflight הוא firmware בקוד פתוח שרץ על ה-FC. מנהל: קריאת IMU, PID loop, ESC output, OSD, Modes, Blackbox.</p>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-top:12px">
+        <div style="font-weight:700;color:var(--fpv-accent);margin-bottom:8px">PID Controller</div>
+        <ul>
+          <li><strong>P (Proportional)</strong> — תגובה לשגיאה נוכחית. גבוה מדי → oscillation.</li>
+          <li><strong>I (Integral)</strong> — מצטבר שגיאות לאורך זמן. עוזר ב-hover יציב. גבוה מדי → drift.</li>
+          <li><strong>D (Derivative)</strong> — בלם — מונע overshoot. גבוה מדי → noise, חום במנועים.</li>
+        </ul>
+        <p style="margin-top:8px;font-size:0.82rem;color:var(--muted)">כמתחיל — אל תגע ב-PID. הברירות מחדל מספיקות.</p>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-top:10px">
+        <div style="font-weight:700;color:var(--fpv-accent);margin-bottom:8px">Rates</div>
+        <p style="margin:0;font-size:0.85rem;color:var(--text-secondary)">קובעים כמה מהיר הרחפן מסתובב לפי Stick input. מתחילים: RC Rate ~1.0, Expo ~0.5.</p>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-top:10px">
+        <div style="font-weight:700;color:var(--fpv-accent);margin-bottom:8px">Modes שימושיים</div>
+        <ul style="font-size:0.85rem">
+          <li><strong>ARM</strong> — מפעיל מנועים.</li>
+          <li><strong>ANGLE / HORIZON / ACRO</strong> — מצב טיסה.</li>
+          <li><strong>BEEPER</strong> — מצפצף → עוזר למצוא רחפן שנפל.</li>
+          <li><strong>TURTLE MODE</strong> — מסובב רחפן הפוך חזרה.</li>
+          <li><strong>BLACKBOX</strong> — מקליט נתוני טיסה לניתוח.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">🥽 משקפי FPV — Video Systems <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div style="display:grid;gap:8px;margin-top:8px">
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:700">Analog (Fatshark, Skyzone)</span>
+            <span style="font-size:0.75rem;color:#4ECDC4;background:rgba(78,205,196,0.1);padding:2px 8px;border-radius:4px">💰 זול יותר</span>
+          </div>
+          <p style="margin-top:6px;font-size:0.85rem;color:var(--text-secondary)">latency ~20ms. רזולוציה נמוכה. קהילה גדולה, תאימות רחבה.</p>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:700">DJI O3 / Goggles 2</span>
+            <span style="font-size:0.75rem;color:#ffd166;background:rgba(255,209,102,0.1);padding:2px 8px;border-radius:4px">💰💰 יקר</span>
+          </div>
+          <p style="margin-top:6px;font-size:0.85rem;color:var(--text-secondary)">תמונה HD מדהימה. latency ~30ms. מערכת סגורה.</p>
+        </div>
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:700">Walksnail Avatar</span>
+            <span style="font-size:0.75rem;color:#ffd166;background:rgba(255,209,102,0.1);padding:2px 8px;border-radius:4px">💰 בינוני</span>
+          </div>
+          <p style="margin-top:6px;font-size:0.85rem;color:var(--text-secondary)">Digital. latency ~22ms. מחיר בינוני. תמונה טובה.</p>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:0.85rem;color:var(--muted)">💡 מתחיל? התחל עם Analog Box Goggles זולים + סימולטור. אחר כך תשקיע.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-h" onclick="accToggle(this)">⚠️ בטיחות וחוקים בישראל <span class="acc-arrow">▼</span></div>
+    <div class="acc-b">
+      <div style="background:rgba(255,95,95,0.08);border:1px solid rgba(255,95,95,0.3);border-radius:var(--radius-sm);padding:14px;margin-top:8px">
+        <strong style="color:#ff5f5f">חוקי רת"א לרחפנים:</strong>
+        <ul style="margin-top:8px;color:var(--text-secondary)">
+          <li>רחפן מעל 250 גרם דורש <strong>רישיון מטיסן</strong> (רת"א)</li>
+          <li>FPV racing / freestyle — בדרך כלל מעל 250 גרם → דרוש רישיון</li>
+          <li>טיסה <strong>תמיד ב-Line of Sight</strong> או עם observer ב-FPV</li>
+          <li>גובה מקסימלי <strong>120 מטר</strong> מעל הקרקע</li>
+          <li>אסור ליד שדות תעופה ואזורים מוגבלים</li>
+        </ul>
+      </div>
+      <p style="margin-top:14px"><strong>בטיחות מעשית:</strong></p>
+      <ul>
+        <li>ARM רק ברגע שמוכן לטוס — DISARM מיד כשנוחת</li>
+        <li>אל תעוף מעל אנשים</li>
+        <li>בדוק פרופלרים לפני כל טיסה — סדקים = להחליף</li>
+        <li>טעינת LiPo על משטח חסין אש, תמיד בנוכחות</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function accToggle(header) {
+  var body = header.nextElementSibling;
+  var isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+  header.querySelector('.acc-arrow').textContent = isOpen ? '▼' : '▲';
+}
+</script>
+
+</body>
+</html>

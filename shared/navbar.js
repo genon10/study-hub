@@ -42,6 +42,8 @@
   // FPV pages
   const fpvPages = [
     { label: '🏠 קורס FPV',    href: 'index.html' },
+    { label: '📖 תיאוריה',     href: 'theory.html' },
+    { label: '📋 חומר עיוני',  href: 'reference.html' },
   ];
 
   const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : inFPV ? fpvPages : [];
