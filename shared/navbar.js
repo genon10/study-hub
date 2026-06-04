@@ -36,6 +36,7 @@
     { label: '🃏 כרטיסיות',    href: 'flashcards.html' },
     { label: '❓ חידון',        href: 'quiz.html' },
     { label: '📝 בחינה',        href: 'exam.html' },
+    { label: '🚁 FPV',          href: 'fpv.html' },
   ];
 
   const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : [];

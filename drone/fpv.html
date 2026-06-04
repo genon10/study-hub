@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לימוד FPV — Study Hub</title>
+  <link rel="stylesheet" href="../shared/style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="../shared/navbar.js" defer></script>
+  <style>
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color var(--transition-slow);
+    }
+    .phase-card.open { border-color: var(--phase-color, var(--drone-accent)); }
+
+    .phase-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer;
+      user-select: none;
+      transition: background var(--transition);
+    }
+    .phase-header:hover { background: var(--surface2); }
+
+    .phase-emoji { font-size: 1.6rem; flex-shrink: 0; }
+
+    .phase-info { flex: 1; }
+    .phase-title { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .phase-hours { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    .phase-progress-wrap { min-width: 72px; text-align: center; }
+    .phase-pct { font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; }
+    .phase-bar-bg { background: var(--surface2); height: 4px; border-radius: var(--radius-full); overflow: hidden; }
+    .phase-bar-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.3s; }
+
+    .phase-arrow { color: var(--muted); font-size: 0.7rem; margin-right: 4px; }
+
+    .phase-body { display: none; padding: 0 20px 20px; }
+    .phase-body.open { display: block; }
+
+    .phase-goal {
+      background: var(--surface2);
+      border-right: 3px solid var(--drone-accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .phase-goal strong { color: var(--drone-accent); }
+
+    .task-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 10px; border-radius: var(--radius-sm);
+      cursor: pointer; margin-bottom: 3px;
+      transition: background var(--transition);
+    }
+    .task-item:hover { background: var(--surface2); }
+    .task-item.done { background: rgba(34,197,94,0.04); }
+    .task-item input[type=checkbox] {
+      margin-top: 2px; width: 15px; height: 15px;
+      flex-shrink: 0; cursor: pointer;
+      accent-color: var(--drone-accent);
+    }
+    .task-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
+    .task-item.done .task-text { text-decoration: line-through; color: var(--muted); }
+
+    .phase-tip {
+      margin-top: 14px; padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;
+    }
+
+    .overall-progress-bar {
+      background: var(--surface2); border-radius: var(--radius-full);
+      height: 8px; overflow: hidden; margin: 8px 0;
+    }
+    .overall-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B35, #FFB347);
+      border-radius: var(--radius-full);
+      transition: width 0.4s ease;
+    }
+
+    .daily-table {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); overflow: hidden;
+    }
+    .daily-row {
+      display: grid; grid-template-columns: 1.2fr 70px 2fr;
+      gap: 12px; padding: 13px 18px; align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .daily-row:last-child { border-bottom: none; }
+    .daily-day { font-size: 0.82rem; font-weight: 700; color: #4ECDC4; }
+    .daily-session {
+      font-size: 0.75rem; background: var(--surface2);
+      border-radius: var(--radius-sm); padding: 3px 8px;
+      color: var(--text-secondary); text-align: center;
+    }
+    .daily-focus { font-size: 0.82rem; color: var(--text-secondary); }
+
+    .sim-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px;
+    }
+    .sim-name { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+    .sim-price { font-size: 0.75rem; color: #4ECDC4; }
+    .sim-desc { font-size: 0.82rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+    .ps4-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: var(--surface2); padding: 10px 12px;
+      border-radius: var(--radius-sm);
+    }
+    .ps4-key {
+      background: rgba(162,155,254,0.12); color: #A29BFE;
+      border-radius: 4px; padding: 2px 10px;
+      font-size: 0.75rem; font-weight: 700;
+      white-space: nowrap; min-width: 56px; text-align: center;
+    }
+    .ps4-val { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+    @media (max-width: 600px) {
+      .daily-row { grid-template-columns: 1fr 60px 1.5fr; gap: 8px; padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">🚁 רישיון רחפן · FPV</span>
+    <h1 class="page-title">לימוד FPV — 20 שעות לטיסה ראשונה</h1>
+    <p class="page-subtitle">מבוסס על חוק 20 השעות של Josh Kaufman · מאפס לטיסה ראשונה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="hbox blue" dir="rtl" style="margin-bottom:24px">
+    <strong>📖 חוק 20 השעות:</strong> לפי Josh Kaufman, כל מיומנות חדשה דורשת
+    <strong>20 שעות של תרגול מכוון</strong> כדי להגיע לרמה פונקציונלית.
+    המפתח: פירוק לתת-מיומנויות, תרגול הכי קריטיות ראשון, הסרת מחסומים לתרגול,
+    ו-20 שעות מחויבות ללא ויתור.
+  </div>
+
+  <!-- Overall Progress -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:28px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-size:0.85rem; color:var(--muted)">התקדמות כוללת</span>
+      <span style="font-size:1.3rem; font-weight:800; color:#FF6B35" id="overall-pct">0%</span>
+    </div>
+    <div class="overall-progress-bar">
+      <div class="overall-progress-fill" id="overall-fill" style="width:0%"></div>
+    </div>
+    <div style="font-size:0.78rem; color:var(--muted); margin-top:6px" id="overall-count">0 / 30 משימות הושלמו</div>
+  </div>
+
+  <h3 style="font-size:0.75rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px">6 שלבי הלמידה</h3>
+
+  <div id="phases-container"></div>
+
+  <h3 style="font-size:0.75rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin:32px 0 16px">לוח תרגול יומי מומלץ</h3>
+  <div class="daily-table">
+    <div class="daily-row">
+      <span class="daily-day">ימים 1–3</span>
+      <span class="daily-session">20 דק'</span>
+      <span class="daily-focus">Hover בלבד – Throttle control</span>
+    </div>
+    <div class="daily-row">
+      <span class="daily-day">ימים 4–6</span>
+      <span class="daily-session">25 דק'</span>
+      <span class="daily-focus">ריבוע + נחיתה מדויקת</span>
+    </div>
+    <div class="daily-row">
+      <span class="daily-day">ימים 7–10</span>
+      <span class="daily-session">30 דק'</span>
+      <span class="daily-focus">Figure-8 + Nose-in hover</span>
+    </div>
+    <div class="daily-row">
+      <span class="daily-day">ימים 11–14</span>
+      <span class="daily-session">30 דק'</span>
+      <span class="daily-focus">Acro mode – Hover + Figure-8</span>
+    </div>
+    <div class="daily-row">
+      <span class="daily-day">ימים 15–18</span>
+      <span class="daily-session">35 דק'</span>
+      <span class="daily-focus">Acro + gates + FPV view</span>
+    </div>
+    <div class="daily-row">
+      <span class="daily-day">ימים 19–20</span>
+      <span class="daily-session">40 דק'</span>
+      <span class="daily-focus">Full FPV session + real drone prep</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:0.75rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin:32px 0 16px">🎮 טיפים לשלט PS4 כסימולטור</h3>
+  <div style="background:var(--surface); border:1px solid rgba(162,155,254,0.3); border-radius:var(--radius-md); padding:20px;">
+    <div style="display:flex;flex-direction:column;gap:8px" id="ps4-tips"></div>
+  </div>
+
+  <h3 style="font-size:0.75rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin:32px 0 16px">🖥️ סימולטורים מומלצים</h3>
+  <div style="display:grid;gap:10px" id="sims-container"></div>
+
+</main>
+
+<script>
+const PHASES = [
+  {
+    id: 1, emoji: '🧠', color: '#FF6B35',
+    title: 'שלב 1: יסודות הבנת המכשיר',
+    hours: '0–2 שעות',
+    goal: 'הבן מה אתה מטיס לפני שאתה מטיס',
+    tip: 'בשלב זה אסור לטוס – רק ללמוד ולהבין. הזמן הזה חוסך שעות של תסכול מאוחר יותר.',
+    tasks: [
+      "צפה ב-YouTube: 'FPV for beginners – how it works' (30 דק')",
+      'למד את 4 ערוצי השלט: Throttle, Roll, Pitch, Yaw',
+      'הכר את מצבי השלט: Acro vs Angle/Horizon mode',
+      'הורד סימולטור: Liftoff או Velocidrone (יש גרסאות חינמיות)',
+      'חבר את שלט ה-PS4 לסימולטור דרך USB',
+    ]
+  },
+  {
+    id: 2, emoji: '🚁', color: '#FFB347',
+    title: 'שלב 2: Hover וחרדת גובה',
+    hours: '2–5 שעות',
+    goal: 'שלוט ב-Throttle – הערוץ הכי קשה למתחילים',
+    tip: 'ב-PS4 – Throttle stick חוזר למרכז. בשלט אמיתי הוא נשאר. הסימולטור יעזור לגשר.',
+    tasks: [
+      'פתח סימולטור → Angle Mode → תרגול Hover במקום',
+      'תרגיל: הרם לגובה 1 מטר, החזק 30 שניות ללא תנועה',
+      'תרגיל: עלה-רד-עלה-רד ×20 פעמים בשליטה',
+      'תרגיל: הרחק Throttle stick מ-0% ל-50% בצורה חלקה',
+      'יעד: Hover יציב 60 שניות ללא correction גדול',
+    ]
+  },
+  {
+    id: 3, emoji: '✈️', color: '#4ECDC4',
+    title: 'שלב 3: תנועה בסיסית',
+    hours: '5–9 שעות',
+    goal: 'שלב Throttle עם תנועה קדימה/אחורה/ימינה/שמאלה',
+    tip: "זה השלב שמרגיש 'לא מתקדם'. זה נורמלי. Figure-8 הוא הבנצ'מרק הכי טוב לתיאום בין ידיים.",
+    tasks: [
+      'תרגיל: ריבוע – טוס קדימה, ימין, אחורה, שמאל ×10',
+      'תרגיל: עיגול ידני – Pitch + Roll בו זמנית',
+      'תרגיל: Figure-8 איטי ×10 ברצף',
+      'תרגיל: נחיתה מדויקת על עיגול קוטר 50 ס"מ',
+      'תרגיל: שינוי גובה תוך כדי תנועה קדימה',
+    ]
+  },
+  {
+    id: 4, emoji: '🔄', color: '#A29BFE',
+    title: "שלב 4: Orientation & Yaw",
+    hours: '9–14 שעות',
+    goal: "טוס כשהרחפן לא מכוון אליך – הצ'אלנג' האמיתי",
+    tip: "Nose-in הוא המחסום הגדול ביותר. המוח 'מתהפך' כשהרחפן מכוון אליך. עובר עם חזרות.",
+    tasks: [
+      'תרגיל: Nose-in hover – הרחפן מכוון אליך, Hover 30 שניות',
+      'תרגיל: Left/Right side-in Hover',
+      'תרגיל: Slow Yaw spin תוך כדי Hover – 360° ×5',
+      'תרגיל: ריבוע עם Yaw – בכל פינה סובב 90° ואז קדימה',
+      'תרגיל: Continuous Yaw עם Forward Flight – spiral',
+    ]
+  },
+  {
+    id: 5, emoji: '⚡', color: '#FD79A8',
+    title: 'שלב 5: Acro Mode – הצעד הגדול',
+    hours: '14–18 שעות',
+    goal: 'עבור ל-Acro Mode – הדרך לטוס FPV אמיתי',
+    tip: 'Acro Mode מרגיש כמו להתחיל מחדש. 2-3 שעות ראשונות יהיו תסכול. אחרי זה הכל יהיה מדויק יותר.',
+    tasks: [
+      'קרא/צפה: מה ההבדל בין Angle לבין Acro (Rate mode)',
+      'תרגיל: Hover ב-Acro Mode – זה מרגיש חדש לגמרי',
+      'תרגיל: Figure-8 ב-Acro Mode לאט',
+      'תרגיל: נחיתה מדויקת ב-Acro Mode',
+      'תרגיל: טיסה דרך שער (שתי כיסאות) ×20',
+    ]
+  },
+  {
+    id: 6, emoji: '🥽', color: '#00B894',
+    title: 'שלב 6: FPV View + שלט אמיתי',
+    hours: '18–20 שעות',
+    goal: 'עבור לתצוגת FPV בסימולטור ואז לרחפן אמיתי',
+    tip: 'המעבר לרחפן אמיתי יהיה קל בהרבה ממה שאתה מצפה אם עשית 18 שעות בסימולטור ברצינות.',
+    tasks: [
+      'תרגיל: הפעל FPV view בסימולטור, חזור על Figure-8',
+      'תרגיל: FPV Acro Hover 30 שניות',
+      'כשהשלט האמיתי מגיע: Hover בחצר ב-Angle Mode ראשון',
+      'טיסה ראשונה ב-FPV view עם הרחפן האמיתי – קצרה ושקטה',
+      '🎉 סיים 20 שעות – יש לך בסיס אמיתי ב-FPV!',
+    ]
+  }
+];
+
+const PS4_TIPS = [
+  ['Throttle', 'Stick שמאל למעלה/למטה – הבעיה: הוא חוזר למרכז. תרגל להחזיק ב-50%'],
+  ['Yaw',      'Stick שמאל ימין/שמאל – לסיבוב ציר אנכי'],
+  ['Pitch',    'Stick ימין למעלה/למטה – קדימה/אחורה'],
+  ['Roll',     'Stick ימין ימין/שמאל – הטייה לצדדים'],
+  ['הגדרה',   'Velocidrone: Settings → Controller → Map buttons → בחר PS4'],
+];
+
+const SIMS = [
+  { name: 'Velocidrone',    price: '💰 חינמי / זול', desc: 'הכי פופולרי בקהילה. מציאותי מאוד. תמיכה טובה ב-PS4.' },
+  { name: 'Liftoff',        price: '💰 ~$20',         desc: 'גרפיקה יפה, physics טוב. יש demo חינמי.' },
+  { name: 'DRL Simulator',  price: '💰 חינמי',        desc: 'רשמי של Drone Racing League. קל להתחלה.' },
+  { name: 'Uncrashed',      price: '💰 ~$15',         desc: 'הכי מציאותי ל-freestyle. מומלץ אחרי שיש בסיס.' },
+];
+
+const STORAGE_KEY = 'fpv_tasks';
+let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let openPhase = 1;
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+}
+
+function totalTasks() {
+  return PHASES.reduce(function(sum, p) { return sum + p.tasks.length; }, 0);
+}
+
+function totalDone() {
+  return PHASES.reduce(function(sum, p) {
+    return sum + p.tasks.filter(function(_, i) { return completed[p.id + '_' + i]; }).length;
+  }, 0);
+}
+
+function phaseDone(phase) {
+  return phase.tasks.filter(function(_, i) { return completed[phase.id + '_' + i]; }).length;
+}
+
+function renderOverall() {
+  var total = totalTasks();
+  var done = totalDone();
+  var pct = Math.round(done / total * 100);
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('overall-fill').style.width = pct + '%';
+  document.getElementById('overall-count').textContent = done + ' / ' + total + ' משימות הושלמו';
+}
+
+function renderPhases() {
+  var container = document.getElementById('phases-container');
+  container.innerHTML = PHASES.map(function(phase) {
+    var pd = phaseDone(phase);
+    var pp = Math.round(pd / phase.tasks.length * 100);
+    var isOpen = openPhase === phase.id;
+    var pctHtml = pp === 100
+      ? '<span style="color:#00B894">✓ הושלם</span>'
+      : '<span style="color:' + phase.color + '">' + pp + '%</span>';
+
+    var tasksHtml = phase.tasks.map(function(task, i) {
+      var tid = phase.id + '_' + i;
+      var done = !!completed[tid];
+      return '<label class="task-item' + (done ? ' done' : '') + '">' +
+        '<input type="checkbox"' + (done ? ' checked' : '') + ' onchange="toggleTask(\'' + tid + '\')">' +
+        '<span class="task-text">' + task + '</span>' +
+        '</label>';
+    }).join('');
+
+    return '<div class="phase-card' + (isOpen ? ' open' : '') + '" style="--phase-color:' + phase.color + '">' +
+      '<div class="phase-header" onclick="togglePhase(' + phase.id + ')">' +
+        '<span class="phase-emoji">' + phase.emoji + '</span>' +
+        '<div class="phase-info">' +
+          '<div class="phase-title">' + phase.title + '</div>' +
+          '<div class="phase-hours">' + phase.hours + '</div>' +
+        '</div>' +
+        '<div class="phase-progress-wrap">' +
+          '<div class="phase-pct">' + pctHtml + '</div>' +
+          '<div class="phase-bar-bg"><div class="phase-bar-fill" style="width:' + pp + '%;background:' + phase.color + '"></div></div>' +
+        '</div>' +
+        '<span class="phase-arrow">' + (isOpen ? '▲' : '▼') + '</span>' +
+      '</div>' +
+      (isOpen
+        ? '<div class="phase-body open">' +
+            '<div class="phase-goal"><strong>מטרת השלב:</strong> ' + phase.goal + '</div>' +
+            tasksHtml +
+            '<div class="phase-tip">💡 <strong>טיפ:</strong> ' + phase.tip + '</div>' +
+          '</div>'
+        : '') +
+      '</div>';
+  }).join('');
+}
+
+function renderPS4() {
+  document.getElementById('ps4-tips').innerHTML = PS4_TIPS.map(function(row) {
+    return '<div class="ps4-row">' +
+      '<span class="ps4-key">' + row[0] + '</span>' +
+      '<span class="ps4-val">' + row[1] + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+function renderSims() {
+  document.getElementById('sims-container').innerHTML = SIMS.map(function(s) {
+    return '<div class="sim-card">' +
+      '<div style="display:flex;justify-content:space-between">' +
+        '<span class="sim-name">' + s.name + '</span>' +
+        '<span class="sim-price">' + s.price + '</span>' +
+      '</div>' +
+      '<p class="sim-desc">' + s.desc + '</p>' +
+      '</div>';
+  }).join('');
+}
+
+function render() {
+  renderOverall();
+  renderPhases();
+}
+
+function togglePhase(id) {
+  openPhase = openPhase === id ? null : id;
+  render();
+}
+
+function toggleTask(tid) {
+  completed[tid] = !completed[tid];
+  save();
+  render();
+}
+
+renderPS4();
+renderSims();
+render();
+</script>
+
+</body>
+</html>
