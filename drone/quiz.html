@@ -60,7 +60,7 @@ let score = 0, answered = 0;
 function updateDroneProgress() {
   try {
     const fcSeen = JSON.parse(localStorage.getItem('drone_fc_seen') || '[]');
-    const fcPct = Math.min(100, Math.round((fcSeen.length / 30) * 100));
+    const fcPct = Math.min(100, Math.round((fcSeen.length / FLASHCARDS.length) * 100));
 
     const quizHistory = JSON.parse(localStorage.getItem('drone_quiz_history') || '[]');
     const quizPct = quizHistory.length > 0 ? 100 : 0;
