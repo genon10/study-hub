@@ -22,7 +22,7 @@
       <div class="progress-bar-fill" id="timer-progress" style="width:100%"></div>
     </div>
   </div>
-  <div class="exam-progress-text" id="exam-progress-text">0 / 18 נענו</div>
+  <div class="exam-progress-text" id="exam-progress-text">0 / <span class="exam-q-count">18</span> נענו</div>
   <button class="btn btn-danger" onclick="submitEarly()" style="font-size:.75rem;padding:6px 10px">הגש עכשיו</button>
 </div>
 
@@ -30,7 +30,7 @@
   <div class="page-header-inner">
     <span class="page-eyebrow">רחפן · בחינה</span>
     <h1 class="page-title">סימולציית בחינה</h1>
-    <p class="page-subtitle">18 שאלות בסגנון רת"א עם טיימר</p>
+    <p class="page-subtitle"><span class="exam-q-count">18</span> שאלות בסגנון רת"א עם טיימר</p>
   </div>
 </div>
 
@@ -43,7 +43,7 @@
       <div class="card card-glass">
         <div class="card-title">📋 הנחיות למבחן</div>
         <ul class="sl" style="font-size:.87rem;line-height:2">
-          <li>18 שאלות רב-ברירה בנושאי חוקה, ידע טכני, מטאורולוגיה וחישובי גובה.</li>
+          <li><span class="exam-q-count">18</span> שאלות רב-ברירה בנושאי חוקה, ידע טכני, מטאורולוגיה וחישובי גובה.</li>
           <li>כל שאלה שווה כ-5.5 נקודות (ציון בטווח 0–100).</li>
           <li>ציון עובר: 60 ומעלה.</li>
           <li>זמן: 30 דקות.</li>
@@ -146,6 +146,7 @@
 
 <script src="js/data.js"></script>
 <script>
+document.querySelectorAll('.exam-q-count').forEach(el => { el.textContent = EXAM_QUESTIONS.length; });
 const EXAM_TOPICS = [
   'תקנות הרישיון', // 0
   'כללי טיסה',     // 1
@@ -179,7 +180,7 @@ let tenMinWarningShown = false;
 function updateDroneProgress() {
   try {
     const fcSeen = JSON.parse(localStorage.getItem('drone_fc_seen') || '[]');
-    const fcPct = Math.min(100, Math.round((fcSeen.length / 30) * 100));
+    const fcPct = Math.min(100, Math.round((fcSeen.length / FLASHCARDS.length) * 100));
 
     const quizHistory = JSON.parse(localStorage.getItem('drone_quiz_history') || '[]');
     const quizPct = quizHistory.length > 0 ? 100 : 0;
@@ -199,7 +200,7 @@ function startExam() {
   timeLeft            = EXAM_DURATION;
   examStartTime       = Date.now();
   tenMinWarningShown  = false;
-  // Shuffling all 18 questions
+  // Shuffle all exam questions
   questionOrder = shuffle([...Array(EXAM_QUESTIONS.length).keys()]);
 
   document.getElementById('screen-start').style.display = 'none';
