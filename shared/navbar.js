@@ -44,6 +44,7 @@
     { label: '🏠 קורס FPV',    href: 'index.html' },
     { label: '📖 תיאוריה',     href: 'theory.html' },
     { label: '📋 חומר עיוני',  href: 'reference.html' },
+    { label: '❓ חידון',        href: 'quiz.html' },
   ];
 
   const pages = inFRC ? frcPages : inMM ? mmPages : inDrone ? dronePages : inFPV ? fpvPages : [];
@@ -71,7 +72,7 @@
   const navHtml = `
     <nav class="site-nav" id="site-nav">
       <a href="${root}index.html" class="nav-home">${homeLabel}</a>
-      ${(inFRC || inMM || inDrone) ? '<div class="nav-divider"></div>' : ''}
+      ${(inFRC || inMM || inDrone || inFPV) ? '<div class="nav-divider"></div>' : ''}
       ${sectionLabel}
       <div class="nav-links">${linksHtml}</div>
     </nav>

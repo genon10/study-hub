@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPV – חידון | Study Hub</title>
+<link rel="stylesheet" href="../shared/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="../shared/navbar.js" defer></script>
+<script src="../shared/utils.js"></script>
+<style>
+  /* options are real <button>s here (keyboard + screen-reader friendly) */
+  button.q-opt {
+    display: block; width: 100%;
+    font: inherit; font-size: 0.875rem; color: var(--text);
+    line-height: 1.5;
+  }
+  button.q-opt:focus-visible { outline: 2px solid var(--fpv-accent); outline-offset: 2px; }
+  button.q-opt.locked { cursor: default; }
+
+  .quiz-bar {
+    position: sticky; top: 56px; z-index: 5;
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px; margin-bottom: 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  .quiz-bar-score { font-size: 1.6rem; font-weight: 900; color: var(--fpv-accent); line-height: 1; min-width: 2ch; text-align: center; }
+  .quiz-bar-mid { flex: 1; min-width: 0; }
+  .quiz-bar-line { font-size: .82rem; font-weight: 600; }
+  .quiz-bar-sub { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+  .quiz-track { height: 4px; background: var(--surface2); border-radius: var(--radius-full); overflow: hidden; margin-top: 8px; }
+  .quiz-track-fill { height: 100%; width: 0; background: var(--fpv-accent); transition: width .3s; }
+  .quiz-bar .btn-primary { font-size: .78rem; padding: 6px 12px; }
+
+  .q-ref { display: inline-block; margin-top: 6px; color: inherit; font-weight: 600; }
+
+  .review-list { text-align: right; margin: 18px auto 0; max-width: 560px; }
+  .review-item {
+    padding: 10px 14px; margin-bottom: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-size: .84rem; line-height: 1.55;
+  }
+  .review-item a { color: var(--fpv-accent); }
+  .done-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .btn-ghost { background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border); box-shadow: none !important; }
+
+  @media (prefers-reduced-motion: reduce) { .quiz-track-fill { transition: none; } }
+  @media (max-width: 480px) {
+    .quiz-bar { gap: 10px; padding: 10px 12px; }
+    .quiz-bar-score { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="page-eyebrow">FPV · חידון</span>
+    <h1 class="page-title">חידון תרגול FPV</h1>
+    <p class="page-subtitle" id="quiz-subtitle">רכיבים, פיזיקה, מצבי טיסה, LiPo ו-Betaflight — משוב מיידי על כל תשובה</p>
+  </div>
+</div>
+
+<main class="page-main">
+
+  <div class="quiz-bar" role="status" aria-live="polite">
+    <div class="quiz-bar-score" id="qs">0</div>
+    <div class="quiz-bar-mid">
+      <div class="quiz-bar-line">ציון: <span id="qp">—</span></div>
+      <div class="quiz-bar-sub" id="qpr">ענה על השאלה הראשונה</div>
+      <div class="quiz-track"><div class="quiz-track-fill" id="qtrack"></div></div>
+    </div>
+    <button class="btn-primary" type="button" onclick="resetQ()">🔄 ערבב מחדש</button>
+  </div>
+
+  <div id="qc"></div>
+
+  <div id="quiz-done" style="display:none">
+    <div class="score-screen show">
+      <div style="font-size:2.5rem;margin-bottom:10px" id="done-emoji"></div>
+      <div style="font-size:1.3rem;font-weight:700;margin-bottom:6px" id="done-title"></div>
+      <div class="score-msg" id="done-sub"></div>
+      <div class="review-list" id="done-review"></div>
+      <div class="done-actions">
+        <button class="btn-primary" type="button" onclick="resetQ()">🔄 נסה שוב</button>
+        <a href="theory.html" class="btn-primary btn-ghost">📖 חזרה לתיאוריה</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script>
+const QS_ALL = typeof QUIZ_QUESTIONS !== 'undefined' ? QUIZ_QUESTIONS : [];
+const HISTORY_KEY = 'fpv_quiz_history';
+let order = [], score = 0, answered = 0, wrong = [];
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function bestScoreText() {
+  try {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    if (!h.length) return '';
+    const best = Math.max(...h.map(r => Math.round(r.score / r.total * 100)));
+    return ` · השיא שלך: ${best}%`;
+  } catch (e) { return ''; }
+}
+
+function updateBar() {
+  document.getElementById('qs').textContent = score;
+  document.getElementById('qp').textContent = answered ? Math.round(score / answered * 100) + '%' : '—';
+  document.getElementById('qpr').textContent = answered
+    ? `${answered} מתוך ${order.length} נענו`
+    : 'ענה על השאלה הראשונה' + bestScoreText();
+  document.getElementById('qtrack').style.width = (order.length ? answered / order.length * 100 : 0) + '%';
+}
+
+function buildQ() {
+  const container = document.getElementById('qc');
+  score = 0; answered = 0; wrong = [];
+  document.getElementById('quiz-done').style.display = 'none';
+
+  if (!QS_ALL.length) {
+    order = [];
+    container.innerHTML = '<div class="hbox yellow">שאלות החידון לא נטענו. רענן את העמוד.</div>';
+    updateBar();
+    return;
+  }
+
+  // random question order + random option order each round
+  order = shuffle(QS_ALL.map((_, i) => i)).map(qi => ({
+    qi,
+    opts: shuffle(QS_ALL[qi].o.map((_, oi) => oi))
+  }));
+
+  container.innerHTML = order.map((item, i) => {
+    const q = QS_ALL[item.qi];
+    return `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-num">שאלה ${i + 1} מתוך ${order.length}</div>
+      <div class="q-text" id="qtext-${i}">${esc(q.q)}</div>
+      <div class="q-opts" role="group" aria-labelledby="qtext-${i}">
+        ${item.opts.map(oi => `<button type="button" class="q-opt" data-oi="${oi}" onclick="ans(${i},${oi})">${esc(q.o[oi])}</button>`).join('')}
+      </div>
+      <div class="q-feedback" id="fb-${i}" aria-live="polite"></div>
+    </div>`;
+  }).join('');
+  updateBar();
+}
+
+function ans(i, oi) {
+  const item = order[i];
+  const q = QS_ALL[item.qi];
+  const card = document.getElementById('qcard-' + i);
+  if (card.dataset.answered) return;
+  card.dataset.answered = '1';
+  answered++;
+
+  card.querySelectorAll('.q-opt').forEach(el => {
+    const elOi = Number(el.dataset.oi);
+    el.classList.add('locked');
+    el.setAttribute('aria-disabled', 'true');
+    if (elOi === q.c) el.classList.add('correct');
+    else if (elOi === oi) el.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb-' + i);
+  const ok = oi === q.c;
+  if (ok) score++; else wrong.push(item.qi);
+  const ref = !ok && q.ref ? `<br><a class="q-ref" href="${esc(q.ref.page)}">📖 לחזור על: ${esc(q.ref.label)}</a>` : '';
+  fb.innerHTML = (ok ? '✓ נכון! ' : '✗ לא נכון. ') + esc(q.exp || '') + ref;
+  fb.className = 'q-feedback show ' + (ok ? 'correct' : 'wrong');
+
+  updateBar();
+  if (answered === order.length) setTimeout(finish, 400);
+}
+
+function finish() {
+  const total = order.length;
+  const p = Math.round(score / total * 100);
+  try {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    h.push({ date: todayStr(), score, total });
+    while (h.length > 10) h.shift();
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+  } catch (e) { console.error(e); }
+
+  document.getElementById('done-emoji').textContent = p >= 85 ? '🎉' : p >= 65 ? '👍' : '📚';
+  document.getElementById('done-title').textContent = `${score}/${total} (${p}%)`;
+  document.getElementById('done-sub').textContent = p >= 85
+    ? 'מעולה! שולט בבסיס התיאורטי של FPV'
+    : p >= 65 ? 'טוב — עבור על מה שטעית למטה' : 'כדאי לחזור על התיאוריה ולנסות שוב';
+
+  document.getElementById('done-review').innerHTML = wrong.length
+    ? '<div style="font-weight:700;margin-bottom:8px">שאלות לחזרה:</div>' + wrong.map(qi => {
+        const q = QS_ALL[qi];
+        const link = q.ref ? ` · <a href="${esc(q.ref.page)}">${esc(q.ref.label)}</a>` : '';
+        return `<div class="review-item"><strong>${esc(q.q)}</strong><br>תשובה נכונה: ${esc(q.o[q.c])}${link}</div>`;
+      }).join('')
+    : '';
+
+  const done = document.getElementById('quiz-done');
+  done.style.display = 'block';
+  done.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+}
+
+function resetQ() {
+  buildQ();
+  window.scrollTo({ top: 0 });
+}
+
+buildQ();
+
+function onLangChange() {}
+</script>
+</body>
+</html>
