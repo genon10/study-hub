@@ -1294,7 +1294,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p>פרופילי אלומיניום <strong>50×25 מ"מ</strong> בתצורה מלבנית. מודולות קדמיות סובבו <strong>90°</strong> לפנות מקום לאינטייק ולקלע.</p>
 <p>מנועים: <strong>Talon FX (Falcon)</strong> — שליטה מדויקת + ניצול אנרגיה חכם. יחס <strong>1:5.9</strong>.</p>
 <figure>
-<img src="images/image58.png" loading="lazy" alt="שלדה">
+<img src="images/image58.jpg" loading="lazy" alt="שלדה">
 <figcaption>שלדת הרובוט ומודולות הסווארב מלמעלה</figcaption>
 </figure>
 </div></div>
@@ -1303,7 +1303,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p>כל מודולה = <strong>2 מנועים עצמאיים</strong>: מנוע כיוון (Steer) + מנוע הנעה (Drive).</p>
 <p>4 מודולות → holonomic motion: נסיעה לצד, תמרון מהיר, סיבוב תוך כדי נסיעה.</p>
 <figure>
-<img src="images/image73.png" loading="lazy" alt="מודולות סווארב">
+<img src="images/image73.jpg" loading="lazy" alt="מודולות סווארב">
 <figcaption>4 מודולות סווארב על שולחן העבודה</figcaption>
 </figure>
 <figure>
@@ -1338,7 +1338,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <div class="acc-b">
 <p>מבוסס <strong>ציר סיבוב</strong>, לא תנועה ליניארית. בעת התנגשות — האינטייק "בורח" כלפי מעלה ולא נשבר, חוזר מיד לפעולה.</p>
 <figure>
-<img src="images/image10.png" loading="lazy" alt="מנגנון האיסוף">
+<img src="images/image10.jpg" loading="lazy" alt="מנגנון האיסוף">
 <figcaption>מנגנון האיסוף – גלגלים ורולרים</figcaption>
 </figure>
 </div></div>
@@ -1347,7 +1347,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p><strong>פוליקרבונט:</strong> מתגמש בספיגת מכה וחוזר לצורתו (≠ אלומיניום). קל יותר → CoG נמוך.</p>
 <p><strong>ציר חורו (Churro):</strong> צינור אלומיניום משושה. <strong>מיסבים פנימיים</strong> נכנסים לפעולה תחת לחץ → סיבוב חלק.</p>
 <figure>
-<img src="images/image17.png" loading="lazy" alt="מבט קדמי על האינטייק">
+<img src="images/image17.jpg" loading="lazy" alt="מבט קדמי על האינטייק">
 <figcaption>מבט קדמי על מערכת האיסוף</figcaption>
 </figure>
 </div></div>`
@@ -1363,7 +1363,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <div class="acc-b">
 <p>① <strong>איסוף</strong> מהאינטייק → ② <strong>מסוע שיפוע</strong> (קדימה) → ③ <strong>גלגלי מקאנום</strong> (מירכוז) → ④ <strong>הזנה</strong> לקלע.</p>
 <figure>
-<img src="images/image10.png" loading="lazy" alt="הופר">
+<img src="images/image10.jpg" loading="lazy" alt="הופר">
 <figcaption>מנגנון ההובלה בהופר</figcaption>
 </figure>
 </div></div>
@@ -1418,11 +1418,11 @@ STOP();                             // עצירה עם בלימה — מונע d
 <p>מחליקה על פרופיל <strong>40×40 מ"מ</strong> (פרופיל יחיד — חסכנו 3.5 ק"ג).</p>
 <p><strong>Wear-In:</strong> מיסבי ±0.005 מ"מ שוחקים פרופיל → התאמה מושלמת. המעלית משתפרת עם שימוש!</p>
 <figure>
-<img src="images/image84.png" loading="lazy" alt="מערכת הטיפוס">
+<img src="images/image84.jpg" loading="lazy" alt="מערכת הטיפוס">
 <figcaption>מערכת הטיפוס – וו ומעלית</figcaption>
 </figure>
 <figure>
-<img src="images/image51.png" loading="lazy" alt="CNC">
+<img src="images/image51.jpg" loading="lazy" alt="CNC">
 <figcaption>בלוק מיסבים לאחר כרסום CNC – דיוק ±0.005 מ״מ</figcaption>
 </figure>
 </div></div>
@@ -1560,7 +1560,7 @@ STOP();                             // עצירה עם בלימה — מונע d
 <div class="acc-b">
 <p><strong>SLA = Sealed Lead Acid</strong> — 12V, 18Ah. 6 תאים × 2.1V. מחויב לפי תקנות FRC. שיא זרם ~400A לרגע.</p>
 <figure>
-<img src="images/image9.png" loading="lazy" alt="סוללה">
+<img src="images/image9.jpg" loading="lazy" alt="סוללה">
 <figcaption>סוללת המצבר SLA 12V 18Ah</figcaption>
 </figure>
 </div></div>`
